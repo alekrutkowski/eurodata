@@ -1,0 +1,147 @@
+---
+title: "eurodata -- R package for fast and easy Eurostata data import and search"
+author: "Aleksander Rutkowski"
+output:
+  html_document:
+    keep_md: true
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1280px;
+}
+</style>
+
+```{r helpers, include=FALSE}
+cran <- function(package)
+    paste0('https://cran.r-project.org/web/packages/',
+           package,'/index.html')
+rdoc <- function(package,funct)
+    paste0('http://www.rdocumentation.org/packages/',
+           package,'/functions/',funct)
+lnk_ <- function(name,url)
+    paste0('[',name,']','(',url,')')
+lnk <- function(package,funct)
+    paste0(lnk_(package,cran(package)),'::',
+           lnk_(funct,rdoc(package,funct)))
+estat_toc_link <-
+    'http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt'
+```
+
+The package relies on [Eurostat's Bulk Download Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
+
+The API contains just 5 functions -- 3 for data or metadata imports and 2 for search:
+
+Import functionality:
+
+- **importData** -- fast thanks to `r lnk('data.table','fread')`
+- **importDataLabels** -- as above
+- **importDataList** -- reflects the hierarchical structure of the Eurostat tree of datasets --
+fast transformation of the raw [Table of Contents file](`r estat_toc_link`)
+is based on a C++ code snipped compiled via [Rcpp](`r cran('Rcpp')`)  
+
+Search functionality:
+
+- **browseDataList** -- based on importDataList, shows an HTML table
+(generated with `r lnk('xtable','xtable')`) in a browser with a list of the found datasets
+- **find** -- based on importDataList, shows a textal report on the found datasets --
+a ``quick-n-dirty'' way to find a Eurostat dataset witout much typing (with a keyword or a few keywords)
+
+## Installation
+
+```{r installation, eval=FALSE, include=TRUE}
+devtools::install_github('alekrutkowski/eurodata') # package 'devtools' needs to be installed
+```
+
+## Functionality demo
+
+```{r attach_library}
+library(eurodata)
+```
+
+### Imports
+
+```{r background_setup, include=FALSE}
+options(width = 120)
+# A trick to display the side-effects:
+browseDataList <- function(...) cat(eurodata::browseDataList(...)$html, sep='\n')
+find <- function(...) cat(eurodata::find(...)$report, sep='\n')
+eurostat::clean_eurostat_cache() # in case repeated evaluation
+```
+
+```{r import_demo, warning=FALSE}
+x <- importData('nama_10_a10')  # actual dataset
+str(x)
+head(x,10)
+# Friendly error if a wrong data code (similar for importLabels):
+tryCatch(importData('nama_10_a10_XXX'),
+         error = function(e) cat(geterrmessage()))
+y <- importDataList()  # matadata
+colnames(y)
+str(y[y$Code=='nama_10_a10',])  # matadata on x
+z <- importLabels('geo')
+head(z,10)
+```
+
+### Search
+
+```{r find_demo}
+find(bop, its)
+find(bop,-ybk,its)
+```
+
+```{r browse_demo, results='asis'}
+browseDataList(grepl('bop',Code) & grepl('its',Code))
+```
+
+## Speed demo
+
+eurodata::**importData** compared to `r lnk('eurostat','get_eurostat')`:
+
+```{r speed_demo}
+y <- importDataList()  # matadata
+
+d <- unique(y[y$Type=='dataset','Code']) # dataset codes
+
+set.seed(1234)  # for replicability
+
+d30 <- sample(d, 30) # a random sample of 30 datasets
+
+get_eurostat <- eurostat::get_eurostat  # package 'eurostat' needs to be installed
+
+FUNS <- c('importData', 'get_eurostat')
+
+timeit <- function(funname, code)
+    tryCatch(system.time(get(funname)(code))['elapsed'],
+             error = function(e) as.numeric(NA)) # due to errors in some 'eurostat' package imports
+
+compileInfo <-
+    function(code) {
+        FUNS2 <- if (sample(c(TRUE,FALSE), 1))
+            FUNS else rev(FUNS) # so that the execution order is random
+        res <- data.frame(code,
+                          timeit(FUNS2[1], code),
+                          timeit(FUNS2[2], code))
+        colnames(res) <- c('Data code name',FUNS2)
+        res
+    }
+```
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+L <- lapply(d30, compileInfo)
+```
+
+```{r}
+Res <- do.call(rbind, L)
+
+Res2 <- within(Res,
+       ratio <- get_eurostat/importData)
+
+row.names(Res2) <- NULL # to eliminate the visual noise
+
+Res2 # lower = faster (in seconds)
+# How many times eurodata::importData is faster on average?
+
+mean(Res2$ratio, na.rm=TRUE)
+median(Res2$ratio, na.rm=TRUE)
+```
