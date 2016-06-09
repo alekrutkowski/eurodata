@@ -1,12 +1,6 @@
 # eurodata -- R package for fast and easy Eurostata data import and search
 Aleksander Rutkowski  
 
-<style type="text/css">
-.main-container {
-  max-width: 1280px;
-}
-</style>
-
 
 
 The package relies on [Eurostat's Bulk Download Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
@@ -26,7 +20,7 @@ Search functionality:
 - **browseDataList** -- based on importDataList, shows an HTML table
 (generated with [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable)) in a browser with a list of the found datasets
 - **find** -- based on importDataList, shows a textal report on the found datasets --
-a ``quick-n-dirty'' way to find a Eurostat dataset witout much typing (with a keyword or a few keywords)
+a ``quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
 ## Installation
 
@@ -54,24 +48,8 @@ library(eurodata)
 ### Imports
 
 
-
-
 ```r
 x <- importData('nama_10_a10')  # actual dataset
-```
-
-```
-## Downloading Eurostat dataset nama_10_a10
-## Uncompressing (extracting)
-## Verifying the code
-## Importing (reading into memory)
-## Splitting the column of identifiers
-## Reshaping into long format (single value column)
-## Separating values and flags
-## Converting codes to factors
-```
-
-```r
 str(x)
 ```
 
@@ -85,7 +63,7 @@ str(x)
 ##  $ value_ : num  3269 2506 1382 NA 294 ...
 ##  $ flags_ : chr  "" "" "" ":" ...
 ##  - attr(*, "EurostatDatasetCode")= chr "nama_10_a10"
-##  - attr(*, "DownloadTime")= POSIXct, format: "2016-06-07 16:01:06"
+##  - attr(*, "DownloadTime")= POSIXct, format: "2016-06-09 11:45:23"
 ```
 
 ```r
@@ -113,12 +91,6 @@ tryCatch(importData('nama_10_a10_XXX'),
 ```
 
 ```
-## Downloading Eurostat dataset nama_10_a10_XXX
-## Uncompressing (extracting)
-## Verifying the code
-```
-
-```
 ## 
 ## Probably a wrong dataset code:  nama_10_a10_XXX
 ## Check if you can find  nama_10_a10_XXX.tsv.gz  at
@@ -126,7 +98,7 @@ tryCatch(importData('nama_10_a10_XXX'),
 ```
 
 ```r
-y <- importDataList()  # matadata
+y <- importDataList()  # metadata
 colnames(y)
 ```
 
@@ -139,7 +111,7 @@ colnames(y)
 ```
 
 ```r
-str(y[y$Code=='nama_10_a10',])  # matadata on x
+str(y[y$Code=='nama_10_a10',])  # metadata on x
 ```
 
 ```
@@ -163,14 +135,6 @@ str(y[y$Code=='nama_10_a10',])  # matadata on x
 
 ```r
 z <- importLabels('geo')
-```
-
-```
-## Verifying the code
-## Downloading Eurostat labels for geo
-```
-
-```r
 head(z,10)
 ```
 
@@ -191,102 +155,101 @@ head(z,10)
 ### Search
 
 
+
+
 ```r
 find(bop, its)
 ```
 
 ```
-## 2016-06-07 16:01:12 
-##  7 dataset(s)/table(s) found.
-##  Keywords: bop, its 
-##  
+## 2016-06-09 11:45:29
+## 7 dataset(s)/table(s) found.
+## Keywords: bop, its
 ## 
 ##  Database by themes >>
 ##  Economy and finance >>
 ##  Balance of payments - International transactions >>
 ##  International trade in services, geographical breakdown
-##  
-## No : 1 
-## Dataset name : International trade in services (since 2004) 
-## Code : bop_its_det 
-## Type : dataset 
-## Last update of data : 16.05.2014 
-## Last table structure change : 16.05.2014 
-## Data start : 2004 
-## Data end : 2013 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en 
 ## 
-## No : 2 
-## Dataset name : International trade in services (1985-2003) 
-## Code : bop_its_deth 
-## Type : dataset 
-## Last update of data : 16.05.2014 
-## Last table structure change : 16.05.2014 
-## Data start : 1985 
-## Data end : 2003 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en 
+## No : 1
+## Dataset name : International trade in services (since 2004)
+## Code : bop_its_det
+## Type : dataset
+## Last update of data : 16.05.2014
+## Last table structure change : 16.05.2014
+## Data start : 2004
+## Data end : 2013
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en
 ## 
-## No : 3 
-## Dataset name : International trade in services - market integration indicators 
-## Code : bop_its_str 
-## Type : dataset 
-## Last update of data : 28.05.2014 
-## Last table structure change : 28.05.2014 
-## Data start : 1992 
-## Data end : 2013 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en 
+## No : 2
+## Dataset name : International trade in services (1985-2003)
+## Code : bop_its_deth
+## Type : dataset
+## Last update of data : 16.05.2014
+## Last table structure change : 16.05.2014
+## Data start : 1985
+## Data end : 2003
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en
 ## 
-## No : 4 
-## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2002) 
-## Code : bop_its_tot 
-## Type : dataset 
-## Last update of data : 27.05.2014 
-## Last table structure change : 27.05.2014 
-## Data start : 2002 
-## Data end : 2012 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en 
+## No : 3
+## Dataset name : International trade in services - market integration indicators
+## Code : bop_its_str
+## Type : dataset
+## Last update of data : 28.05.2014
+## Last table structure change : 28.05.2014
+## Data start : 1992
+## Data end : 2013
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en
 ## 
-## No : 5 
-## Dataset name : International trade in services - Data for the Eurostat yearbook 
-## Code : bop_its_ybk 
-## Type : dataset 
-## Last update of data : 06.06.2014 
-## Last table structure change : 06.06.2014 
-## Data start : 1992 
-## Data end : 2013 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_ybk&lang=en 
+## No : 4
+## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2002)
+## Code : bop_its_tot
+## Type : dataset
+## Last update of data : 27.05.2014
+## Last table structure change : 27.05.2014
+## Data start : 2002
+## Data end : 2012
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en
 ## 
+## No : 5
+## Dataset name : International trade in services - Data for the Eurostat yearbook
+## Code : bop_its_ybk
+## Type : dataset
+## Last update of data : 06.06.2014
+## Last table structure change : 06.06.2014
+## Data start : 1992
+## Data end : 2013
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_ybk&lang=en
 ## 
 ##  Database by themes >>
 ##  Economy and finance >>
 ##  Balance of payments - International transactions (BPM6) >>
 ##  International trade in services, geographical breakdown (BPM6)
-##  
-## No : 6 
-## Dataset name : International trade in services (since 2010) (BPM6) 
-## Code : bop_its6_det 
-## Type : dataset 
-## Last update of data : 01.06.2016 
-## Last table structure change : 01.06.2016 
-## Data start : 2010 
-## Data end : 2015 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en 
 ## 
-## No : 7 
-## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6) 
-## Code : bop_its6_tot 
-## Type : dataset 
-## Last update of data : 01.06.2016 
-## Last table structure change : 01.06.2016 
-## Data start : 2010 
-## Data end : 2015 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en 
+## No : 6
+## Dataset name : International trade in services (since 2010) (BPM6)
+## Code : bop_its6_det
+## Type : dataset
+## Last update of data : 01.06.2016
+## Last table structure change : 01.06.2016
+## Data start : 2010
+## Data end : 2015
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
 ## 
+## No : 7
+## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)
+## Code : bop_its6_tot
+## Type : dataset
+## Last update of data : 01.06.2016
+## Last table structure change : 01.06.2016
+## Data start : 2010
+## Data end : 2015
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en
 ## 
-##  2016-06-07 16:01:12 
-##  7 dataset(s)/table(s) found.
-##  Keywords: bop, its 
-##  
+## 2016-06-09 11:45:29
+## 7 dataset(s)/table(s) found.
+## Keywords: bop, its
+## 
 ## End.
 ```
 
@@ -295,87 +258,84 @@ find(bop,-ybk,its)
 ```
 
 ```
-## 2016-06-07 16:01:13 
-##  6 dataset(s)/table(s) found.
-##  Keywords: bop, -ybk, its 
-##  
+## 2016-06-09 11:45:30
+## 6 dataset(s)/table(s) found.
+## Keywords: bop, -ybk, its
 ## 
 ##  Database by themes >>
 ##  Economy and finance >>
 ##  Balance of payments - International transactions >>
 ##  International trade in services, geographical breakdown
-##  
-## No : 1 
-## Dataset name : International trade in services (since 2004) 
-## Code : bop_its_det 
-## Type : dataset 
-## Last update of data : 16.05.2014 
-## Last table structure change : 16.05.2014 
-## Data start : 2004 
-## Data end : 2013 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en 
 ## 
-## No : 2 
-## Dataset name : International trade in services (1985-2003) 
-## Code : bop_its_deth 
-## Type : dataset 
-## Last update of data : 16.05.2014 
-## Last table structure change : 16.05.2014 
-## Data start : 1985 
-## Data end : 2003 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en 
+## No : 1
+## Dataset name : International trade in services (since 2004)
+## Code : bop_its_det
+## Type : dataset
+## Last update of data : 16.05.2014
+## Last table structure change : 16.05.2014
+## Data start : 2004
+## Data end : 2013
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en
 ## 
-## No : 3 
-## Dataset name : International trade in services - market integration indicators 
-## Code : bop_its_str 
-## Type : dataset 
-## Last update of data : 28.05.2014 
-## Last table structure change : 28.05.2014 
-## Data start : 1992 
-## Data end : 2013 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en 
+## No : 2
+## Dataset name : International trade in services (1985-2003)
+## Code : bop_its_deth
+## Type : dataset
+## Last update of data : 16.05.2014
+## Last table structure change : 16.05.2014
+## Data start : 1985
+## Data end : 2003
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en
 ## 
-## No : 4 
-## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2002) 
-## Code : bop_its_tot 
-## Type : dataset 
-## Last update of data : 27.05.2014 
-## Last table structure change : 27.05.2014 
-## Data start : 2002 
-## Data end : 2012 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en 
+## No : 3
+## Dataset name : International trade in services - market integration indicators
+## Code : bop_its_str
+## Type : dataset
+## Last update of data : 28.05.2014
+## Last table structure change : 28.05.2014
+## Data start : 1992
+## Data end : 2013
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en
 ## 
+## No : 4
+## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2002)
+## Code : bop_its_tot
+## Type : dataset
+## Last update of data : 27.05.2014
+## Last table structure change : 27.05.2014
+## Data start : 2002
+## Data end : 2012
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en
 ## 
 ##  Database by themes >>
 ##  Economy and finance >>
 ##  Balance of payments - International transactions (BPM6) >>
 ##  International trade in services, geographical breakdown (BPM6)
-##  
-## No : 5 
-## Dataset name : International trade in services (since 2010) (BPM6) 
-## Code : bop_its6_det 
-## Type : dataset 
-## Last update of data : 01.06.2016 
-## Last table structure change : 01.06.2016 
-## Data start : 2010 
-## Data end : 2015 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en 
 ## 
-## No : 6 
-## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6) 
-## Code : bop_its6_tot 
-## Type : dataset 
-## Last update of data : 01.06.2016 
-## Last table structure change : 01.06.2016 
-## Data start : 2010 
-## Data end : 2015 
-## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en 
+## No : 5
+## Dataset name : International trade in services (since 2010) (BPM6)
+## Code : bop_its6_det
+## Type : dataset
+## Last update of data : 01.06.2016
+## Last table structure change : 01.06.2016
+## Data start : 2010
+## Data end : 2015
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
 ## 
+## No : 6
+## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)
+## Code : bop_its6_tot
+## Type : dataset
+## Last update of data : 01.06.2016
+## Last table structure change : 01.06.2016
+## Data start : 2010
+## Data end : 2015
+## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en
 ## 
-##  2016-06-07 16:01:13 
-##  6 dataset(s)/table(s) found.
-##  Keywords: bop, -ybk, its 
-##  
+## 2016-06-09 11:45:30
+## 6 dataset(s)/table(s) found.
+## Keywords: bop, -ybk, its
+## 
 ## End.
 ```
 
@@ -384,7 +344,7 @@ find(bop,-ybk,its)
 browseDataList(grepl('bop',Code) & grepl('its',Code))
 ```
 
-<!DOCTYPE html><html><head><style type="text/css">table.gridtable {font-family: verdana,arial,sans-serif;font-size:11px;color:#333333;border-width: 1px;border-color: #666666;border-collapse: collapse;}table.gridtable th {border-width: 1px;padding: 4px;border-style: solid;border-color: #666666;background-color: #dedede;}table.gridtable td {border-width: 1px;padding: 4px;border-style: solid;border-color: #666666;background-color: #ffffff;}</style></head><body> <p><tt>&#9632; Generated on:&nbsp;2016-06-07 16:01:14 &#9632; Number of datasets/tables found:&nbsp;7 &#9632; Search criteria:&nbsp;grepl("bop", Code) & grepl("its", Code)</tt></p> <!-- html table generated in R 3.2.3 by xtable 1.7-4 package --><!-- Tue Jun 07 16:01:14 2016 --><table class="gridtable"><tr> <th> Row </th> <th> Data subgroup, level 0 </th> <th> Data subgroup, level 1 </th> <th> Data subgroup, level 2 </th> <th> Data subgroup, level 3 </th> <th> Dataset name </th> <th> Code </th> <th> Type </th> <th> Last update of data </th> <th> Last table structure change </th> <th> Data start </th> <th> Data end </th> <th> Link </th></tr><tr> <td> 1 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services (since 2004)</b> </td> <td> <tt><b>bop_its_det</b></tt> </td> <td> dataset </td> <td> 16.05.2014 </td> <td> 16.05.2014 </td> <td> 2004 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 2 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services (1985-2003)</b> </td> <td> <tt><b>bop_its_deth</b></tt> </td> <td> dataset </td> <td> 16.05.2014 </td> <td> 16.05.2014 </td> <td> 1985 </td> <td> 2003 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 3 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services - market integration indicators</b> </td> <td> <tt><b>bop_its_str</b></tt> </td> <td> dataset </td> <td> 28.05.2014 </td> <td> 28.05.2014 </td> <td> 1992 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 4 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>Total services, detailed geographical breakdown by EU Member States (since 2002)</b> </td> <td> <tt><b>bop_its_tot</b></tt> </td> <td> dataset </td> <td> 27.05.2014 </td> <td> 27.05.2014 </td> <td> 2002 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 5 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services - Data for the Eurostat yearbook</b> </td> <td> <tt><b>bop_its_ybk</b></tt> </td> <td> dataset </td> <td> 06.06.2014 </td> <td> 06.06.2014 </td> <td> 1992 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_ybk&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 6 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions (BPM6) </td> <td> International trade in services, geographical breakdown (BPM6) </td> <td> <b>International trade in services (since 2010) (BPM6)</b> </td> <td> <tt><b>bop_its6_det</b></tt> </td> <td> dataset </td> <td> 01.06.2016 </td> <td> 01.06.2016 </td> <td> 2010 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 7 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions (BPM6) </td> <td> International trade in services, geographical breakdown (BPM6) </td> <td> <b>Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)</b> </td> <td> <tt><b>bop_its6_tot</b></tt> </td> <td> dataset </td> <td> 01.06.2016 </td> <td> 01.06.2016 </td> <td> 2010 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en" target="_blank">click here</a> </td> </tr> </table> </body></html>
+<html> <body> <p><tt>&#9632; Generated on:&nbsp;2016-06-09 11:45:30 &#9632; Number of datasets/tables found:&nbsp;7 &#9632; Search criteria:&nbsp;grepl("bop", Code) & grepl("its", Code)</tt></p> <!-- html table generated in R 3.2.3 by xtable 1.7-4 package --><!-- Thu Jun 09 11:45:31 2016 --><table class="gridtable"><tr> <th> Row </th> <th> Data subgroup, level 0 </th> <th> Data subgroup, level 1 </th> <th> Data subgroup, level 2 </th> <th> Data subgroup, level 3 </th> <th> Dataset name </th> <th> Code </th> <th> Type </th> <th> Last update of data </th> <th> Last table structure change </th> <th> Data start </th> <th> Data end </th> <th> Link </th></tr><tr> <td> 1 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services (since 2004)</b> </td> <td> <tt><b>bop_its_det</b></tt> </td> <td> dataset </td> <td> 16.05.2014 </td> <td> 16.05.2014 </td> <td> 2004 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 2 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services (1985-2003)</b> </td> <td> <tt><b>bop_its_deth</b></tt> </td> <td> dataset </td> <td> 16.05.2014 </td> <td> 16.05.2014 </td> <td> 1985 </td> <td> 2003 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 3 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services - market integration indicators</b> </td> <td> <tt><b>bop_its_str</b></tt> </td> <td> dataset </td> <td> 28.05.2014 </td> <td> 28.05.2014 </td> <td> 1992 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 4 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>Total services, detailed geographical breakdown by EU Member States (since 2002)</b> </td> <td> <tt><b>bop_its_tot</b></tt> </td> <td> dataset </td> <td> 27.05.2014 </td> <td> 27.05.2014 </td> <td> 2002 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 5 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services - Data for the Eurostat yearbook</b> </td> <td> <tt><b>bop_its_ybk</b></tt> </td> <td> dataset </td> <td> 06.06.2014 </td> <td> 06.06.2014 </td> <td> 1992 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_ybk&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 6 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions (BPM6) </td> <td> International trade in services, geographical breakdown (BPM6) </td> <td> <b>International trade in services (since 2010) (BPM6)</b> </td> <td> <tt><b>bop_its6_det</b></tt> </td> <td> dataset </td> <td> 01.06.2016 </td> <td> 01.06.2016 </td> <td> 2010 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 7 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions (BPM6) </td> <td> International trade in services, geographical breakdown (BPM6) </td> <td> <b>Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)</b> </td> <td> <tt><b>bop_its6_tot</b></tt> </td> <td> dataset </td> <td> 01.06.2016 </td> <td> 01.06.2016 </td> <td> 2010 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en" target="_blank">click here</a> </td> </tr> </table> </body></html>
 
 ## Speed demo
 
@@ -392,7 +352,7 @@ eurodata::**importData** compared to [eurostat](https://cran.r-project.org/web/p
 
 
 ```r
-y <- importDataList()  # matadata
+y <- importDataList()  # metadata
 
 d <- unique(y[y$Type=='dataset','Code']) # dataset codes
 
@@ -439,36 +399,36 @@ Res2 # lower = faster (in seconds)
 
 ```
 ##      Data code name importData get_eurostat     ratio
-## 1           vit_bs2       5.85        25.78  4.406838
-## 2      yth_incl_090       0.09         0.37  4.111111
-## 3       spr_exp_eur       0.53         3.53  6.660377
-## 4      yth_incl_130       0.09         0.51  5.666667
-## 5      mar_sg_am_cv       0.08         0.08  1.000000
-## 6        sts_inpi_q       2.85        30.03 10.536842
-## 7         ei_isrt_q       0.09         0.25  2.777778
-## 8       demo_nsinrt       0.50         3.73  7.460000
-## 9       sbs_ins_5d2       0.06         0.20  3.333333
-## 10    earn_ses06_18       0.19           NA        NA
+## 1           vit_bs2       6.09        25.61  4.205255
+## 2      yth_incl_090       0.11         0.36  3.272727
+## 3       spr_exp_eur       0.65         3.59  5.523077
+## 4      yth_incl_130       0.11         0.56  5.090909
+## 5      mar_sg_am_cv       0.07         0.07  1.000000
+## 6        sts_inpi_q       2.82        30.19 10.705674
+## 7         ei_isrt_q       0.08         0.24  3.000000
+## 8       demo_nsinrt       0.61         3.71  6.081967
+## 9       sbs_ins_5d2       0.06         0.24  4.000000
+## 10    earn_ses06_18       0.18           NA        NA
 ## 11         iss_barr       0.34           NA        NA
-## 12     lmp_expme_lu       0.13         0.72  5.538462
-## 13    hlth_ehis_hc1       0.32           NA        NA
-## 14         nrg_122m       0.53         6.52 12.301887
-## 15      hlth_dsi050       0.06           NA        NA
-## 16     road_eqr_bum       0.05         0.13  2.600000
-## 17       hlth_dp050       0.06           NA        NA
+## 12     lmp_expme_lu       0.10         0.74  7.400000
+## 13    hlth_ehis_hc1       0.11           NA        NA
+## 14         nrg_122m       0.48         6.58 13.708333
+## 15      hlth_dsi050       0.08           NA        NA
+## 16     road_eqr_bum       0.06         0.14  2.333333
+## 17       hlth_dp050       0.07           NA        NA
 ## 18        hlth_hlye       0.08         0.22  2.750000
-## 19    naio_agg_aimp       0.45         4.21  9.355556
-## 20         migr_lct       0.21         2.15 10.238095
-## 21     hsw_aw_inaag       0.15         0.80  5.333333
-## 22      hlth_dhc060       0.12         0.50  4.166667
-## 23     nasa_10_f_bs      21.06       167.26  7.942070
-## 24 htec_emp_risced2       0.95         7.63  8.031579
-## 25       bop_gdp6_q       0.64           NA        NA
-## 26  ext_lt_intertrd       0.27         2.17  8.037037
-## 27   earn_ses_agt15       0.27           NA        NA
-## 28      env_wat_cat       0.09         0.36  4.000000
-## 29  rail_go_natdist       0.23         2.23  9.695652
-## 30    hlth_cd_ysdr1      10.24        10.93  1.067383
+## 19    naio_agg_aimp       0.48         4.19  8.729167
+## 20         migr_lct       0.23         2.20  9.565217
+## 21     hsw_aw_inaag       0.16         0.81  5.062500
+## 22      hlth_dhc060       0.12         0.61  5.083333
+## 23     nasa_10_f_bs      21.51       166.98  7.762901
+## 24 htec_emp_risced2       0.96         7.61  7.927083
+## 25       bop_gdp6_q       0.72           NA        NA
+## 26  ext_lt_intertrd       0.27         2.16  8.000000
+## 27   earn_ses_agt15       0.28           NA        NA
+## 28      env_wat_cat       0.08         0.36  4.500000
+## 29  rail_go_natdist       0.29         2.15  7.413793
+## 30    hlth_cd_ysdr1      10.36        10.95  1.056950
 ```
 
 ```r
@@ -478,7 +438,7 @@ mean(Res2$ratio, na.rm=TRUE)
 ```
 
 ```
-## [1] 5.956985
+## [1] 5.833575
 ```
 
 ```r
@@ -486,5 +446,5 @@ median(Res2$ratio, na.rm=TRUE)
 ```
 
 ```
-## [1] 5.538462
+## [1] 5.090909
 ```

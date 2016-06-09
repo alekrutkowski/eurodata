@@ -6,13 +6,9 @@ output:
     keep_md: true
 ---
 
-<style type="text/css">
-.main-container {
-  max-width: 1280px;
-}
-</style>
-
 ```{r helpers, include=FALSE}
+options(width = 120)
+eurostat::clean_eurostat_cache() # in case repeated evaluation
 cran <- function(package)
     paste0('https://cran.r-project.org/web/packages/',
            package,'/index.html')
@@ -45,7 +41,7 @@ Search functionality:
 - **browseDataList** -- based on importDataList, shows an HTML table
 (generated with `r lnk('xtable','xtable')`) in a browser with a list of the found datasets
 - **find** -- based on importDataList, shows a textal report on the found datasets --
-a ``quick-n-dirty'' way to find a Eurostat dataset witout much typing (with a keyword or a few keywords)
+a ``quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
 ## Installation
 
@@ -61,29 +57,32 @@ library(eurodata)
 
 ### Imports
 
-```{r background_setup, include=FALSE}
-options(width = 120)
-# A trick to display the side-effects:
-browseDataList <- function(...) cat(eurodata::browseDataList(...)$html, sep='\n')
-find <- function(...) cat(eurodata::find(...)$report, sep='\n')
-eurostat::clean_eurostat_cache() # in case repeated evaluation
-```
-
-```{r import_demo, warning=FALSE}
+```{r import_demo, warning=FALSE, , message=FALSE}
 x <- importData('nama_10_a10')  # actual dataset
 str(x)
 head(x,10)
 # Friendly error if a wrong data code (similar for importLabels):
 tryCatch(importData('nama_10_a10_XXX'),
          error = function(e) cat(geterrmessage()))
-y <- importDataList()  # matadata
+y <- importDataList()  # metadata
 colnames(y)
-str(y[y$Code=='nama_10_a10',])  # matadata on x
+str(y[y$Code=='nama_10_a10',])  # metadata on x
 z <- importLabels('geo')
 head(z,10)
 ```
 
 ### Search
+
+```{r background_setup, include=FALSE}
+# A trick to display the side-effects:
+library(magrittr)
+browseDataList <- function(...) eurodata::browseDataList(...)$html %>%
+    substr(457, nchar(.)) %>%  # drop html style preamble not supported by GitHub md parser
+    paste('<html>',.) %>%
+    cat(sep='\n')
+find <- function(...) eurodata::find(...)$report %>%
+    cat(sep='\n')
+```
 
 ```{r find_demo}
 find(bop, its)
@@ -99,7 +98,7 @@ browseDataList(grepl('bop',Code) & grepl('its',Code))
 eurodata::**importData** compared to `r lnk('eurostat','get_eurostat')`:
 
 ```{r speed_demo}
-y <- importDataList()  # matadata
+y <- importDataList()  # metadata
 
 d <- unique(y[y$Type=='dataset','Code']) # dataset codes
 

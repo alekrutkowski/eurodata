@@ -4,10 +4,10 @@
 \alias{browseDataList}
 \title{Search Eurostat datasets and see the result as a table in a browser}
 \usage{
-browseDataList(...)
+browseDataList(subs)
 }
 \arguments{
-\item{...}{An expression (symbolic, unquoted) to be passted to \code{\link{subset}}.
+\item{subs}{An expression to be passed to \code{\link[base]{subset}}.
 The column names of the table of datasets can be used -- those with spaces should be
 backtick (`) quoted. See the examples below.}
 }
@@ -16,8 +16,10 @@ backtick (`) quoted. See the examples below.}
   \item Side effect -- a table opened in a browser via \code{\link[utils]{browseURL}}.
   \item Value -- a list with:
   \itemize{
+    \item criteria -- a string, search criteria,
+    \item time -- the time of the query,
     \item df -- a data.frame, imported via \code{\link[eurodata]{importDataList}} and
-    filtered based on the conditions specified in \code{...}.
+    filtered based on the conditions specified in \code{subs}.
     \item html -- a string, with the HTML code that generated the table in a browser.
   }
 }

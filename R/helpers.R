@@ -71,71 +71,76 @@ grepv <- Vectorize(function(p,x)
                     unlist %>%
                     unique)
 
+dfToLines <- function(df, info_message)
+    (if (nrow(df)>0) {
+        HierarchyCols <- df %>%
+            colnames %>%
+            grep('Data subgroup.*',.)
+        Hierarchy <- df %>%
+            extract(HierarchyCols) %>%
+            apply(MARGIN=1, paste, collapse=" >>\n ") %>%
+            gsub(' >>\n  >>\n', "", ., fixed=TRUE) %>%
+            sub(' >>\n $',"",.) %++%
+            '\n'
+        df %>%
+            extract(-HierarchyCols) %>%
+            cbind(Hierarchy) %>%
+            within({
+                No <- seq_along(Code)}) %>%
+            merge(stats::aggregate(.$No,
+                                   by=list(.$Hierarchy),
+                                   mean) %>%
+                      set_colnames(c('Hierarchy','meanNo'))) %>%
+            within({
+                Hierarchy <- # to preserve order in split below
+                    paste(formatC(round(meanNo),
+                                  digits=4,
+                                  flag=0),
+                          Hierarchy)
+                meanNo <- NULL
+            }) %>%
+            moveColLeft('No') %>%
+            extractRows(order(.$No)) %>%
+            split(.$Hierarchy %>%
+                      as.factor) %>%
+            Reduce(function(x,y) {
+                heading <- y$Hierarchy %>%
+                    unique %>%
+                    as.character %>%
+                    sub('^\\w+ ',"",.)
+                y %>%
+                    within(Hierarchy <- NULL) %>%
+                    extractRows(order(.$No)) %>%
+                    split(.$No) %>%
+                    sapply(function(d)
+                        paste(colnames(d),':',d,collapse='\n')) %>%
+                    paste(collapse='\n\n') %>%
+                    paste(x,"\n " %++% heading,.,sep='\n',collapse="")},
+                x=.,
+                init="") %>%
+            paste(info_message,.,"",sep="",collapse="") %++%
+            '\n\n'}) %>%
+        paste(info_message,'\n\nEnd.',sep="",collapse="")
+
 #' @export
-print.FoundEurostatDatasetList <- function(df, time, criteria) {
-    NRow <- nrow(df)
+print.FoundEurostatDatasetList <- function(x) {
     tmpf <- tempfile(fileext = '.txt')
-    info_message <- paste(time,'\n',
-                          NRow,'dataset(s)/table(s) found.\n',
-                          'Keywords:',criteria,'\n')
-    lines <- capture.output({
-        if (NRow>0) {
-            cat(info_message,'\n')
-            HierarchyCols <- df %>%
-                colnames %>%
-                grep('Data subgroup.*',.)
-            Hierarchy <- df %>%
-                extract(HierarchyCols) %>%
-                apply(MARGIN=1, paste, collapse=" >>\n ") %>%
-                gsub(' >>\n  >>', "", ., fixed=TRUE) %>%
-                sub(' >>\n $',"",.)  %++%
-                '\n'
-            df %>%
-                extract(-HierarchyCols) %>%
-                cbind(Hierarchy) %>%
-                within({
-                    No <- seq_along(Code)}) %>%
-                merge(stats::aggregate(.$No,
-                                by=list(.$Hierarchy),
-                                mean) %>%
-                          set_colnames(c('Hierarchy','meanNo'))) %>%
-                within({
-                    Hierarchy <- # to preserve order in split below
-                        paste(formatC(round(meanNo),
-                                      digits=4,
-                                      flag=0),
-                              Hierarchy)
-                    meanNo <- NULL
-                }) %>%
-                moveColLeft('No') %>%
-                extractRows(order(.$No)) %>%
-                split(.$Hierarchy %>%
-                          as.factor) %>%
-                lapply(function(x) {
-                    cat('\n',
-                        x$Hierarchy %>%
-                            as.character %>%
-                            sub('^\\w+ ',"",.) %>%
-                            unique,'\n')
-                    within(x, Hierarchy <- NULL) %>%
-                        split(row.names(.) %>% as.factor) %>%
-                        lapply(function(d) {
-                            colnames(d) %>%
-                                lapply(function(x)
-                                    cat(x, ':', d[[x]], '\n'))
-                            cat('\n')
-                        })})
-        }
-        cat('\n',info_message,'\nEnd.')
-    })
-    cat(lines, file=tmpf, sep="\n")
+    cat(x$report, file=tmpf, sep="\n")
     file.show(tmpf, title = "Results for 'found'")
-    invisible(list(df=df, report=lines %>%
-                       addClass('FoundEurostatDatasetListReport')))
+    invisible(x)
 }
 
+#' @export
 print.FoundEurostatDatasetListReport <- function(x) {
     cat(x, sep="\n")
+    invisible(x)
+}
+
+#' @export
+print.BrowsedEurostatDatasetList <- function(x) {
+    tf <- tempfile(fileext='.html')
+    cat(x$html, file=tf)
+    utils::browseURL(tf)
     invisible(x)
 }
 

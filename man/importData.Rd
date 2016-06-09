@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_import.R
 \name{importData}
 \alias{importData}
-\title{Download and import a EuroStat dataset}
+\title{Download and import a Eurostat dataset}
 \usage{
 importData(EurostatDatasetCode)
 }
@@ -18,6 +18,6 @@ of all dimensions (e.g. if dimensions are: countries, years, sectors, and indica
 added in retail in Germany in 2013).
 }
 \description{
-Download and import a EuroStat dataset
+Download and import a Eurostat dataset
 }
 

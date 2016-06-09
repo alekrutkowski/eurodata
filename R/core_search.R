@@ -1,6 +1,6 @@
 #' Search Eurostat datasets and see the result as a table in a browser
 #'
-#' @param ... An expression (symbolic, unquoted) to be passted to \code{\link{subset}}.
+#' @param subs An expression to be passed to \code{\link[base]{subset}}.
 #' The column names of the table of datasets can be used -- those with spaces should be
 #' backtick (`) quoted. See the examples below.
 #' @return
@@ -8,8 +8,10 @@
 #'   \item Side effect -- a table opened in a browser via \code{\link[utils]{browseURL}}.
 #'   \item Value -- a list with:
 #'   \itemize{
+#'     \item criteria -- a string, search criteria,
+#'     \item time -- the time of the query,
 #'     \item df -- a data.frame, imported via \code{\link[eurodata]{importDataList}} and
-#'     filtered based on the conditions specified in \code{...}.
+#'     filtered based on the conditions specified in \code{subs}.
 #'     \item html -- a string, with the HTML code that generated the table in a browser.
 #'   }
 #' }
@@ -20,13 +22,15 @@
 #' }
 #' @useDynLib eurodata
 #' @export
-browseDataList <- function(...) {
-    t <- Sys.time()
-    tf <- tempfile(fileext='.html')
-    SearchCriteria <- substitute(...) %>%
+browseDataList <- function(subs) {
+    SearchCriteria <-
+        substitute(subs) %>%
         deparse
-    Table <- importDataList() %>%
-        subset(...)
+    t_ <- Sys.time()
+    Table <-
+        bquote(subset(importDataList(),  # due to non-standard eval in subset
+                      .(substitute(subs)))) %>%
+        eval
     NRow <- nrow(Table)
     html <- (if (NRow==0)
         data.frame(`Nothing found` = character(0),
@@ -47,7 +51,7 @@ browseDataList <- function(...) {
               html.table.attributes='class="gridtable"',
               print.results=FALSE) %>%
         paste(CssStyle,
-              p('&#9632; Generated on:&nbsp;' %++% t %++% ' &#9632; ' %++%
+              p('&#9632; Generated on:&nbsp;' %++% t_ %++% ' &#9632; ' %++%
                     'Number of datasets/tables found:&nbsp;' %++% NRow %++% ' &#9632; ' %++%
                     'Search criteria:&nbsp;' %++% SearchCriteria),
               .,
@@ -56,11 +60,11 @@ browseDataList <- function(...) {
             gsub(char,"",str,fixed=TRUE),
             x=c('\n','\t',"  "),
             init=.)
-    cat(html, file=tf)
-    utils::browseURL(tf)
-    invisible(list(df=Table %>%
-                  addClass('BrowsedEurostatDatasetList'),
-                  html=html))
+    list(criteria=SearchCriteria,
+         time=t_,
+         df=Table,
+         html=html) %>%
+        addClass('BrowsedEurostatDatasetList')
 }
 
 
@@ -75,12 +79,14 @@ browseDataList <- function(...) {
 #' quoted. Partial word/phrase match is applied. See the examples below.
 #' @return
 #' \itemize{
-#'   \item Side effect -- a text report file opened via \code{\link{file.show}}.
+#'   \item Side effect (via \code{print}) -- a text report file opened via \code{\link{file.show}}.
 #'   \item Value -- a list with:
 #'   \itemize{
+#'     \item criteria -- a string, search criteria,
+#'     \item time -- the time of the query,
 #'     \item df -- a data.frame, imported via \code{\link[eurodata]{importDataList}} and
-#'     filtered based on the conditions specified in \code{...}.
-#'     \item report -- a character vector, with the lines of the text report.
+#'     filtered based on the conditions specified in \code{...},
+#'     \item report -- a string, with the text report.
 #'   }
 #' }
 #' @examples
@@ -106,14 +112,14 @@ find <- function(...) {
                 length(y)==2 && y[[1]]==quote(`-`),
                 list(and=x$and,not=c(x$not,y[[2]])),
                 # else:
-                stop(call.=FALSE, '
-                     Every argument in find(...) must be either just a single unquoted word
-                     or a single unquoted word preceded just by a minus!
-                     E.g. find(bop, its, -ybk)')),
+                stop(call.=FALSE,
+                     paste("",'Every argument in find(...) must be either just a single unquoted word',
+                           'or a single unquoted word preceded just by a minus!',
+                           'E.g. find(bop, its, -ybk)', sep='\n'))),
             x=.,
             init=list(and=NULL,not=NULL)) %>%
         lapply(function(x) x %>% as.character)
-    t <- Sys.time() %>% as.character
+    t_ <- Sys.time()
     Table <- importDataList() %>%
         extractRows(union(intersect(Critera$and %And% .$Code,
                                     Critera$not %Not% .$Code),
@@ -122,10 +128,19 @@ find <- function(...) {
         Filter(function(x)
             not(all(x=="")), .) # drop empty columns
     NRow <- nrow(Table)
-    print(Table %>%
-              addClass('FoundEurostatDatasetList'),
-          t,
-          substitute(list(...)) %>%
-              tail(-1) %>%
-              paste(collapse=", "))
+    criteria <- substitute(list(...)) %>%
+        tail(-1) %>%
+        paste(collapse=", ")
+    info_message <- paste(t_,
+                          NRow %++% ' dataset(s)/table(s) found.',
+                          'Keywords: ' %++% criteria,
+                          sep='\n')
+    report <- Table %>%
+        dfToLines(info_message)
+    list(criteria=criteria,
+         time=t_,
+         df=Table,
+         report=report %>%
+             addClass('FoundEurostatDatasetListReport')) %>%
+        addClass('FoundEurostatDatasetList')
 }

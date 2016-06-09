@@ -16,12 +16,14 @@ quoted. Partial word/phrase match is applied. See the examples below.}
 }
 \value{
 \itemize{
-  \item Side effect -- a text report file opened via \code{\link{file.show}}.
+  \item Side effect (via \code{print}) -- a text report file opened via \code{\link{file.show}}.
   \item Value -- a list with:
   \itemize{
+    \item criteria -- a string, search criteria,
+    \item time -- the time of the query,
     \item df -- a data.frame, imported via \code{\link[eurodata]{importDataList}} and
-    filtered based on the conditions specified in \code{...}.
-    \item report -- a character vector, with the lines of the text report.
+    filtered based on the conditions specified in \code{...},
+    \item report -- a string, with the text report.
   }
 }
 }

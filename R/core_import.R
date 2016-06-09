@@ -1,4 +1,4 @@
-#' Download and import a EuroStat dataset
+#' Download and import a Eurostat dataset
 #'
 #' @param EurostatDatasetCode A string with Eurostat dataset code name, e.g. \code{nama_10_gdp} or \code{bop_its6_det}.
 #' See e.g.:
