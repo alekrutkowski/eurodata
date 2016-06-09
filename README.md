@@ -13,13 +13,13 @@ Import functionality:
 - **importDataLabels** -- as above
 - **importDataList** -- reflects the hierarchical structure of the Eurostat tree of datasets --
 fast transformation of the raw [Table of Contents file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt)
-is based on a C++ code snipped compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)  
+is based on a C++ code snippet compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)  
 
 Search functionality:
 
 - **browseDataList** -- based on importDataList, shows an HTML table
 (generated with [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable)) in a browser with a list of the found datasets
-- **find** -- based on importDataList, shows a textal report on the found datasets --
+- **find** -- based on importDataList, shows a textual report on the found datasets --
 a ``quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
 ## Installation
@@ -85,7 +85,7 @@ head(x,10)
 ```
 
 ```r
-# Friendly error if a wrong data code (similar for importLabels):
+# Friendly error if a wrong data code (similarly for importLabels):
 tryCatch(importData('nama_10_a10_XXX'),
          error = function(e) cat(geterrmessage()))
 ```

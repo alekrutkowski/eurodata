@@ -34,13 +34,13 @@ Import functionality:
 - **importDataLabels** -- as above
 - **importDataList** -- reflects the hierarchical structure of the Eurostat tree of datasets --
 fast transformation of the raw [Table of Contents file](`r estat_toc_link`)
-is based on a C++ code snipped compiled via [Rcpp](`r cran('Rcpp')`)  
+is based on a C++ code snippet compiled via [Rcpp](`r cran('Rcpp')`)  
 
 Search functionality:
 
 - **browseDataList** -- based on importDataList, shows an HTML table
 (generated with `r lnk('xtable','xtable')`) in a browser with a list of the found datasets
-- **find** -- based on importDataList, shows a textal report on the found datasets --
+- **find** -- based on importDataList, shows a textual report on the found datasets --
 a ``quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
 ## Installation
@@ -61,7 +61,7 @@ library(eurodata)
 x <- importData('nama_10_a10')  # actual dataset
 str(x)
 head(x,10)
-# Friendly error if a wrong data code (similar for importLabels):
+# Friendly error if a wrong data code (similarly for importLabels):
 tryCatch(importData('nama_10_a10_XXX'),
          error = function(e) cat(geterrmessage()))
 y <- importDataList()  # metadata

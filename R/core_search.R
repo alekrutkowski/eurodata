@@ -103,7 +103,6 @@ find <- function(...) {
         as.list %>%
         tail(-1) %>%
         lapply(as.list) %>%
-        # lapply(function(x) if(x %>% is.null) list("") else x) %>%
         Reduce(function(x,y)
             cond(# and case:
                 length(y)<=1,
