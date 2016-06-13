@@ -5,7 +5,7 @@
 #' backtick (`) quoted. See the examples below.
 #' @return
 #' \itemize{
-#'   \item Side effect -- a table opened in a browser via \code{\link[utils]{browseURL}}.
+#'   \item Side effect (via \code{print}) -- a table opened in a browser via \code{\link[utils]{browseURL}}.
 #'   \item Value -- a list with:
 #'   \itemize{
 #'     \item criteria -- a string, search criteria,
