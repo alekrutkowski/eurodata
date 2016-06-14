@@ -25,7 +25,8 @@
 browseDataList <- function(subs) {
     SearchCriteria <-
         substitute(subs) %>%
-        deparse
+        deparse %>%
+        paste(collapse=" ")
     t_ <- Sys.time()
     Table <-
         bquote(subset(importDataList(),  # due to non-standard eval in subset

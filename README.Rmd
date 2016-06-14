@@ -85,11 +85,18 @@ find <- function(...) eurodata::find(...)$report %>%
 ```
 
 ```{r find_demo}
+# Free text search based on the parts of words in the dataset names
+find(gdp,main,selected,-quarterly)
+# Search based on the parts of the dataset codes
 find(bop, its)
 find(bop,-ybk,its)
 ```
 
 ```{r browse_demo, results='asis'}
+browseDataList(grepl('GDP',`Dataset name`) &
+                   grepl('main',`Dataset name`) &
+                   grepl('selected',`Dataset name`) &
+                   !grepl('quarterly',`Dataset name`))
 browseDataList(grepl('bop',Code) & grepl('its',Code))
 ```
 
@@ -97,7 +104,7 @@ browseDataList(grepl('bop',Code) & grepl('its',Code))
 
 eurodata::**importData** compared to `r lnk('eurostat','get_eurostat')`:
 
-```{r speed_demo}
+```{r speed_demo, cache=TRUE}
 y <- importDataList()  # metadata
 
 d <- unique(y[y$Type=='dataset','Code']) # dataset codes
@@ -126,11 +133,11 @@ compileInfo <-
     }
 ```
 
-```{r, message=FALSE, warning=FALSE, results='hide'}
+```{r, message=FALSE, warning=FALSE, results='hide', cache=TRUE}
 L <- lapply(d30, compileInfo)
 ```
 
-```{r}
+```{r, cache=TRUE}
 Res <- do.call(rbind, L)
 
 Res2 <- within(Res,
