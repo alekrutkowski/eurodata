@@ -1,7 +1,7 @@
 Package: eurodata
 Type: Package
 Title: Fast and easy Eurostat data import and search
-Version: 1.0.1
+Version: 1.1.0
 Date: 2014-06-09
 Author: Aleksander Rutkowski
 Maintainer: Aleksander Rutkowski <alek.rutkowski@gmail.com>
