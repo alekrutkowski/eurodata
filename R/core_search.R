@@ -32,35 +32,7 @@ browseDataList <- function(subs) {
         bquote(subset(importDataList(),  # due to non-standard eval in subset
                       .(substitute(subs)))) %>%
         eval
-    NRow <- nrow(Table)
-    html <- (if (NRow==0)
-        data.frame(`Nothing found` = character(0),
-                   check.names=FALSE) else
-                       Table %>%
-                           within({
-                               Link <- link(Link, 'click here')
-                               Row <- seq_along(Code) %>% as.character
-                               Code <- '<tt><b>' %++% Code %++% '</b></tt>'
-                               `Dataset name` <- '<b>' %++% `Dataset name` %++% '</b>'}) %>%
-                           moveColLeft('Row') %>%
-                           Filter(function(x)
-                               not(all(x=="")), .)) %>%
-        xtable::xtable() %>%
-        print(type='html',
-              sanitize.text.function = force,
-              include.rownames = FALSE,
-              html.table.attributes='class="gridtable"',
-              print.results=FALSE) %>%
-        paste(CssStyle,
-              p('&#9632; Generated on:&nbsp;' %++% t_ %++% ' &#9632; ' %++%
-                    'Number of datasets/tables found:&nbsp;' %++% NRow %++% ' &#9632; ' %++%
-                    'Search criteria:&nbsp;' %++% SearchCriteria),
-              .,
-              '</body></html>', collapse="") %>%
-        Reduce(function(str,char)  # minimise html file for faster rendering
-            gsub(char,"",str,fixed=TRUE),
-            x=c('\n','\t',"  "),
-            init=.)
+    html <- tableToHtml(Table, t_, SearchCriteria)
     list(criteria=SearchCriteria,
          time=t_,
          df=Table,

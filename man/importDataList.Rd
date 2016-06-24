@@ -8,8 +8,9 @@ importDataList()
 }
 \value{
 The imported data.frame reflects the hierarchical
-structure of datasets (see the columns "Data subgroup, level 0",
-"Data subgroup, level 1", "Data subgroup, level 2", etc.).
+structure of datasets (see the columns \code{Data subgroup, level 0},
+\code{Data subgroup, level 1}, \code{Data subgroup, level 2}, etc.).
+It is tagged with S3 class \code{EurostatDataList}.
 }
 \description{
 Import and reshape Eurostat inventory of datasets

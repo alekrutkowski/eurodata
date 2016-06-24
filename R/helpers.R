@@ -12,9 +12,11 @@ message_ <- function(x, ...) { # to be used inside pipes
 }
 
 addClass <- function(obj, ClassName)
-    `class<-`(obj,
-              c(ClassName,
-                class(obj)))
+    if (inherits(obj, ClassName))
+        obj else
+            `class<-`(obj,
+                      c(ClassName,
+                        class(obj)))
 
 addAttr <- `attr<-`
 
@@ -123,7 +125,7 @@ dfToLines <- function(df, info_message)
         paste(info_message,'\n\nEnd.',sep="",collapse="")
 
 #' @export
-print.FoundEurostatDatasetList <- function(x) {
+print.FoundEurostatDatasetList <- function(x, ...) {
     tmpf <- tempfile(fileext = '.txt')
     cat(x$report, file=tmpf, sep="\n")
     file.show(tmpf, title = "Results for 'found'")
@@ -131,17 +133,95 @@ print.FoundEurostatDatasetList <- function(x) {
 }
 
 #' @export
-print.FoundEurostatDatasetListReport <- function(x) {
+print.FoundEurostatDatasetListReport <- function(x, ...) {
     cat(x, sep="\n")
     invisible(x)
 }
 
 #' @export
-print.BrowsedEurostatDatasetList <- function(x) {
+print.BrowsedEurostatDatasetList <- function(x, ...) {
     tf <- tempfile(fileext='.html')
     cat(x$html, file=tf)
     utils::browseURL(tf)
     invisible(x)
+}
+
+#' @export
+print.EurostatDataList <- function(x,
+                                   SearchCriteria =
+                                       `if`(attr(x,'SearchCriteria') %>% is.null,
+                                            "",
+                                            attr(x,'SearchCriteria')),
+                                   ...) {
+    stopifnot(SearchCriteria %>% is.character,
+              length(SearchCriteria)==1)
+    x %>%
+        tableToHtml(Sys.time(), SearchCriteria) %>%
+        list(html=.) %>%
+        print.BrowsedEurostatDatasetList
+    invisible(x)
+}
+
+#' Coerce a data.frame to a EurostatDataList
+#'
+#' Some manipulations of the \code{EurostatDataList} data.frame
+#' (imported with \code{\link[eurodata]{importDataList}})
+#' e.g. filtering with package \pkg{dplyr} may remove the S3 class tag
+#' \code{EurostatDataList}. This function coerces it back to \code{EurostatDataList}
+#' after checking that the critical columns
+#' (\code{PCode}, \code{Dataset name},\code{Link}) are present. This is useful
+#' if a user wants to print and browse this filtered data.frame as a specially
+#' formatted HTML table.
+#' @param x A (most likely filtered subset of) \code{EurostatDataList} data.frame
+#' returned by \code{\link[eurodata]{importDataList}}.
+#' @param SearchCriteria A string describing the search criteria used for
+#' filtering/subsetting.
+#' @param ... Additional arguments to be passed to or from methods
+#' (currently not used).
+#' @return A data.frame of S3 class \code{EurostatDataList}.
+#' @export
+as.EurostatDataList <- function(x, SearchCriteria="", ...) {
+    stopifnot(x %>% is.data.frame,
+              all(c('Code','Dataset name','Link') %in% names(x)),
+              SearchCriteria %>% is.character,
+              length(SearchCriteria)==1)
+    x %>%
+        addAttr('SearchCriteria',SearchCriteria) %>%
+        addClass('EurostatDataList')
+}
+
+tableToHtml <- function(Table, t_, SearchCriteria) {
+    NRow <- nrow(Table)
+    (if (NRow==0)
+        data.frame(`Nothing found` = character(0),
+                   check.names=FALSE) else
+                       Table %>%
+         within({
+             Link <- link(Link, 'click here')
+             Row <- seq_along(Code) %>% as.character
+             Code <- '<tt><b>' %++% Code %++% '</b></tt>'
+             `Dataset name` <- '<b>' %++% `Dataset name` %++% '</b>'}) %>%
+         moveColLeft('Row') %>%
+         Filter(function(x)
+             not(all(x=="")), .)) %>%
+        xtable::xtable() %>%
+        print(type='html',
+              sanitize.text.function = force,
+              include.rownames = FALSE,
+              html.table.attributes='class="gridtable"',
+              print.results=FALSE) %>%
+        paste(CssStyle,
+              p('&#9632; Generated on:&nbsp;' %++% t_ %++% ' &#9632; ' %++%
+                    'Number of datasets/tables found:&nbsp;' %++% NRow %++%
+                    `if`(SearchCriteria != "",
+                         ' &#9632; Search criteria:&nbsp;' %++% SearchCriteria,
+                         "")),
+              .,
+              '</body></html>', collapse="") %>%
+        Reduce(function(str,char)  # minimise html file for faster rendering
+            gsub(char,"",str,fixed=TRUE),
+            x=c('\n','\t',"  "),
+            init=.)
 }
 
 cond <- function(...) {

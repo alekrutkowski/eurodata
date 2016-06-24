@@ -110,8 +110,9 @@ importLabels <- function(EurostatDimCode) {
 #' Import and reshape Eurostat inventory of datasets
 #'
 #' @return The imported data.frame reflects the hierarchical
-#' structure of datasets (see the columns "Data subgroup, level 0",
-#' "Data subgroup, level 1", "Data subgroup, level 2", etc.).
+#' structure of datasets (see the columns \code{Data subgroup, level 0},
+#' \code{Data subgroup, level 1}, \code{Data subgroup, level 2}, etc.).
+#' It is tagged with S3 class \code{EurostatDataList}.
 #' @export
 importDataList <- function() {
     RawTable <-
@@ -160,9 +161,48 @@ importDataList <- function() {
                               '&lang=en')) %>%
         set_colnames(colnames(.) %>%
                          sub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", # upper case first char
-                             ., perl=TRUE))
+                             ., perl=TRUE)) %>%
+        addClass('EurostatDataList')
 }
 
-
-
+#' Import Eurostat ``Metabase''
+#'
+#' The Eurostat ``Metabase'' shows which datasets contain which
+#' dimensions (where a dimension is e.g. \code{geo} or \code{nace_r2}
+#' or \code{indic_sb}) and, within each dataset and dimension,
+#' which codes (e.g. which countries for the \code{geo} dimension).
+#' @return The imported data.frame which reflects the hierarchical
+#' structure described above. It is a `flat' data.frame with 3 columns, where
+#' each row corresponds to the combination of:
+#' \itemize{
+#'   \item \code{Code} -- Eurostat dataset code names,
+#'   e.g. \code{"nama_10_a64"}
+#'   \item \code{Dim_name} -- Eurostat dimension code names,
+#'   e.g. \code{"nace_r2"}
+#'   \item \code{Dim_val} -- Eurostat dimension code values,
+#'   e.g. \code{"EU28"} if \code{Dim_name} is \code{"geo"};
+#'   not to be confused with the actual numeric values
+#'   in the actual datasets
+#' }
+#' @export
+importMetabase <- function() {
+    # Download
+    message('Downloading Eurostat Metabase')
+    TempGZfileName <- tempfile(fileext='.gz')
+    t <- Sys.time()
+    utils::download.file(EurostatBaseUrl %++% 'metabase.txt.gz',
+                         TempGZfileName)
+    # Uncompress and verify
+    message('Uncompressing (extracting)')
+    TempTSVfileName <- R.utils::gunzip(TempGZfileName)
+    # Read into RAM
+    TempTSVfileName %>%
+        message_('Importing (reading into memory)') %>%
+        data.table::fread(sep='\t',
+                          sep2=',',
+                          colClasses='character',
+                          header=FALSE) %>%
+        data.table::setnames(c('Code','Dim_name','Dim_val')) %>%
+        as.data.frame
+}
 

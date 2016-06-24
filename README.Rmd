@@ -2,8 +2,8 @@
 title: "eurodata -- R package for fast and easy Eurostata data import and search"
 author: "Aleksander Rutkowski"
 output:
-  html_document:
-    keep_md: true
+html_document:
+keep_md: true
 ---
 
 ```{r helpers, include=FALSE}
@@ -26,15 +26,16 @@ estat_toc_link <-
 
 The package relies on [Eurostat's Bulk Download Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
 
-The API contains just 5 functions -- 3 for data or metadata imports and 2 for search:
+The core API contains just 6 functions -- 4 for data or metadata imports and 2 for search:
 
 Import functionality:
 
 - **importData** -- fast thanks to `r lnk('data.table','fread')`
 - **importDataLabels** -- as above
+- **importMetabase** -- as above
 - **importDataList** -- reflects the hierarchical structure of the Eurostat tree of datasets --
 fast transformation of the raw [Table of Contents file](`r estat_toc_link`)
-is based on a C++ code snippet compiled via [Rcpp](`r cran('Rcpp')`)  
+is based on a C++ code snippet compiled via [Rcpp](`r cran('Rcpp')`)
 
 Search functionality:
 
@@ -76,16 +77,23 @@ head(z,10)
 ```{r background_setup, include=FALSE}
 # A trick to display the side-effects:
 library(magrittr)
-browseDataList <- function(...) eurodata::browseDataList(...)$html %>%
+cleanForGH <- function(x) x %>%
     substr(457, nchar(.)) %>%  # drop html style preamble not supported by GitHub md parser
     paste('<html>',.) %>%
     cat(sep='\n')
+browseDataList <- function(...) eurodata::browseDataList(...)$html %>%
+    cleanForGH
+print.EurostatDataList <- function(x, SearchCriteria, ...) x %>%
+    eurodata:::tableToHtml(Sys.time(), SearchCriteria) %>%
+    list(html=.) %>%
+    eurodata:::print.BrowsedEurostatDatasetList() %>%
+    cleanForGH
 find <- function(...) eurodata::find(...)$report %>%
     cat(sep='\n')
 ```
 
 ```{r find_demo}
-# Free text search based on the parts of words in the dataset names
+# Free-style text search based on the parts of words in the dataset names
 find(gdp,main,selected,-quarterly)
 # Search based on the parts of the dataset codes
 find(bop, its)
@@ -100,6 +108,33 @@ browseDataList(grepl('GDP',`Dataset name`) &
 browseDataList(grepl('bop',Code) & grepl('its',Code))
 ```
 
+```{r}
+# Producing a table of datasets which (1) include a dimension `sizeclas`
+# (i.e. firm size class) and (2) some data for firms with fewer than 10 employees
+# (`sizeclas` code "LT10") and (3) have sectorial data (i.e. include a
+# dimension `nace_r2`).
+library(magrittr)
+metab <- importMetabase()
+codes_with_nace <- metab %>% 
+    subset(Dim_name=='nace_r2') %>%
+    extract2('Code') %>%
+    unique
+final_codes <- metab %>%
+    subset(Dim_name=='sizeclas' & Dim_val=='LT10' &
+               Code %in% codes_with_nace) %>%
+    extract2('Code') %>%
+    unique
+```
+
+```{r, results='asis'}
+importDataList() %>%
+    subset(Code %in% final_codes) %>%
+    as.EurostatDataList %>%
+    # the `SearchCriteria` argument below is optional
+    print(SearchCriteria =
+              'those including data on firms with fewer than 10 employees and NACE Rev.2 disaggregation') 
+```
+
 ## Speed demo
 
 eurodata::**importData** compared to `r lnk('eurostat','get_eurostat')`:
@@ -111,7 +146,7 @@ d <- unique(y[y$Type=='dataset','Code']) # dataset codes
 
 set.seed(1234)  # for replicability
 
-d30 <- sample(d, 30) # a random sample of 30 datasets
+d50 <- sample(d, 50) # a random sample of 50 datasets
 
 get_eurostat <- eurostat::get_eurostat  # package 'eurostat' needs to be installed
 
@@ -134,14 +169,14 @@ compileInfo <-
 ```
 
 ```{r, message=FALSE, warning=FALSE, results='hide', cache=TRUE}
-L <- lapply(d30, compileInfo)
+L <- lapply(d50, compileInfo) 
 ```
 
 ```{r, cache=TRUE}
 Res <- do.call(rbind, L)
 
 Res2 <- within(Res,
-       ratio <- get_eurostat/importData)
+               ratio <- get_eurostat/importData)
 
 row.names(Res2) <- NULL # to eliminate the visual noise
 

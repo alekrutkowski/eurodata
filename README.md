@@ -5,15 +5,16 @@ Aleksander Rutkowski
 
 The package relies on [Eurostat's Bulk Download Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
 
-The API contains just 5 functions -- 3 for data or metadata imports and 2 for search:
+The core API contains just 6 functions -- 4 for data or metadata imports and 2 for search:
 
 Import functionality:
 
 - **importData** -- fast thanks to [data.table](https://cran.r-project.org/web/packages/data.table/index.html)::[fread](http://www.rdocumentation.org/packages/data.table/functions/fread)
 - **importDataLabels** -- as above
+- **importMetabase** -- as above
 - **importDataList** -- reflects the hierarchical structure of the Eurostat tree of datasets --
 fast transformation of the raw [Table of Contents file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt)
-is based on a C++ code snippet compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)  
+is based on a C++ code snippet compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
 
 Search functionality:
 
@@ -63,7 +64,7 @@ str(x)
 ##  $ value_ : num  3269 2506 1382 NA 294 ...
 ##  $ flags_ : chr  "" "" "" ":" ...
 ##  - attr(*, "EurostatDatasetCode")= chr "nama_10_a10"
-##  - attr(*, "DownloadTime")= POSIXct, format: "2016-06-14 12:12:38"
+##  - attr(*, "DownloadTime")= POSIXct, format: "2016-06-23 13:55:22"
 ```
 
 ```r
@@ -115,7 +116,7 @@ str(y[y$Code=='nama_10_a10',])  # metadata on x
 ```
 
 ```
-## 'data.frame':	1 obs. of  15 variables:
+## Classes 'EurostatDataList' and 'data.frame':	1 obs. of  15 variables:
 ##  $ Data subgroup, level 0     : chr "Database by themes"
 ##  $ Data subgroup, level 1     : chr "Economy and finance"
 ##  $ Data subgroup, level 2     : chr "National accounts (ESA 2010)"
@@ -126,7 +127,7 @@ str(y[y$Code=='nama_10_a10',])  # metadata on x
 ##  $ Dataset name               : chr "Gross value added and income by A*10 industry breakdowns"
 ##  $ Code                       : chr "nama_10_a10"
 ##  $ Type                       : chr "dataset"
-##  $ Last update of data        : chr "14.06.2016"
+##  $ Last update of data        : chr "22.06.2016"
 ##  $ Last table structure change: chr "14.01.2016"
 ##  $ Data start                 : chr "1975"
 ##  $ Data end                   : chr "2015"
@@ -158,12 +159,12 @@ head(z,10)
 
 
 ```r
-# Free text search based on the parts of words in the dataset names
+# Free-style text search based on the parts of words in the dataset names
 find(gdp,main,selected,-quarterly)
 ```
 
 ```
-## 2016-06-14 12:12:44
+## 2016-06-23 13:55:28
 ## 1 dataset(s)/table(s) found.
 ## Keywords: gdp, main, selected, -quarterly
 ## 
@@ -177,13 +178,13 @@ find(gdp,main,selected,-quarterly)
 ## Dataset name : GDP and main aggregates - selected international annual data
 ## Code : naida_10_gdp
 ## Type : dataset
-## Last update of data : 13.06.2016
+## Last update of data : 22.06.2016
 ## Last table structure change : 03.03.2016
 ## Data start : 1975
 ## Data end : 2015
 ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=naida_10_gdp&lang=en
 ## 
-## 2016-06-14 12:12:44
+## 2016-06-23 13:55:28
 ## 1 dataset(s)/table(s) found.
 ## Keywords: gdp, main, selected, -quarterly
 ## 
@@ -196,7 +197,7 @@ find(bop, its)
 ```
 
 ```
-## 2016-06-14 12:12:44
+## 2016-06-23 13:55:29
 ## 7 dataset(s)/table(s) found.
 ## Keywords: bop, its
 ## 
@@ -280,7 +281,7 @@ find(bop, its)
 ## Data end : 2015
 ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en
 ## 
-## 2016-06-14 12:12:44
+## 2016-06-23 13:55:29
 ## 7 dataset(s)/table(s) found.
 ## Keywords: bop, its
 ## 
@@ -292,7 +293,7 @@ find(bop,-ybk,its)
 ```
 
 ```
-## 2016-06-14 12:12:45
+## 2016-06-23 13:55:29
 ## 6 dataset(s)/table(s) found.
 ## Keywords: bop, -ybk, its
 ## 
@@ -366,7 +367,7 @@ find(bop,-ybk,its)
 ## Data end : 2015
 ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en
 ## 
-## 2016-06-14 12:12:45
+## 2016-06-23 13:55:29
 ## 6 dataset(s)/table(s) found.
 ## Keywords: bop, -ybk, its
 ## 
@@ -381,13 +382,52 @@ browseDataList(grepl('GDP',`Dataset name`) &
                    !grepl('quarterly',`Dataset name`))
 ```
 
-<html> <body> <p><tt>&#9632; Generated on:&nbsp;2016-06-14 12:12:46 &#9632; Number of datasets/tables found:&nbsp;1 &#9632; Search criteria:&nbsp;grepl("GDP", `Dataset name`) & grepl("main", `Dataset name`) &grepl("selected", `Dataset name`) & !grepl("quarterly", `Dataset name`)</tt></p> <!-- html table generated in R 3.2.3 by xtable 1.7-4 package --><!-- Tue Jun 14 12:12:47 2016 --><table class="gridtable"><tr> <th> Row </th> <th> Data subgroup, level 0 </th> <th> Data subgroup, level 1 </th> <th> Data subgroup, level 2 </th> <th> Data subgroup, level 3 </th> <th> Data subgroup, level 4 </th> <th> Dataset name </th> <th> Code </th> <th> Type </th> <th> Last update of data </th> <th> Last table structure change </th> <th> Data start </th> <th> Data end </th> <th> Link </th></tr><tr> <td> 1 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> National accounts (ESA 2010) </td> <td> National accounts - international data cooperation </td> <td> Annual national accounts </td> <td> <b>GDP and main aggregates - selected international annual data</b> </td> <td> <tt><b>naida_10_gdp</b></tt> </td> <td> dataset </td> <td> 13.06.2016 </td> <td> 03.03.2016 </td> <td> 1975 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=naida_10_gdp&lang=en" target="_blank">click here</a> </td> </tr> </table> </body></html>
+<html> <body> <p><tt>&#9632; Generated on:&nbsp;2016-06-23 13:55:30 &#9632; Number of datasets/tables found:&nbsp;1 &#9632; Search criteria:&nbsp;grepl("GDP", `Dataset name`) & grepl("main", `Dataset name`) &grepl("selected", `Dataset name`) & !grepl("quarterly", `Dataset name`)</tt></p> <!-- html table generated in R 3.2.4 by xtable 1.7-4 package --><!-- Thu Jun 23 13:55:31 2016 --><table class="gridtable"><tr> <th> Row </th> <th> Data subgroup, level 0 </th> <th> Data subgroup, level 1 </th> <th> Data subgroup, level 2 </th> <th> Data subgroup, level 3 </th> <th> Data subgroup, level 4 </th> <th> Dataset name </th> <th> Code </th> <th> Type </th> <th> Last update of data </th> <th> Last table structure change </th> <th> Data start </th> <th> Data end </th> <th> Link </th></tr><tr> <td> 1 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> National accounts (ESA 2010) </td> <td> National accounts - international data cooperation </td> <td> Annual national accounts </td> <td> <b>GDP and main aggregates - selected international annual data</b> </td> <td> <tt><b>naida_10_gdp</b></tt> </td> <td> dataset </td> <td> 22.06.2016 </td> <td> 03.03.2016 </td> <td> 1975 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=naida_10_gdp&lang=en" target="_blank">click here</a> </td> </tr> </table> </body></html>
 
 ```r
 browseDataList(grepl('bop',Code) & grepl('its',Code))
 ```
 
-<html> <body> <p><tt>&#9632; Generated on:&nbsp;2016-06-14 12:12:47 &#9632; Number of datasets/tables found:&nbsp;7 &#9632; Search criteria:&nbsp;grepl("bop", Code) & grepl("its", Code)</tt></p> <!-- html table generated in R 3.2.3 by xtable 1.7-4 package --><!-- Tue Jun 14 12:12:47 2016 --><table class="gridtable"><tr> <th> Row </th> <th> Data subgroup, level 0 </th> <th> Data subgroup, level 1 </th> <th> Data subgroup, level 2 </th> <th> Data subgroup, level 3 </th> <th> Dataset name </th> <th> Code </th> <th> Type </th> <th> Last update of data </th> <th> Last table structure change </th> <th> Data start </th> <th> Data end </th> <th> Link </th></tr><tr> <td> 1 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services (since 2004)</b> </td> <td> <tt><b>bop_its_det</b></tt> </td> <td> dataset </td> <td> 16.05.2014 </td> <td> 16.05.2014 </td> <td> 2004 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 2 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services (1985-2003)</b> </td> <td> <tt><b>bop_its_deth</b></tt> </td> <td> dataset </td> <td> 16.05.2014 </td> <td> 16.05.2014 </td> <td> 1985 </td> <td> 2003 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 3 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services - market integration indicators</b> </td> <td> <tt><b>bop_its_str</b></tt> </td> <td> dataset </td> <td> 28.05.2014 </td> <td> 28.05.2014 </td> <td> 1992 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 4 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>Total services, detailed geographical breakdown by EU Member States (since 2002)</b> </td> <td> <tt><b>bop_its_tot</b></tt> </td> <td> dataset </td> <td> 27.05.2014 </td> <td> 27.05.2014 </td> <td> 2002 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 5 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services - Data for the Eurostat yearbook</b> </td> <td> <tt><b>bop_its_ybk</b></tt> </td> <td> dataset </td> <td> 06.06.2014 </td> <td> 06.06.2014 </td> <td> 1992 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_ybk&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 6 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions (BPM6) </td> <td> International trade in services, geographical breakdown (BPM6) </td> <td> <b>International trade in services (since 2010) (BPM6)</b> </td> <td> <tt><b>bop_its6_det</b></tt> </td> <td> dataset </td> <td> 01.06.2016 </td> <td> 01.06.2016 </td> <td> 2010 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 7 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions (BPM6) </td> <td> International trade in services, geographical breakdown (BPM6) </td> <td> <b>Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)</b> </td> <td> <tt><b>bop_its6_tot</b></tt> </td> <td> dataset </td> <td> 01.06.2016 </td> <td> 01.06.2016 </td> <td> 2010 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en" target="_blank">click here</a> </td> </tr> </table> </body></html>
+<html> <body> <p><tt>&#9632; Generated on:&nbsp;2016-06-23 13:55:31 &#9632; Number of datasets/tables found:&nbsp;7 &#9632; Search criteria:&nbsp;grepl("bop", Code) & grepl("its", Code)</tt></p> <!-- html table generated in R 3.2.4 by xtable 1.7-4 package --><!-- Thu Jun 23 13:55:31 2016 --><table class="gridtable"><tr> <th> Row </th> <th> Data subgroup, level 0 </th> <th> Data subgroup, level 1 </th> <th> Data subgroup, level 2 </th> <th> Data subgroup, level 3 </th> <th> Dataset name </th> <th> Code </th> <th> Type </th> <th> Last update of data </th> <th> Last table structure change </th> <th> Data start </th> <th> Data end </th> <th> Link </th></tr><tr> <td> 1 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services (since 2004)</b> </td> <td> <tt><b>bop_its_det</b></tt> </td> <td> dataset </td> <td> 16.05.2014 </td> <td> 16.05.2014 </td> <td> 2004 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 2 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services (1985-2003)</b> </td> <td> <tt><b>bop_its_deth</b></tt> </td> <td> dataset </td> <td> 16.05.2014 </td> <td> 16.05.2014 </td> <td> 1985 </td> <td> 2003 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 3 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services - market integration indicators</b> </td> <td> <tt><b>bop_its_str</b></tt> </td> <td> dataset </td> <td> 28.05.2014 </td> <td> 28.05.2014 </td> <td> 1992 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 4 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>Total services, detailed geographical breakdown by EU Member States (since 2002)</b> </td> <td> <tt><b>bop_its_tot</b></tt> </td> <td> dataset </td> <td> 27.05.2014 </td> <td> 27.05.2014 </td> <td> 2002 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 5 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions </td> <td> International trade in services, geographical breakdown </td> <td> <b>International trade in services - Data for the Eurostat yearbook</b> </td> <td> <tt><b>bop_its_ybk</b></tt> </td> <td> dataset </td> <td> 06.06.2014 </td> <td> 06.06.2014 </td> <td> 1992 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_ybk&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 6 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions (BPM6) </td> <td> International trade in services, geographical breakdown (BPM6) </td> <td> <b>International trade in services (since 2010) (BPM6)</b> </td> <td> <tt><b>bop_its6_det</b></tt> </td> <td> dataset </td> <td> 01.06.2016 </td> <td> 01.06.2016 </td> <td> 2010 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 7 </td> <td> Database by themes </td> <td> Economy and finance </td> <td> Balance of payments - International transactions (BPM6) </td> <td> International trade in services, geographical breakdown (BPM6) </td> <td> <b>Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)</b> </td> <td> <tt><b>bop_its6_tot</b></tt> </td> <td> dataset </td> <td> 01.06.2016 </td> <td> 01.06.2016 </td> <td> 2010 </td> <td> 2015 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en" target="_blank">click here</a> </td> </tr> </table> </body></html>
+
+
+```r
+# Producing a table of datasets which (1) include a dimension `sizeclas`
+# (i.e. firm size class) and (2) some data for firms with fewer than 10 employees
+# (`sizeclas` code "LT10") and (3) have sectorial data (i.e. include a
+# dimension `nace_r2`).
+library(magrittr)
+metab <- importMetabase()
+```
+
+```
+## Downloading Eurostat Metabase
+## Uncompressing (extracting)
+## Importing (reading into memory)
+```
+
+```r
+codes_with_nace <- metab %>% 
+    subset(Dim_name=='nace_r2') %>%
+    extract2('Code') %>%
+    unique
+final_codes <- metab %>%
+    subset(Dim_name=='sizeclas' & Dim_val=='LT10' &
+               Code %in% codes_with_nace) %>%
+    extract2('Code') %>%
+    unique
+```
+
+
+```r
+importDataList() %>%
+    subset(Code %in% final_codes) %>%
+    as.EurostatDataList %>%
+    # the `SearchCriteria` argument below is optional
+    print(SearchCriteria='those including data on firms with fewer than 10 employees') 
+```
+
+<html> <body> <p><tt>&#9632; Generated on:&nbsp;2016-06-23 13:55:33 &#9632; Number of datasets/tables found:&nbsp;7 &#9632; Search criteria:&nbsp;those including data on firms with fewer than 10 employees</tt></p> <!-- html table generated in R 3.2.4 by xtable 1.7-4 package --><!-- Thu Jun 23 13:55:33 2016 --><table class="gridtable"><tr> <th> Row </th> <th> Data subgroup, level 0 </th> <th> Data subgroup, level 1 </th> <th> Data subgroup, level 2 </th> <th> Data subgroup, level 3 </th> <th> Data subgroup, level 4 </th> <th> Data subgroup, level 5 </th> <th> Dataset name </th> <th> Code </th> <th> Type </th> <th> Last update of data </th> <th> Last table structure change </th> <th> Data start </th> <th> Data end </th> <th> Link </th></tr><tr> <td> 1 </td> <td> Database by themes </td> <td> Population and social conditions </td> <td> Labour market </td> <td> Labour costs</td> <td> Labour cost surveys</td> <td> Labour costs survey 2008 and 2012 - NACE Rev. 2 </td> <td> <b>Labour cost, wages and salaries, direct remuneration (excluding apprentices) - NACE Rev. 2</b> </td> <td> <tt><b>lc_ncost_r2</b></tt> </td> <td> dataset </td> <td> 25.05.2016 </td> <td> 17.12.2015 </td> <td> 2008 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_ncost_r2&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 2 </td> <td> Database by themes </td> <td> Population and social conditions </td> <td> Labour market </td> <td> Labour costs</td> <td> Labour cost surveys</td> <td> Labour costs survey 2008 and 2012 - NACE Rev. 2 </td> <td> <b>Structure of labour cost as % of total cost - NACE Rev. 2</b> </td> <td> <tt><b>lc_nstruc_r2</b></tt> </td> <td> dataset </td> <td> 25.05.2016 </td> <td> 17.12.2015 </td> <td> 2008 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nstruc_r2&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 3 </td> <td> Database by themes </td> <td> Population and social conditions </td> <td> Labour market </td> <td> Labour costs</td> <td> Labour cost surveys</td> <td> Labour costs survey 2008 and 2012 - NACE Rev. 2 </td> <td> <b>Number of employees, hours actually worked and paid - NACE Rev. 2</b> </td> <td> <tt><b>lc_nnum1_r2</b></tt> </td> <td> dataset </td> <td> 25.05.2016 </td> <td> 17.12.2015 </td> <td> 2008 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nnum1_r2&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 4 </td> <td> Database by themes </td> <td> Population and social conditions </td> <td> Labour market </td> <td> Labour costs</td> <td> Labour cost surveys</td> <td> Labour costs survey 2008 and 2012 - NACE Rev. 2 </td> <td> <b>Number of hours actually worked and paid per employee - NACE Rev. 2</b> </td> <td> <tt><b>lc_nnum2_r2</b></tt> </td> <td> dataset </td> <td> 25.05.2016 </td> <td> 17.12.2015 </td> <td> 2008 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nnum2_r2&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 5 </td> <td> Database by themes </td> <td> Population and social conditions </td> <td> Labour market </td> <td> Labour costs</td> <td> Labour cost surveys</td> <td> Labour costs survey 2008 and 2012 - NACE Rev. 2 </td> <td> <b>Number of statistical units - NACE Rev. 2</b> </td> <td> <tt><b>lc_nstu_r2</b></tt> </td> <td> dataset </td> <td> 25.05.2016 </td> <td> 17.12.2015 </td> <td> 2008 </td> <td> 2012 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nstu_r2&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 6 </td> <td> Cross cutting topics </td> <td> Entrepreneurship indicators program </td> <td> Enterprise population </td> <td></td> <td></td> <td></td> <td> <b>Annual enterprise statistics by size class and NACE Rev. 2 activity (B-N_X_K)</b> </td> <td> <tt><b>eip_pop1</b></tt> </td> <td> dataset </td> <td> 07.04.2016 </td> <td> 07.04.2016 </td> <td> 2010 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=eip_pop1&lang=en" target="_blank">click here</a> </td> </tr><tr> <td> 7 </td> <td> Cross cutting topics </td> <td> Entrepreneurship indicators program </td> <td></td> <td></td> <td></td> <td></td> <td> <b>International trade by size class and NACE Rev. 2 activity (B-N_X_K)</b> </td> <td> <tt><b>eip_ext1</b></tt> </td> <td> dataset </td> <td> 07.04.2016 </td> <td> 07.04.2016 </td> <td> 2008 </td> <td> 2013 </td> <td> <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=eip_ext1&lang=en" target="_blank">click here</a> </td> </tr> </table> </body></html>
 
 ## Speed demo
 
@@ -441,37 +481,37 @@ Res2 # lower = faster (in seconds)
 ```
 
 ```
-##      Data code name importData get_eurostat     ratio
-## 1           vit_bs1       1.15         6.71  5.834783
-## 2      yth_incl_090       0.11         0.42  3.818182
-## 3       spr_exp_pps       0.36         1.72  4.777778
-## 4      yth_incl_130       0.09         0.55  6.111111
-## 5      mar_sg_am_cv       0.10         0.14  1.400000
-## 6        sts_inpi_q       2.92        30.51 10.448630
-## 7         ei_isrt_q       0.13         0.27  2.076923
-## 8     demo_nsinagec       0.48         4.84 10.083333
-## 9       sbs_ins_5d2       0.08         0.23  2.875000
-## 10    earn_ses06_47       1.04           NA        NA
-## 11         iss_barr       0.36           NA        NA
-## 12     lmp_expme_hu       0.11         0.81  7.363636
-## 13    hlth_ehis_hc3       0.08         0.04  0.500000
-## 14         nrg_123m      19.14       273.79 14.304598
-## 15      hlth_dsi030       0.07           NA        NA
-## 16  road_eqr_carbua       0.06         0.24  4.000000
-## 17       hlth_dp040       0.11           NA        NA
-## 18      cens_91dame       0.08           NA        NA
-## 19    naio_agg_adom       0.61         5.03  8.245902
-## 20        migr_acqs       0.04         0.08  2.000000
-## 21     hsw_aw_inasx       0.14         0.56  4.000000
-## 22      hlth_dhc050       0.45         2.91  6.466667
-## 23    nasa_10_nf_tr       4.23        31.61  7.472813
-## 24 htec_emp_risced2       0.99         7.61  7.686869
-## 25       bop_gdp6_q       0.67           NA        NA
-## 26     ext_lt_euqtr       0.07         0.17  2.428571
-## 27   earn_ses_agt16       0.38           NA        NA
-## 28      env_wat_cat       0.08         0.37  4.625000
-## 29  rail_go_natdist       0.25         2.15  8.600000
-## 30    hlth_cd_ysdr1      10.20        11.31  1.108824
+##      Data code name importData get_eurostat      ratio
+## 1           vit_bs1       1.00         6.65  6.6500000
+## 2      yth_incl_090       0.10         0.40  4.0000000
+## 3       spr_exp_pps       0.31         1.65  5.3225806
+## 4      yth_incl_130       0.16         0.67  4.1875000
+## 5      mar_sg_am_cv       0.06         0.07  1.1666667
+## 6        sts_inpi_q       2.85        30.63 10.7473684
+## 7         ei_isrt_q       0.09         0.25  2.7777778
+## 8     demo_nsinagec       0.43         4.82 11.2093023
+## 9       sbs_ins_5d2       0.07         0.22  3.1428571
+## 10    earn_ses06_47       0.98           NA         NA
+## 11         iss_barr       0.34           NA         NA
+## 12     lmp_expme_hu       0.11         0.57  5.1818182
+## 13    hlth_ehis_hc3       0.06         0.04  0.6666667
+## 14         nrg_123m      18.81       276.18 14.6826156
+## 15      hlth_dsi030       0.08           NA         NA
+## 16  road_eqr_carbua       0.06         0.21  3.5000000
+## 17       hlth_dp040       0.08           NA         NA
+## 18      cens_91dame       0.06           NA         NA
+## 19    naio_agg_adom       0.58         5.04  8.6896552
+## 20        migr_acqs       0.07         0.08  1.1428571
+## 21     hsw_aw_inasx       0.11         0.56  5.0909091
+## 22      hlth_dhc050       0.41         2.90  7.0731707
+## 23    nasa_10_nf_tr       3.93        32.06  8.1577608
+## 24 htec_emp_risced2       1.08         8.89  8.2314815
+## 25       bop_gdp6_q       0.66           NA         NA
+## 26     ext_lt_euqtr       0.08         0.17  2.1250000
+## 27   earn_ses_agt16       0.30           NA         NA
+## 28      env_wat_cat       0.08         0.35  4.3750000
+## 29  rail_go_natdist       0.22         2.17  9.8636364
+## 30    hlth_cd_ysdr1      10.64        12.00  1.1278195
 ```
 
 ```r
@@ -481,7 +521,7 @@ mean(Res2$ratio, na.rm=TRUE)
 ```
 
 ```
-## [1] 5.488201
+## [1] 5.613585
 ```
 
 ```r
@@ -489,5 +529,5 @@ median(Res2$ratio, na.rm=TRUE)
 ```
 
 ```
-## [1] 4.777778
+## [1] 5.090909
 ```
