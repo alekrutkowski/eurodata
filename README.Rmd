@@ -1,9 +1,8 @@
 ---
 title: "eurodata -- R package for fast and easy Eurostata data import and search"
 author: "Aleksander Rutkowski"
-output:
-html_document:
-keep_md: true
+output: github_document
+always_allow_html: yes
 ---
 
 ```{r helpers, include=FALSE}
@@ -169,7 +168,7 @@ compileInfo <-
 ```
 
 ```{r, message=FALSE, warning=FALSE, results='hide', cache=TRUE}
-L <- lapply(d50, compileInfo) 
+L <- lapply(d50, compileInfo)
 ```
 
 ```{r, cache=TRUE}
