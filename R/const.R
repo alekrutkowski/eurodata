@@ -1,5 +1,5 @@
 EurostatBaseUrl <-
-    'http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file='
+    'https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file='
 
 CssStyle <- '
     <!DOCTYPE html>
