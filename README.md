@@ -434,7 +434,7 @@ Annual national accounts
 <b>GDP and main aggregates - selected international annual data</b>
 </td>
 <td>
-<tt><b>naida\_10\_gdp</b></tt>
+<tt><b>naida_10_gdp</b></tt>
 </td>
 <td>
 dataset
@@ -531,7 +531,7 @@ International trade in services, geographical breakdown
 <b>International trade in services (since 2004)</b>
 </td>
 <td>
-<tt><b>bop\_its\_det</b></tt>
+<tt><b>bop_its_det</b></tt>
 </td>
 <td>
 dataset
@@ -572,7 +572,7 @@ International trade in services, geographical breakdown
 <b>International trade in services (1985-2003)</b>
 </td>
 <td>
-<tt><b>bop\_its\_deth</b></tt>
+<tt><b>bop_its_deth</b></tt>
 </td>
 <td>
 dataset
@@ -613,7 +613,7 @@ International trade in services, geographical breakdown
 <b>International trade in services - market integration indicators</b>
 </td>
 <td>
-<tt><b>bop\_its\_str</b></tt>
+<tt><b>bop_its_str</b></tt>
 </td>
 <td>
 dataset
@@ -654,7 +654,7 @@ International trade in services, geographical breakdown
 <b>Total services, detailed geographical breakdown by EU Member States (since 2002)</b>
 </td>
 <td>
-<tt><b>bop\_its\_tot</b></tt>
+<tt><b>bop_its_tot</b></tt>
 </td>
 <td>
 dataset
@@ -695,7 +695,7 @@ International trade in services, geographical breakdown
 <b>International trade in services - Data for the Eurostat yearbook</b>
 </td>
 <td>
-<tt><b>bop\_its\_ybk</b></tt>
+<tt><b>bop_its_ybk</b></tt>
 </td>
 <td>
 dataset
@@ -736,7 +736,7 @@ International trade in services, geographical breakdown (BPM6)
 <b>International trade in services (since 2010) (BPM6)</b>
 </td>
 <td>
-<tt><b>bop\_its6\_det</b></tt>
+<tt><b>bop_its6_det</b></tt>
 </td>
 <td>
 dataset
@@ -777,7 +777,7 @@ International trade in services, geographical breakdown (BPM6)
 <b>Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)</b>
 </td>
 <td>
-<tt><b>bop\_its6\_tot</b></tt>
+<tt><b>bop_its6_tot</b></tt>
 </td>
 <td>
 dataset
@@ -916,7 +916,7 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 <b>Labour cost, wages and salaries, direct remuneration (excluding apprentices) - NACE Rev. 2</b>
 </td>
 <td>
-<tt><b>lc\_ncost\_r2</b></tt>
+<tt><b>lc_ncost_r2</b></tt>
 </td>
 <td>
 dataset
@@ -963,7 +963,7 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 <b>Structure of labour cost as % of total cost - NACE Rev. 2</b>
 </td>
 <td>
-<tt><b>lc\_nstruc\_r2</b></tt>
+<tt><b>lc_nstruc_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1010,7 +1010,7 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 <b>Number of employees, hours actually worked and paid - NACE Rev. 2</b>
 </td>
 <td>
-<tt><b>lc\_nnum1\_r2</b></tt>
+<tt><b>lc_nnum1_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1057,7 +1057,7 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 <b>Number of hours actually worked and paid per employee - NACE Rev. 2</b>
 </td>
 <td>
-<tt><b>lc\_nnum2\_r2</b></tt>
+<tt><b>lc_nnum2_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1104,7 +1104,7 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 <b>Number of statistical units - NACE Rev. 2</b>
 </td>
 <td>
-<tt><b>lc\_nstu\_r2</b></tt>
+<tt><b>lc_nstu_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1145,10 +1145,10 @@ Enterprise population
 <td>
 </td>
 <td>
-<b>Annual enterprise statistics by size class and NACE Rev. 2 activity (B-N\_X\_K)</b>
+<b>Annual enterprise statistics by size class and NACE Rev. 2 activity (B-N_X_K)</b>
 </td>
 <td>
-<tt><b>eip\_pop1</b></tt>
+<tt><b>eip_pop1</b></tt>
 </td>
 <td>
 dataset
@@ -1188,10 +1188,10 @@ Entrepreneurship indicators program
 <td>
 </td>
 <td>
-<b>International trade by size class and NACE Rev. 2 activity (B-N\_X\_K)</b>
+<b>International trade by size class and NACE Rev. 2 activity (B-N_X_K)</b>
 </td>
 <td>
-<tt><b>eip\_ext1</b></tt>
+<tt><b>eip_ext1</b></tt>
 </td>
 <td>
 dataset
@@ -1219,7 +1219,7 @@ dataset
 Speed demo
 ----------
 
-eurodata::**importData** compared to [eurostat](https://cran.r-project.org/web/packages/eurostat/index.html)::[get\_eurostat](http://www.rdocumentation.org/packages/eurostat/functions/get_eurostat):
+eurodata::**importData** compared to [eurostat](https://cran.r-project.org/web/packages/eurostat/index.html)::[get_eurostat](http://www.rdocumentation.org/packages/eurostat/functions/get_eurostat):
 
 ``` r
 y <- importDataList()  # metadata
