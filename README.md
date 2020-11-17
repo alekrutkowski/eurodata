@@ -1,4 +1,4 @@
-eurodata &ndash; R package for fast and easy Eurostata data import and search
+eurodata &ndash; R package for fast and easy Eurostat data import and search
 ================
 Aleksander Rutkowski
 
