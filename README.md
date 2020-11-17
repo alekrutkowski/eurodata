@@ -4,25 +4,33 @@ Aleksander Rutkowski
 
 The package relies on [Eurostat's Bulk Download Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
 
-The core API contains just 6 functions -- 4 for data or metadata imports and 2 for search:
+The core API contains just 6 functions &ndash; 4 for data or metadata imports and 2 for search:
 
 Import functionality:
 
--   **importData** -- fast thanks to [data.table](https://cran.r-project.org/web/packages/data.table/index.html)::[fread](http://www.rdocumentation.org/packages/data.table/functions/fread)
--   **importDataLabels** -- as above
--   **importMetabase** -- as above
--   **importDataList** -- reflects the hierarchical structure of the Eurostat tree of datasets -- fast transformation of the raw [Table of Contents file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt) is based on a C++ code snippet compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
+-   **importData** &ndash; fast thanks to [data.table](https://cran.r-project.org/web/packages/data.table/index.html)::[fread](http://www.rdocumentation.org/packages/data.table/functions/fread)
+-   **importDataLabels** &ndash; as above
+-   **importMetabase** &ndash; as above
+-   **importDataList** &ndash; reflects the hierarchical structure of the Eurostat tree of datasets &ndash; fast transformation of the raw [Table of Contents file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt) is based on a C++ code snippet compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
 
 Search functionality:
 
--   **browseDataList** -- based on importDataList, shows an HTML table (generated with [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable)) in a browser with a list of the found datasets
--   **find** -- based on importDataList, shows a textual report on the found datasets -- a \`\`quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
+-   **browseDataList** &ndash; based on importDataList, shows an HTML table (generated with [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable)) in a browser with a list of the found datasets
+-   **find** &ndash; based on importDataList, shows a textual report on the found datasets &ndash; a \`\`quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
 Installation
 ------------
 
+From source:
+
 ``` r
-devtools::install_github('alekrutkowski/eurodata') # package 'devtools' needs to be installed
+devtools::install_github('alekrutkowski/eurodata')
+```
+
+Precompiled binary for Windows (useful for those who don't have Rtools):
+
+``` r
+installr::install.packages.zip('https://github.com/alekrutkowski/eurodata/releases/download/v1.2.1/eurodata_1.2.1.zip')
 ```
 
 Functionality demo
