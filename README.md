@@ -1,4 +1,4 @@
-eurodata -- R package for fast and easy Eurostata data import and search
+eurodata &ndash; R package for fast and easy Eurostata data import and search
 ================
 Aleksander Rutkowski
 
@@ -16,7 +16,7 @@ Import functionality:
 Search functionality:
 
 -   **browseDataList** &ndash; based on importDataList, shows an HTML table (generated with [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable)) in a browser with a list of the found datasets
--   **find** &ndash; based on importDataList, shows a textual report on the found datasets &ndash; a \`\`quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
+-   **find** &ndash; based on importDataList, shows a textual report on the found datasets &ndash; a &ldquo;quick-n-dirty&rdquo; way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
 Installation
 ------------
@@ -458,6 +458,7 @@ dataset
 </table>
 </body>
 </html>
+
 ``` r
 browseDataList(grepl('bop',Code) & grepl('its',Code))
 ```
@@ -800,6 +801,7 @@ dataset
 </table>
 </body>
 </html>
+
 ``` r
 # Producing a table of datasets which (1) include a dimension `sizeclas`
 # (i.e. firm size class) and (2) some data for firms with fewer than 10 employees
