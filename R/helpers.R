@@ -1,4 +1,4 @@
-#' @import magrittr
+#' @import magrittr Rcpp
 NULL
 
 '%++%' <- function(x,y) paste0(x,y)
