@@ -8,15 +8,15 @@ The core API contains just 6 functions &ndash; 4 for data or metadata imports an
 
 Import functionality:
 
--   **importData** &ndash; fast thanks to [data.table](https://cran.r-project.org/web/packages/data.table/index.html)::[fread](http://www.rdocumentation.org/packages/data.table/functions/fread)
--   **importDataLabels** &ndash; as above
--   **importMetabase** &ndash; as above
--   **importDataList** &ndash; reflects the hierarchical structure of the Eurostat tree of datasets &ndash; fast transformation of the raw [Table of Contents file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt) is based on a C++ code snippet compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
+-   [**importData**](https://rdrr.io/github/alekrutkowski/eurodata/man/importData.html) &ndash; fast thanks to [data.table](https://cran.r-project.org/web/packages/data.table/index.html)::[fread](http://www.rdocumentation.org/packages/data.table/functions/fread)
+-   [**importLabels**](https://rdrr.io/github/alekrutkowski/eurodata/man/importLabels.html) &ndash; as above
+-   [**importMetabase**](https://rdrr.io/github/alekrutkowski/eurodata/man/importMetabase.html) &ndash; as above
+-   [**importDataList**](https://rdrr.io/github/alekrutkowski/eurodata/man/importDataList.html) &ndash; reflects the hierarchical structure of the Eurostat tree of datasets &ndash; fast transformation of the raw [Table of Contents file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt) is based on a C++ code snippet compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
 
 Search functionality:
 
--   **browseDataList** &ndash; based on importDataList, shows an HTML table (generated with [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable)) in a browser with a list of the found datasets
--   **find** &ndash; based on importDataList, shows a textual report on the found datasets &ndash; a &ldquo;quick-n-dirty&rdquo; way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
+-   [**browseDataList**](https://rdrr.io/github/alekrutkowski/eurodata/man/browseDataList.html) &ndash; based on importDataList, shows an HTML table (generated with [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable)) in a browser with a list of the found datasets
+-   [**find**](https://rdrr.io/github/alekrutkowski/eurodata/man/find.html) &ndash; based on importDataList, shows a textual report on the found datasets &ndash; a &ldquo;quick-n-dirty&rdquo; way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
 Installation
 ------------
