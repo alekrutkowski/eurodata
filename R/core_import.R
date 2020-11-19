@@ -123,6 +123,10 @@ importDataList <- function() {
         as.data.frame %>%
         within({if (exists('values'))
             values <- NULL
+        `last update of data` <-
+            invertDate(`last update of data`)
+        `last table structure change` <-
+            invertDate(`last table structure change`)
         txtpos <- stringr::str_locate(title, "[a-zA-Z0-9\'%]") %>%
             extract(, 'start')
         level <- floor((txtpos - 1)/4)

@@ -34,6 +34,10 @@ verifyFile <- function(FileName, EurostatCode, FileType) {
                                 list(error=FALSE)
 }
 
+invertDate <- function(x)
+    # inspiered by https://stackoverflow.com/a/46834350
+    sub('^(\\d{2})\\.(\\d{2})\\.(\\d{4})$','\\3-\\2-\\1',x)
+
 p <- function(str)
     '<p><tt>' %++% str %++% '</tt></p>'
 

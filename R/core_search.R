@@ -2,7 +2,25 @@
 #'
 #' @param subs An expression to be passed to \code{\link[base]{subset}}.
 #' The column names of the table of datasets can be used -- those with spaces should be
-#' backtick (`) quoted. See the examples below.
+#' backtick (`) quoted. See the examples below. The names of the available columns are:
+#' \itemize{
+#'  \item \code{`Data subgroup, level 0`}
+#'  \item \code{`Data subgroup, level 1`}
+#'  \item \code{`Data subgroup, level 2`}
+#'  \item \code{`Data subgroup, level 3`}
+#'  \item \code{`Data subgroup, level 4`}
+#'  \item \code{`Data subgroup, level 5`}
+#'  \item \code{`Data subgroup, level 6`}
+#'  \item \code{`Data subgroup, level 7`}
+#'  \item \code{`Dataset name`}
+#'  \item \code{`Code`}
+#'  \item \code{`Type`}
+#'  \item \code{`Last update of data`}
+#'  \item \code{`Last table structure change`}
+#'  \item \code{`Data start`}
+#'  \item \code{`Data end`}
+#'  \item \code{`Link`}
+#' }
 #' @return
 #' \itemize{
 #'   \item Side effect (via \code{print}) -- a table opened in a browser via \code{\link[utils]{browseURL}}.

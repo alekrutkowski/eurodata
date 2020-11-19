@@ -30,7 +30,7 @@ devtools::install_github('alekrutkowski/eurodata')
 Precompiled binary for Windows (useful for those who don't have Rtools):
 
 ``` r
-installr::install.packages.zip('https://github.com/alekrutkowski/eurodata/releases/download/v1.2.1/eurodata_1.2.1.zip')
+installr::install.packages.zip('https://github.com/alekrutkowski/eurodata/releases/download/v1.3.0/eurodata_1.3.0.zip')
 ```
 
 Functionality demo
