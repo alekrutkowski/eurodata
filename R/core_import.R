@@ -1,4 +1,5 @@
 #' @import data.table magrittr
+#' @importFrom stringr str_locate
 NULL
 
 #' Download and import a Eurostat dataset
@@ -151,12 +152,9 @@ importDataList <- function() {
                       seq_along %>%
                       setdiff(newcols))) %>%
         within(Link <-
-                   ifelse(nchar(code)==8 & substr(code,1,1)=='t',
-                          'http://epp.eurostat.ec.europa.eu/tgm/table.do?tab=table&init=1&language=en&pcode=' %++%
-                              code[nchar(code)==8 & substr(code,1,1)=='t'] %++% '&plugin=1',
-                          'http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=' %++%
-                              code %++%
-                              '&lang=en')) %>%
+                   'https://ec.europa.eu/eurostat/databrowser/view/' %++%
+                   code %++%
+                   '/default/table?lang=en') %>%
         set_colnames(colnames(.) %>%
                          sub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", # upper case first char
                              ., perl=TRUE)) %>%

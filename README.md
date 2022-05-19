@@ -50,13 +50,6 @@ devtools::install_github('alekrutkowski/eurodata') # package 'devtools' needs to
 library(eurodata)
 ```
 
-    ## 
-    ## Attaching package: 'eurodata'
-
-    ## The following object is masked from 'package:utils':
-    ## 
-    ##     find
-
 ### Imports
 
 ``` r
@@ -73,7 +66,7 @@ str(x)
     ##  $ value_ : num  4063 865 2577 1590 2634 ...
     ##  $ flags_ : chr  "" "" " p" " p" ...
     ##  - attr(*, "EurostatDatasetCode")= chr "nama_10_a10"
-    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-05-19 10:18:31"
+    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-05-19 12:54:02"
 
 ``` r
 head(x,10)
@@ -157,12 +150,47 @@ head(z,10)
 
 ``` r
 # Free-style text search based on the parts of words in the dataset names
-find(gdp,main,selected,-quarterly)
+find(gdp,main,international,-quarterly)
 ```
 
-    ## 2022-05-19 10:18:55
-    ## 0 dataset(s)/table(s) found.
-    ## Keywords: gdp, main, selected, -quarterly
+    ## 2022-05-19 12:54:18
+    ## 2 dataset(s)/table(s) found.
+    ## Keywords: gdp, main, international, -quarterly
+    ## 
+    ##  Database by themes >>
+    ##  Economy and finance >>
+    ##  National accounts (ESA 2010) >>
+    ##  National accounts - international data cooperation >>
+    ##  Annual national accounts- international data cooperation
+    ## 
+    ## No : 1
+    ## Dataset name : GDP and main aggregates- international data cooperation annual data
+    ## Code : naida_10_gdp
+    ## Type : dataset
+    ## Last update of data : 2022-05-17
+    ## Last table structure change : 2022-01-14
+    ## Data start : 1975
+    ## Data end : 2021
+    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=naida_10_gdp&lang=en
+    ## 
+    ##  Database by themes >>
+    ##  Economy and finance >>
+    ##  Balance of payments - International transactions (BPM6) >>
+    ##  Balance of payments statistics and international investment positions (BPM6)
+    ## 
+    ## No : 2
+    ## Dataset name : Main Balance of Payments and International Investment Position items as share of GDP (BPM6)
+    ## Code : bop_gdp6_q
+    ## Type : dataset
+    ## Last update of data : 2022-04-11
+    ## Last table structure change : 2022-04-11
+    ## Data start : 1991
+    ## Data end : 2021Q4
+    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_gdp6_q&lang=en
+    ## 
+    ## 2022-05-19 12:54:18
+    ## 2 dataset(s)/table(s) found.
+    ## Keywords: gdp, main, international, -quarterly
     ## 
     ## End.
 
@@ -171,7 +199,7 @@ find(gdp,main,selected,-quarterly)
 find(bop, its)
 ```
 
-    ## 2022-05-19 10:18:58
+    ## 2022-05-19 12:54:20
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -260,7 +288,7 @@ find(bop, its)
     ## Data end : 2021
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
     ## 
-    ## 2022-05-19 10:18:58
+    ## 2022-05-19 12:54:20
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -270,7 +298,7 @@ find(bop, its)
 find(bop,-ybk,its)
 ```
 
-    ## 2022-05-19 10:19:01
+    ## 2022-05-19 12:54:21
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
@@ -359,7 +387,7 @@ find(bop,-ybk,its)
     ## Data end : 2021
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
     ## 
-    ## 2022-05-19 10:19:01
+    ## 2022-05-19 12:54:21
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
@@ -375,12 +403,12 @@ browseDataList(grepl('GDP',`Dataset name`) &
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-19 10:19:04 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-05-19 12:54:23 ■ Number of datasets/tables
 found: 0 ■ Search criteria: grepl(“GDP”, `Dataset name`) & grepl(“main”,
 `Dataset name`) &grepl(“selected”, `Dataset name`) & !grepl(“quarterly”,
 `Dataset name`)</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 10:19:10 2022 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 12:54:24 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -398,10 +426,10 @@ browseDataList(grepl('bop',Code) & grepl('its',Code))
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-19 10:19:10 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-05-19 12:54:24 ■ Number of datasets/tables
 found: 7 ■ Search criteria: grepl(“bop”, Code) & grepl(“its”, Code)</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 10:19:16 2022 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 12:54:25 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -788,11 +816,11 @@ importDataList() %>%
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-19 10:19:33 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-05-19 12:54:38 ■ Number of datasets/tables
 found: 6 ■ Search criteria: those including data on firms with fewer
 than 10 employees and NACE Rev.2 disaggregation</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 10:19:33 2022 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 12:54:38 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -1142,28 +1170,6 @@ here</a>
 describe('nama_10_gdp')
 ```
 
-    ## Downloading Eurostat Metabase
-
-    ## Uncompressing (extracting)
-
-    ## Importing (reading into memory)
-
-    ## Verifying the code
-
-    ## Downloading Eurostat labels for geo
-
-    ## Verifying the code
-
-    ## Downloading Eurostat labels for na_item
-
-    ## Verifying the code
-
-    ## Downloading Eurostat labels for time
-
-    ## Verifying the code
-
-    ## Downloading Eurostat labels for unit
-
     ##      Dim_name                  Dim_name_label        Dim_val
     ##   1:      geo Geopolitical entity (reporting)             AL
     ##   2:      geo Geopolitical entity (reporting)             AT
@@ -1232,11 +1238,6 @@ compare('nama_10_gdp', 'nama_10_a64')
     ## 208:     unit       PD10_NAC        TRUE
     ## 209:     unit PD_PCH_PRE_EUR        TRUE
     ## 210:     unit PD_PCH_PRE_NAC        TRUE
-
-    ## Verifying the code
-
-    ## Downloading Eurostat labels for nace_r2
-
     ##      Dim_name                  Dim_name_label        Dim_val
     ##   1:      geo Geopolitical entity (reporting)             AL
     ##   2:      geo Geopolitical entity (reporting)             AT

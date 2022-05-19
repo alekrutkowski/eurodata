@@ -2,7 +2,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' @export
 // [[Rcpp::export]]
 CharacterMatrix myRecursFill(CharacterMatrix d) {
 	  int maxi = d.ncol() - 2;

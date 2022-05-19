@@ -95,7 +95,7 @@ find <- function(...) eurodata::find(...)$report %>%
 
 ```{r find_demo}
 # Free-style text search based on the parts of words in the dataset names
-find(gdp,main,selected,-quarterly)
+find(gdp,main,international,-quarterly)
 # Search based on the parts of the dataset codes
 find(bop, its)
 find(bop,-ybk,its)
