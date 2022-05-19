@@ -43,6 +43,11 @@ Search functionality:
 - **find** -- based on importDataList, shows a textual report on the found datasets --
 a ``quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
+NEW! Extra functionality:
+
+- **describe** -- describe a given Eurostat dataset on the basis of information from Metabase
+- **compare** -- compare specific Eurostat datasets on the basis of information from Metabase
+
 ## Installation
 
 ```{r installation, eval=FALSE, include=TRUE}
@@ -61,9 +66,6 @@ library(eurodata)
 x <- importData('nama_10_a10')  # actual dataset
 str(x)
 head(x,10)
-# Friendly error if a wrong data code (similarly for importLabels):
-tryCatch(importData('nama_10_a10_XXX'),
-         error = function(e) cat(geterrmessage()))
 y <- importDataList()  # metadata
 colnames(y)
 str(y[y$Code=='nama_10_a10',])  # metadata on x
@@ -134,54 +136,10 @@ importDataList() %>%
               'those including data on firms with fewer than 10 employees and NACE Rev.2 disaggregation') 
 ```
 
-## Speed demo
+## Extras
 
-eurodata::**importData** compared to `r lnk('eurostat','get_eurostat')`:
-
-```{r speed_demo, cache=TRUE}
-y <- importDataList()  # metadata
-
-d <- unique(y[y$Type=='dataset','Code']) # dataset codes
-
-set.seed(1234)  # for replicability
-
-d50 <- sample(d, 50) # a random sample of 50 datasets
-
-get_eurostat <- eurostat::get_eurostat  # package 'eurostat' needs to be installed
-
-FUNS <- c('importData', 'get_eurostat')
-
-timeit <- function(funname, code)
-    tryCatch(system.time(get(funname)(code))['elapsed'],
-             error = function(e) as.numeric(NA)) # due to errors in some 'eurostat' package imports
-
-compileInfo <-
-    function(code) {
-        FUNS2 <- if (sample(c(TRUE,FALSE), 1))
-            FUNS else rev(FUNS) # so that the execution order is random
-        res <- data.frame(code,
-                          timeit(FUNS2[1], code),
-                          timeit(FUNS2[2], code))
-        colnames(res) <- c('Data code name',FUNS2)
-        res
-    }
-```
-
-```{r, message=FALSE, warning=FALSE, results='hide', cache=TRUE}
-L <- lapply(d50, compileInfo)
-```
-
-```{r, cache=TRUE}
-Res <- do.call(rbind, L)
-
-Res2 <- within(Res,
-               ratio <- get_eurostat/importData)
-
-row.names(Res2) <- NULL # to eliminate the visual noise
-
-Res2 # lower = faster (in seconds)
-# How many times eurodata::importData is faster on average?
-
-mean(Res2$ratio, na.rm=TRUE)
-median(Res2$ratio, na.rm=TRUE)
+```{r}
+describe('nama_10_gdp')
+describe('nama_10_gdp', wide=TRUE)
+compare('nama_10_gdp', 'nama_10_a64')
 ```

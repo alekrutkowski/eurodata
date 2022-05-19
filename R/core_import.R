@@ -1,3 +1,6 @@
+#' @import data.table magrittr
+NULL
+
 #' Download and import a Eurostat dataset
 #'
 #' @param EurostatDatasetCode A string with Eurostat dataset code name, e.g. \code{nama_10_gdp} or \code{bop_its6_det}.
@@ -16,9 +19,9 @@ importData <- function(EurostatDatasetCode) {
     TempGZfileName <- tempfile(fileext='.gz')
     t <- Sys.time()
     utils::download.file(EurostatBaseUrl %++% 'data/' %++%
-                      EurostatDatasetCode %++%
-                      '.tsv.gz',
-                  TempGZfileName)
+                             EurostatDatasetCode %++%
+                             '.tsv.gz',
+                         TempGZfileName)
     # Uncompress and verify
     message('Uncompressing (extracting)')
     TempTSVfileName <- R.utils::gunzip(TempGZfileName)
@@ -44,29 +47,16 @@ importData <- function(EurostatDatasetCode) {
         head(-1)
     # Clean up and reformat data, add metadata
     RawData %>%
-        message_('Splitting the column of identifiers') %>%
-        tidyr::separate_(col = FirstColName,
-                         into = RowIdNames,
-                         sep = ',') %>%
-        message_('Reshaping into long format (single value column)') %>%
-        tidyr::gather_(key_col=ColIdName,
-                       value_col='value_',
-                       gather_cols = colnames(.) %>%
-                           setdiff(RowIdNames),
-                       convert = FALSE) %>%
-        message_('Separating values and flags') %>%
-        within({
-            flags_ <- gsub('[0-9\\.-]', "", value_)
-            value_ <- gsub('[^0-9\\.-]', "", value_) %>%
-                as.numeric}) %>%
-        message_('Converting codes to factors') %>%
-        {df <- .
-        lapply(RowIdNames, function(x)
-            if (x %>% is.numeric) x else
-                df[[x]] %>% as.factor) %>%
-            as.data.frame %>%
-            set_colnames(RowIdNames) %>%
-            cbind(df[c(ColIdName, 'value_', 'flags_')])} %>%
+        as.data.table() %>%
+        .[, (RowIdNames) := tstrsplit(get(FirstColName), split=',')] %>%
+        .[, (FirstColName) := NULL] %>%
+        melt(id.vars=RowIdNames,
+             variable.name=ColIdName,
+             value.name='value_') %>%
+        .[, flags_ := gsub('[0-9\\.-]', "", value_)] %>%
+        .[, value_ := gsub('[^0-9\\.-]', "", value_) %>% as.numeric] %>%
+        .[, (RowIdNames) := lapply(.SD, as.factor), .SDcols=RowIdNames] %>%
+        as.data.frame() %>%
         addAttr('EurostatDatasetCode', EurostatDatasetCode) %>%
         addAttr('DownloadTime', t) %>%
         addClass('EurostatDataset')
@@ -129,11 +119,15 @@ importDataList <- function() {
             invertDate(`last table structure change`)
         txtpos <- stringr::str_locate(title, "[a-zA-Z0-9\'%]") %>%
             extract(, 'start')
-        level <- floor((txtpos - 1)/4)
+        level <- floor((txtpos - 1)/4) %>% as.integer()
         id <- seq_along(level)
         title <- substring(title, txtpos)
         txtpos <- NULL}) %>%
-        tidyr::spread(key=level, value=title, fill="") %>%
+        as.data.table() %>%
+        dcast(id + ... ~ level, fill="",
+              value.var='title',
+              fun.aggregate=identity) %>%
+        as.data.frame() %>%
         within(id <- NULL) %>%
         set_colnames(colnames(.) %>%
                          sapply(function(x)

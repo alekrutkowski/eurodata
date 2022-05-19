@@ -1,40 +1,50 @@
-eurodata &ndash; R package for fast and easy Eurostat data import and search
+eurodata – R package for fast and easy Eurostata data import and search
 ================
 Aleksander Rutkowski
 
-The package relies on [Eurostat's Bulk Download Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
+The package relies on [Eurostat’s Bulk Download
+Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
 
-The core API contains just 6 functions &ndash; 4 for data or metadata imports and 2 for search:
+The core API contains just 6 functions – 4 for data or metadata imports
+and 2 for search:
 
 Import functionality:
 
--   [**importData**](https://rdrr.io/github/alekrutkowski/eurodata/man/importData.html) &ndash; fast thanks to [data.table](https://cran.r-project.org/web/packages/data.table/index.html)::[fread](http://www.rdocumentation.org/packages/data.table/functions/fread)
--   [**importLabels**](https://rdrr.io/github/alekrutkowski/eurodata/man/importLabels.html) &ndash; as above
--   [**importMetabase**](https://rdrr.io/github/alekrutkowski/eurodata/man/importMetabase.html) &ndash; as above
--   [**importDataList**](https://rdrr.io/github/alekrutkowski/eurodata/man/importDataList.html) &ndash; reflects the hierarchical structure of the Eurostat tree of datasets &ndash; fast transformation of the raw [Table of Contents file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt) is based on a C++ code snippet compiled via [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
+-   **importData** – fast thanks to
+    [data.table](https://cran.r-project.org/web/packages/data.table/index.html)::[fread](http://www.rdocumentation.org/packages/data.table/functions/fread)
+-   **importDataLabels** – as above
+-   **importMetabase** – as above
+-   **importDataList** – reflects the hierarchical structure of the
+    Eurostat tree of datasets – fast transformation of the raw [Table of
+    Contents
+    file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt)
+    is based on a C++ code snippet compiled via
+    [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
 
 Search functionality:
 
--   [**browseDataList**](https://rdrr.io/github/alekrutkowski/eurodata/man/browseDataList.html) &ndash; based on importDataList, shows an HTML table (generated with [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable)) in a browser with a list of the found datasets
--   [**find**](https://rdrr.io/github/alekrutkowski/eurodata/man/find.html) &ndash; based on importDataList, shows a textual report on the found datasets &ndash; a &ldquo;quick-n-dirty&rdquo; way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
+-   **browseDataList** – based on importDataList, shows an HTML table
+    (generated with
+    [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable))
+    in a browser with a list of the found datasets
+-   **find** – based on importDataList, shows a textual report on the
+    found datasets – a \`\`quick-n-dirty’’ way to find a Eurostat
+    dataset without much typing (with a keyword or a few keywords)
 
-Installation
-------------
+NEW! Extra functionality:
 
-From source:
+-   **describe** – describe a given Eurostat dataset on the basis of
+    information from Metabase
+-   **compare** – compare specific Eurostat datasets on the basis of
+    information from Metabase
+
+## Installation
 
 ``` r
-devtools::install_github('alekrutkowski/eurodata')
+devtools::install_github('alekrutkowski/eurodata') # package 'devtools' needs to be installed
 ```
 
-Precompiled binary for Windows (useful for those who don't have Rtools):
-
-``` r
-installr::install.packages.zip('https://github.com/alekrutkowski/eurodata/releases/download/v1.3.0/eurodata_1.3.0.zip')
-```
-
-Functionality demo
-------------------
+## Functionality demo
 
 ``` r
 library(eurodata)
@@ -42,7 +52,7 @@ library(eurodata)
 
     ## 
     ## Attaching package: 'eurodata'
-    ## 
+
     ## The following object is masked from 'package:utils':
     ## 
     ##     find
@@ -54,43 +64,32 @@ x <- importData('nama_10_a10')  # actual dataset
 str(x)
 ```
 
-    ## Classes 'EurostatDataset' and 'data.frame':  794170 obs. of  7 variables:
-    ##  $ unit   : Factor w/ 23 levels "CLV_I05","CLV_I10",..: 4 4 4 4 4 4 4 4 4 4 ...
+    ## Classes 'EurostatDataset' and 'data.frame':  1164237 obs. of  7 variables:
+    ##  $ unit   : Factor w/ 28 levels "CLV_I05","CLV_I10",..: 5 5 5 5 5 5 5 5 5 5 ...
     ##  $ nace_r2: Factor w/ 12 levels "A","B-E","C",..: 1 1 1 1 1 1 1 1 1 1 ...
     ##  $ na_item: Factor w/ 4 levels "B1G","D1","D11",..: 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ geo    : Factor w/ 42 levels "AL","AT","BE",..: 2 3 4 5 6 7 8 9 10 11 ...
-    ##  $ time   : Factor w/ 41 levels "2015","2014",..: 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ value_ : num  3269 2506 1382 NA 294 ...
-    ##  $ flags_ : chr  "" "" "" ":" ...
+    ##  $ geo    : Factor w/ 45 levels "AL","AT","BA",..: 2 3 4 5 6 7 8 9 10 11 ...
+    ##  $ time   : Factor w/ 47 levels "2021","2020",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ value_ : num  4063 865 2577 1590 2634 ...
+    ##  $ flags_ : chr  "" "" " p" " p" ...
     ##  - attr(*, "EurostatDatasetCode")= chr "nama_10_a10"
-    ##  - attr(*, "DownloadTime")= POSIXct, format: "2016-06-24 11:19:36"
+    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-05-19 10:18:31"
 
 ``` r
 head(x,10)
 ```
 
-    ##          unit nace_r2 na_item  geo time   value_ flags_
-    ## 1  CLV05_MEUR       A     B1G   AT 2015   3268.7       
-    ## 2  CLV05_MEUR       A     B1G   BE 2015   2506.5       
-    ## 3  CLV05_MEUR       A     B1G   BG 2015   1381.9       
-    ## 4  CLV05_MEUR       A     B1G   CH 2015       NA      :
-    ## 5  CLV05_MEUR       A     B1G   CY 2015    294.0      p
-    ## 6  CLV05_MEUR       A     B1G   CZ 2015   2011.4       
-    ## 7  CLV05_MEUR       A     B1G   DE 2015  16810.1       
-    ## 8  CLV05_MEUR       A     B1G   DK 2015   2624.8       
-    ## 9  CLV05_MEUR       A     B1G   EA 2015 152297.8       
-    ## 10 CLV05_MEUR       A     B1G EA12 2015 146140.6
-
-``` r
-# Friendly error if a wrong data code (similarly for importLabels):
-tryCatch(importData('nama_10_a10_XXX'),
-         error = function(e) cat(geterrmessage()))
-```
-
-    ## 
-    ## Probably a wrong dataset code:  nama_10_a10_XXX
-    ## Check if you can find  nama_10_a10_XXX.tsv.gz  at
-    ## http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?dir=data&start=all
+    ##          unit nace_r2 na_item geo time   value_ flags_
+    ## 1  CLV05_MEUR       A     B1G  AT 2021   4063.0       
+    ## 2  CLV05_MEUR       A     B1G  BA 2021    865.1       
+    ## 3  CLV05_MEUR       A     B1G  BE 2021   2576.6      p
+    ## 4  CLV05_MEUR       A     B1G  BG 2021   1590.4      p
+    ## 5  CLV05_MEUR       A     B1G  CH 2021   2634.5       
+    ## 6  CLV05_MEUR       A     B1G  CY 2021    289.4      p
+    ## 7  CLV05_MEUR       A     B1G  CZ 2021   2561.0       
+    ## 8  CLV05_MEUR       A     B1G  DE 2021  18520.3      p
+    ## 9  CLV05_MEUR       A     B1G  DK 2021   2977.6       
+    ## 10 CLV05_MEUR       A     B1G  EA 2021 158523.1
 
 ``` r
 y <- importDataList()  # metadata
@@ -99,15 +98,16 @@ colnames(y)
 
     ##  [1] "Data subgroup, level 0"      "Data subgroup, level 1"      "Data subgroup, level 2"     
     ##  [4] "Data subgroup, level 3"      "Data subgroup, level 4"      "Data subgroup, level 5"     
-    ##  [7] "Data subgroup, level 6"      "Dataset name"                "Code"                       
-    ## [10] "Type"                        "Last update of data"         "Last table structure change"
-    ## [13] "Data start"                  "Data end"                    "Link"
+    ##  [7] "Data subgroup, level 6"      "Data subgroup, level 7"      "Dataset name"               
+    ## [10] "Code"                        "Type"                        "Last update of data"        
+    ## [13] "Last table structure change" "Data start"                  "Data end"                   
+    ## [16] "Link"
 
 ``` r
 str(y[y$Code=='nama_10_a10',])  # metadata on x
 ```
 
-    ## Classes 'EurostatDataList' and 'data.frame': 1 obs. of  15 variables:
+    ## Classes 'EurostatDataList' and 'data.frame': 1 obs. of  16 variables:
     ##  $ Data subgroup, level 0     : chr "Database by themes"
     ##  $ Data subgroup, level 1     : chr "Economy and finance"
     ##  $ Data subgroup, level 2     : chr "National accounts (ESA 2010)"
@@ -115,13 +115,14 @@ str(y[y$Code=='nama_10_a10',])  # metadata on x
     ##  $ Data subgroup, level 4     : chr "Basic breakdowns of main GDP aggregates and employment (by industry and by assets)"
     ##  $ Data subgroup, level 5     : chr ""
     ##  $ Data subgroup, level 6     : chr ""
+    ##  $ Data subgroup, level 7     : chr ""
     ##  $ Dataset name               : chr "Gross value added and income by A*10 industry breakdowns"
     ##  $ Code                       : chr "nama_10_a10"
     ##  $ Type                       : chr "dataset"
-    ##  $ Last update of data        : chr "22.06.2016"
-    ##  $ Last table structure change: chr "14.01.2016"
+    ##  $ Last update of data        : chr "2022-05-16"
+    ##  $ Last table structure change: chr "2022-03-22"
     ##  $ Data start                 : chr "1975"
-    ##  $ Data end                   : chr "2015"
+    ##  $ Data end                   : chr "2021"
     ##  $ Link                       : chr "http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=nama_10_a10&lang=en"
 
 ``` r
@@ -129,17 +130,28 @@ z <- importLabels('geo')
 head(z,10)
 ```
 
-    ##          geo                                                                                       geo_labels
-    ## 1        EUR                                                                                           Europe
-    ## 2         EU European Union (EU6-1972, EU9-1980, EU10-1985, EU12-1994, EU15-2004, EU25-2006, EU27-2013, EU28)
-    ## 3       EU_V                                     European Union (aggregate changing according to the context)
-    ## 4       EU28                                                                    European Union (28 countries)
-    ## 5       EU27                                                                    European Union (27 countries)
-    ## 6  EU27_X_FR                                                      European Union except France (26 countries)
-    ## 7       EU25                                                                    European Union (25 countries)
-    ## 8       EU15                                                                    European Union (15 countries)
-    ## 9    EU15_NO                                                         European Union (15 countries) and Norway
-    ## 10     NMS13                                                                 New Member States (13 countries)
+    ##               geo
+    ## 1             EUR
+    ## 2              EU
+    ## 3            EU_V
+    ## 4  EU27_2020_EFTA
+    ## 5  EU27_2020_IS_K
+    ## 6       EU27_2020
+    ## 7       EU28_EFTA
+    ## 8       EU28_IS_K
+    ## 9            EU28
+    ## 10      EU27_2007
+    ##                                                                                                          geo_labels
+    ## 1                                                                                                            Europe
+    ## 2  European Union (EU6-1958, EU9-1973, EU10-1981, EU12-1986, EU15-1995, EU25-2004, EU27-2007, EU28-2013, EU27-2020)
+    ## 3                                                      European Union (aggregate changing according to the context)
+    ## 4                    European Union - 27 countries (from 2020) and European Free Trade Association (EFTA) countries
+    ## 5                                    European Union - 27 countries (from 2020) and Iceland under the Kyoto Protocol
+    ## 6                                                                         European Union - 27 countries (from 2020)
+    ## 7                    European Union - 28 countries (2013-2020) and European Free Trade Association (EFTA) countries
+    ## 8                                    European Union - 28 countries (2013-2020) and Iceland under the Kyoto Protocol
+    ## 9                                                                         European Union - 28 countries (2013-2020)
+    ## 10                                                                        European Union - 27 countries (2007-2013)
 
 ### Search
 
@@ -148,28 +160,8 @@ head(z,10)
 find(gdp,main,selected,-quarterly)
 ```
 
-    ## 2016-06-24 11:19:42
-    ## 1 dataset(s)/table(s) found.
-    ## Keywords: gdp, main, selected, -quarterly
-    ## 
-    ##  Database by themes >>
-    ##  Economy and finance >>
-    ##  National accounts (ESA 2010) >>
-    ##  National accounts - international data cooperation >>
-    ##  Annual national accounts
-    ## 
-    ## No : 1
-    ## Dataset name : GDP and main aggregates - selected international annual data
-    ## Code : naida_10_gdp
-    ## Type : dataset
-    ## Last update of data : 23.06.2016
-    ## Last table structure change : 03.03.2016
-    ## Data start : 1975
-    ## Data end : 2015
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=naida_10_gdp&lang=en
-    ## 
-    ## 2016-06-24 11:19:42
-    ## 1 dataset(s)/table(s) found.
+    ## 2022-05-19 10:18:55
+    ## 0 dataset(s)/table(s) found.
     ## Keywords: gdp, main, selected, -quarterly
     ## 
     ## End.
@@ -179,21 +171,21 @@ find(gdp,main,selected,-quarterly)
 find(bop, its)
 ```
 
-    ## 2016-06-24 11:19:43
+    ## 2022-05-19 10:18:58
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
     ##  Database by themes >>
     ##  Economy and finance >>
     ##  Balance of payments - International transactions >>
-    ##  International trade in services, geographical breakdown
+    ##  International trade in services, geographical breakdown - Historical data
     ## 
     ## No : 1
-    ## Dataset name : International trade in services (since 2004)
+    ## Dataset name : International trade in services (2004-2013)
     ## Code : bop_its_det
     ## Type : dataset
-    ## Last update of data : 16.05.2014
-    ## Last table structure change : 16.05.2014
+    ## Last update of data : 2014-05-16
+    ## Last table structure change : 2021-02-08
     ## Data start : 2004
     ## Data end : 2013
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en
@@ -202,68 +194,73 @@ find(bop, its)
     ## Dataset name : International trade in services (1985-2003)
     ## Code : bop_its_deth
     ## Type : dataset
-    ## Last update of data : 16.05.2014
-    ## Last table structure change : 16.05.2014
+    ## Last update of data : 2014-05-16
+    ## Last table structure change : 2021-02-08
     ## Data start : 1985
     ## Data end : 2003
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en
     ## 
     ## No : 3
-    ## Dataset name : International trade in services - market integration indicators
+    ## Dataset name : International trade in services - market integration indicators (1992-2013)
     ## Code : bop_its_str
     ## Type : dataset
-    ## Last update of data : 28.05.2014
-    ## Last table structure change : 28.05.2014
+    ## Last update of data : 2014-05-28
+    ## Last table structure change : 2021-02-08
     ## Data start : 1992
     ## Data end : 2013
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en
     ## 
     ## No : 4
-    ## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2002)
+    ## Dataset name : Total services, detailed geographical breakdown by EU Member States (2002-2012)
     ## Code : bop_its_tot
     ## Type : dataset
-    ## Last update of data : 27.05.2014
-    ## Last table structure change : 27.05.2014
+    ## Last update of data : 2014-05-27
+    ## Last table structure change : 2021-02-08
     ## Data start : 2002
     ## Data end : 2012
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en
-    ## 
-    ## No : 5
-    ## Dataset name : International trade in services - Data for the Eurostat yearbook
-    ## Code : bop_its_ybk
-    ## Type : dataset
-    ## Last update of data : 06.06.2014
-    ## Last table structure change : 06.06.2014
-    ## Data start : 1992
-    ## Data end : 2013
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_ybk&lang=en
     ## 
     ##  Database by themes >>
     ##  Economy and finance >>
     ##  Balance of payments - International transactions (BPM6) >>
     ##  International trade in services, geographical breakdown (BPM6)
     ## 
-    ## No : 6
+    ## No : 5
     ## Dataset name : International trade in services (since 2010) (BPM6)
     ## Code : bop_its6_det
     ## Type : dataset
-    ## Last update of data : 01.06.2016
-    ## Last table structure change : 01.06.2016
+    ## Last update of data : 2022-05-10
+    ## Last table structure change : 2022-05-10
     ## Data start : 2010
-    ## Data end : 2015
+    ## Data end : 2021
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
     ## 
-    ## No : 7
+    ## No : 6
     ## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)
     ## Code : bop_its6_tot
     ## Type : dataset
-    ## Last update of data : 01.06.2016
-    ## Last table structure change : 01.06.2016
+    ## Last update of data : 2022-01-28
+    ## Last table structure change : 2022-01-28
     ## Data start : 2010
-    ## Data end : 2015
+    ## Data end : 2020
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en
     ## 
-    ## 2016-06-24 11:19:43
+    ##  Database by themes >>
+    ##  Population and social conditions >>
+    ##  Culture >>
+    ##  International trade in cultural services
+    ## 
+    ## No : 7
+    ## Dataset name : International trade in services (since 2010) (BPM6)
+    ## Code : bop_its6_det
+    ## Type : dataset
+    ## Last update of data : 2022-05-10
+    ## Last table structure change : 2022-05-10
+    ## Data start : 2010
+    ## Data end : 2021
+    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
+    ## 
+    ## 2022-05-19 10:18:58
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -273,21 +270,21 @@ find(bop, its)
 find(bop,-ybk,its)
 ```
 
-    ## 2016-06-24 11:19:43
-    ## 6 dataset(s)/table(s) found.
+    ## 2022-05-19 10:19:01
+    ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
     ##  Database by themes >>
     ##  Economy and finance >>
     ##  Balance of payments - International transactions >>
-    ##  International trade in services, geographical breakdown
+    ##  International trade in services, geographical breakdown - Historical data
     ## 
     ## No : 1
-    ## Dataset name : International trade in services (since 2004)
+    ## Dataset name : International trade in services (2004-2013)
     ## Code : bop_its_det
     ## Type : dataset
-    ## Last update of data : 16.05.2014
-    ## Last table structure change : 16.05.2014
+    ## Last update of data : 2014-05-16
+    ## Last table structure change : 2021-02-08
     ## Data start : 2004
     ## Data end : 2013
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en
@@ -296,28 +293,28 @@ find(bop,-ybk,its)
     ## Dataset name : International trade in services (1985-2003)
     ## Code : bop_its_deth
     ## Type : dataset
-    ## Last update of data : 16.05.2014
-    ## Last table structure change : 16.05.2014
+    ## Last update of data : 2014-05-16
+    ## Last table structure change : 2021-02-08
     ## Data start : 1985
     ## Data end : 2003
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en
     ## 
     ## No : 3
-    ## Dataset name : International trade in services - market integration indicators
+    ## Dataset name : International trade in services - market integration indicators (1992-2013)
     ## Code : bop_its_str
     ## Type : dataset
-    ## Last update of data : 28.05.2014
-    ## Last table structure change : 28.05.2014
+    ## Last update of data : 2014-05-28
+    ## Last table structure change : 2021-02-08
     ## Data start : 1992
     ## Data end : 2013
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en
     ## 
     ## No : 4
-    ## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2002)
+    ## Dataset name : Total services, detailed geographical breakdown by EU Member States (2002-2012)
     ## Code : bop_its_tot
     ## Type : dataset
-    ## Last update of data : 27.05.2014
-    ## Last table structure change : 27.05.2014
+    ## Last update of data : 2014-05-27
+    ## Last table structure change : 2021-02-08
     ## Data start : 2002
     ## Data end : 2012
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en
@@ -331,24 +328,39 @@ find(bop,-ybk,its)
     ## Dataset name : International trade in services (since 2010) (BPM6)
     ## Code : bop_its6_det
     ## Type : dataset
-    ## Last update of data : 01.06.2016
-    ## Last table structure change : 01.06.2016
+    ## Last update of data : 2022-05-10
+    ## Last table structure change : 2022-05-10
     ## Data start : 2010
-    ## Data end : 2015
+    ## Data end : 2021
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
     ## 
     ## No : 6
     ## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)
     ## Code : bop_its6_tot
     ## Type : dataset
-    ## Last update of data : 01.06.2016
-    ## Last table structure change : 01.06.2016
+    ## Last update of data : 2022-01-28
+    ## Last table structure change : 2022-01-28
     ## Data start : 2010
-    ## Data end : 2015
+    ## Data end : 2020
     ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en
     ## 
-    ## 2016-06-24 11:19:43
-    ## 6 dataset(s)/table(s) found.
+    ##  Database by themes >>
+    ##  Population and social conditions >>
+    ##  Culture >>
+    ##  International trade in cultural services
+    ## 
+    ## No : 7
+    ## Dataset name : International trade in services (since 2010) (BPM6)
+    ## Code : bop_its6_det
+    ## Type : dataset
+    ## Last update of data : 2022-05-10
+    ## Last table structure change : 2022-05-10
+    ## Data start : 2010
+    ## Data end : 2021
+    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
+    ## 
+    ## 2022-05-19 10:19:01
+    ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
     ## End.
@@ -363,97 +375,17 @@ browseDataList(grepl('GDP',`Dataset name`) &
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2016-06-24 11:19:44 ■ Number of datasets/tables found: 1 ■ Search criteria: grepl("GDP", `Dataset name`) & grepl("main", `Dataset name`) &grepl("selected", `Dataset name`) & !grepl("quarterly", `Dataset name`)</tt>
+<tt>■ Generated on: 2022-05-19 10:19:04 ■ Number of datasets/tables
+found: 0 ■ Search criteria: grepl(“GDP”, `Dataset name`) & grepl(“main”,
+`Dataset name`) &grepl(“selected”, `Dataset name`) & !grepl(“quarterly”,
+`Dataset name`)</tt>
 </p>
-<!-- html table generated in R 3.2.4 by xtable 1.7-4 package --><!-- Fri Jun 24 11:19:45 2016 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 10:19:10 2022 -->
 <table class="gridtable">
 <tr>
 <th>
-Row
+Nothing found
 </th>
-<th>
-Data subgroup, level 0
-</th>
-<th>
-Data subgroup, level 1
-</th>
-<th>
-Data subgroup, level 2
-</th>
-<th>
-Data subgroup, level 3
-</th>
-<th>
-Data subgroup, level 4
-</th>
-<th>
-Dataset name
-</th>
-<th>
-Code
-</th>
-<th>
-Type
-</th>
-<th>
-Last update of data
-</th>
-<th>
-Last table structure change
-</th>
-<th>
-Data start
-</th>
-<th>
-Data end
-</th>
-<th>
-Link
-</th>
-</tr>
-<tr>
-<td>
-1
-</td>
-<td>
-Database by themes
-</td>
-<td>
-Economy and finance
-</td>
-<td>
-National accounts (ESA 2010)
-</td>
-<td>
-National accounts - international data cooperation
-</td>
-<td>
-Annual national accounts
-</td>
-<td>
-<b>GDP and main aggregates - selected international annual data</b>
-</td>
-<td>
-<tt><b>naida_10_gdp</b></tt>
-</td>
-<td>
-dataset
-</td>
-<td>
-23.06.2016
-</td>
-<td>
-03.03.2016
-</td>
-<td>
-1975
-</td>
-<td>
-2015
-</td>
-<td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=naida_10_gdp&lang=en" target="_blank">click here</a>
-</td>
 </tr>
 </table>
 </body>
@@ -466,9 +398,10 @@ browseDataList(grepl('bop',Code) & grepl('its',Code))
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2016-06-24 11:19:45 ■ Number of datasets/tables found: 7 ■ Search criteria: grepl("bop", Code) & grepl("its", Code)</tt>
+<tt>■ Generated on: 2022-05-19 10:19:10 ■ Number of datasets/tables
+found: 7 ■ Search criteria: grepl(“bop”, Code) & grepl(“its”, Code)</tt>
 </p>
-<!-- html table generated in R 3.2.4 by xtable 1.7-4 package --><!-- Fri Jun 24 11:19:45 2016 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 10:19:16 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -525,10 +458,11 @@ Economy and finance
 Balance of payments - International transactions
 </td>
 <td>
-International trade in services, geographical breakdown
+International trade in services, geographical breakdown - Historical
+data
 </td>
 <td>
-<b>International trade in services (since 2004)</b>
+<b>International trade in services (2004-2013)</b>
 </td>
 <td>
 <tt><b>bop_its_det</b></tt>
@@ -537,10 +471,10 @@ International trade in services, geographical breakdown
 dataset
 </td>
 <td>
-16.05.2014
+2014-05-16
 </td>
 <td>
-16.05.2014
+2021-02-08
 </td>
 <td>
 2004
@@ -549,7 +483,8 @@ dataset
 2013
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
@@ -566,7 +501,8 @@ Economy and finance
 Balance of payments - International transactions
 </td>
 <td>
-International trade in services, geographical breakdown
+International trade in services, geographical breakdown - Historical
+data
 </td>
 <td>
 <b>International trade in services (1985-2003)</b>
@@ -578,10 +514,10 @@ International trade in services, geographical breakdown
 dataset
 </td>
 <td>
-16.05.2014
+2014-05-16
 </td>
 <td>
-16.05.2014
+2021-02-08
 </td>
 <td>
 1985
@@ -590,7 +526,8 @@ dataset
 2003
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
@@ -607,10 +544,12 @@ Economy and finance
 Balance of payments - International transactions
 </td>
 <td>
-International trade in services, geographical breakdown
+International trade in services, geographical breakdown - Historical
+data
 </td>
 <td>
-<b>International trade in services - market integration indicators</b>
+<b>International trade in services - market integration indicators
+(1992-2013)</b>
 </td>
 <td>
 <tt><b>bop_its_str</b></tt>
@@ -619,10 +558,10 @@ International trade in services, geographical breakdown
 dataset
 </td>
 <td>
-28.05.2014
+2014-05-28
 </td>
 <td>
-28.05.2014
+2021-02-08
 </td>
 <td>
 1992
@@ -631,7 +570,8 @@ dataset
 2013
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
@@ -648,10 +588,12 @@ Economy and finance
 Balance of payments - International transactions
 </td>
 <td>
-International trade in services, geographical breakdown
+International trade in services, geographical breakdown - Historical
+data
 </td>
 <td>
-<b>Total services, detailed geographical breakdown by EU Member States (since 2002)</b>
+<b>Total services, detailed geographical breakdown by EU Member States
+(2002-2012)</b>
 </td>
 <td>
 <tt><b>bop_its_tot</b></tt>
@@ -660,10 +602,10 @@ International trade in services, geographical breakdown
 dataset
 </td>
 <td>
-27.05.2014
+2014-05-27
 </td>
 <td>
-27.05.2014
+2021-02-08
 </td>
 <td>
 2002
@@ -672,53 +614,13 @@ dataset
 2012
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
 <td>
 5
-</td>
-<td>
-Database by themes
-</td>
-<td>
-Economy and finance
-</td>
-<td>
-Balance of payments - International transactions
-</td>
-<td>
-International trade in services, geographical breakdown
-</td>
-<td>
-<b>International trade in services - Data for the Eurostat yearbook</b>
-</td>
-<td>
-<tt><b>bop_its_ybk</b></tt>
-</td>
-<td>
-dataset
-</td>
-<td>
-06.06.2014
-</td>
-<td>
-06.06.2014
-</td>
-<td>
-1992
-</td>
-<td>
-2013
-</td>
-<td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_ybk&lang=en" target="_blank">click here</a>
-</td>
-</tr>
-<tr>
-<td>
-6
 </td>
 <td>
 Database by themes
@@ -742,24 +644,25 @@ International trade in services, geographical breakdown (BPM6)
 dataset
 </td>
 <td>
-01.06.2016
+2022-05-10
 </td>
 <td>
-01.06.2016
+2022-05-10
 </td>
 <td>
 2010
 </td>
 <td>
-2015
+2021
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
 <td>
-7
+6
 </td>
 <td>
 Database by themes
@@ -774,7 +677,8 @@ Balance of payments - International transactions (BPM6)
 International trade in services, geographical breakdown (BPM6)
 </td>
 <td>
-<b>Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)</b>
+<b>Total services, detailed geographical breakdown by EU Member States
+(since 2010) (BPM6)</b>
 </td>
 <td>
 <tt><b>bop_its6_tot</b></tt>
@@ -783,19 +687,62 @@ International trade in services, geographical breakdown (BPM6)
 dataset
 </td>
 <td>
-01.06.2016
+2022-01-28
 </td>
 <td>
-01.06.2016
+2022-01-28
 </td>
 <td>
 2010
 </td>
 <td>
-2015
+2020
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en" target="_blank">click
+here</a>
+</td>
+</tr>
+<tr>
+<td>
+7
+</td>
+<td>
+Database by themes
+</td>
+<td>
+Population and social conditions
+</td>
+<td>
+Culture
+</td>
+<td>
+International trade in cultural services
+</td>
+<td>
+<b>International trade in services (since 2010) (BPM6)</b>
+</td>
+<td>
+<tt><b>bop_its6_det</b></tt>
+</td>
+<td>
+dataset
+</td>
+<td>
+2022-05-10
+</td>
+<td>
+2022-05-10
+</td>
+<td>
+2010
+</td>
+<td>
+2021
+</td>
+<td>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 </table>
@@ -812,7 +759,9 @@ metab <- importMetabase()
 ```
 
     ## Downloading Eurostat Metabase
+
     ## Uncompressing (extracting)
+
     ## Importing (reading into memory)
 
 ``` r
@@ -839,9 +788,11 @@ importDataList() %>%
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2016-06-24 11:19:47 ■ Number of datasets/tables found: 7 ■ Search criteria: those including data on firms with fewer than 10 employees and NACE Rev.2 disaggregation</tt>
+<tt>■ Generated on: 2022-05-19 10:19:33 ■ Number of datasets/tables
+found: 6 ■ Search criteria: those including data on firms with fewer
+than 10 employees and NACE Rev.2 disaggregation</tt>
 </p>
-<!-- html table generated in R 3.2.4 by xtable 1.7-4 package --><!-- Fri Jun 24 11:19:47 2016 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 10:19:33 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -910,10 +861,12 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008 and 2012 - NACE Rev. 2
+Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
-<b>Labour cost, wages and salaries, direct remuneration (excluding apprentices) - NACE Rev. 2</b>
+<b>Labour cost, wages and salaries, direct remuneration (excluding
+apprentices) by NACE Rev. 2 activity ) - LCS surveys 2008, 2012 and
+2016</b>
 </td>
 <td>
 <tt><b>lc_ncost_r2</b></tt>
@@ -922,19 +875,20 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 dataset
 </td>
 <td>
-25.05.2016
+2020-03-24
 </td>
 <td>
-17.12.2015
+2021-02-08
 </td>
 <td>
 2008
 </td>
 <td>
-2012
+2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_ncost_r2&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_ncost_r2&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
@@ -957,10 +911,11 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008 and 2012 - NACE Rev. 2
+Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
-<b>Structure of labour cost as % of total cost - NACE Rev. 2</b>
+<b>Structure of labour cost by NACE Rev. 2 activity - % of total cost,
+LCS surveys 2008, 2012 and 2016</b>
 </td>
 <td>
 <tt><b>lc_nstruc_r2</b></tt>
@@ -969,19 +924,20 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 dataset
 </td>
 <td>
-25.05.2016
+2020-03-24
 </td>
 <td>
-17.12.2015
+2021-02-08
 </td>
 <td>
 2008
 </td>
 <td>
-2012
+2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nstruc_r2&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nstruc_r2&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
@@ -1004,10 +960,11 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008 and 2012 - NACE Rev. 2
+Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
-<b>Number of employees, hours actually worked and paid - NACE Rev. 2</b>
+<b>Number of employees, hours worked and paid, by working time and NACE
+Rev. 2 activity - LCS surveys 2008, 2012 and 2016</b>
 </td>
 <td>
 <tt><b>lc_nnum1_r2</b></tt>
@@ -1016,19 +973,20 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 dataset
 </td>
 <td>
-25.05.2016
+2020-03-24
 </td>
 <td>
-17.12.2015
+2021-02-08
 </td>
 <td>
 2008
 </td>
 <td>
-2012
+2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nnum1_r2&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nnum1_r2&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
@@ -1051,10 +1009,11 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008 and 2012 - NACE Rev. 2
+Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
-<b>Number of hours actually worked and paid per employee - NACE Rev. 2</b>
+<b>Average hours worked and paid per employee, by working time and NACE
+Rev. 2 activity - LCS surveys 2008, 2012 and 2016</b>
 </td>
 <td>
 <tt><b>lc_nnum2_r2</b></tt>
@@ -1063,19 +1022,20 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 dataset
 </td>
 <td>
-25.05.2016
+2020-03-24
 </td>
 <td>
-17.12.2015
+2021-02-08
 </td>
 <td>
 2008
 </td>
 <td>
-2012
+2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nnum2_r2&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nnum2_r2&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
@@ -1098,10 +1058,11 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008 and 2012 - NACE Rev. 2
+Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
-<b>Number of statistical units - NACE Rev. 2</b>
+<b>Number of statistical units selected for the survey, by NACE Rev. 2
+activity - LCS surveys 2008, 2012 and 2016</b>
 </td>
 <td>
 <tt><b>lc_nstu_r2</b></tt>
@@ -1110,19 +1071,20 @@ Labour costs survey 2008 and 2012 - NACE Rev. 2
 dataset
 </td>
 <td>
-25.05.2016
+2020-03-24
 </td>
 <td>
-17.12.2015
+2021-02-08
 </td>
 <td>
 2008
 </td>
 <td>
-2012
+2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nstu_r2&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nstu_r2&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 <tr>
@@ -1130,54 +1092,13 @@ dataset
 6
 </td>
 <td>
-Cross cutting topics
+Database by themes
 </td>
 <td>
-Entrepreneurship indicators program
+International trade in goods
 </td>
 <td>
-Enterprise population
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-<b>Annual enterprise statistics by size class and NACE Rev. 2 activity (B-N_X_K)</b>
-</td>
-<td>
-<tt><b>eip_pop1</b></tt>
-</td>
-<td>
-dataset
-</td>
-<td>
-07.04.2016
-</td>
-<td>
-07.04.2016
-</td>
-<td>
-2010
-</td>
-<td>
-2013
-</td>
-<td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=eip_pop1&lang=en" target="_blank">click here</a>
-</td>
-</tr>
-<tr>
-<td>
-7
-</td>
-<td>
-Cross cutting topics
-</td>
-<td>
-Entrepreneurship indicators program
+International trade in goods - trade by enterprise characteristics (TEC)
 </td>
 <td>
 </td>
@@ -1186,147 +1107,157 @@ Entrepreneurship indicators program
 <td>
 </td>
 <td>
+<b>Trade by NACE Rev. 2 activity and enterprise size class</b>
 </td>
 <td>
-<b>International trade by size class and NACE Rev. 2 activity (B-N_X_K)</b>
-</td>
-<td>
-<tt><b>eip_ext1</b></tt>
+<tt><b>ext_tec01</b></tt>
 </td>
 <td>
 dataset
 </td>
 <td>
-07.04.2016
+2022-05-05
 </td>
 <td>
-07.04.2016
+2022-02-15
 </td>
 <td>
-2008
+2012
 </td>
 <td>
-2013
+2020
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=eip_ext1&lang=en" target="_blank">click here</a>
+<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ext_tec01&lang=en" target="_blank">click
+here</a>
 </td>
 </tr>
 </table>
 </body>
 </html>
 
-Speed demo
-----------
-
-eurodata::**importData** compared to [eurostat](https://cran.r-project.org/web/packages/eurostat/index.html)::[get_eurostat](http://www.rdocumentation.org/packages/eurostat/functions/get_eurostat):
+## Extras
 
 ``` r
-y <- importDataList()  # metadata
-
-d <- unique(y[y$Type=='dataset','Code']) # dataset codes
-
-set.seed(1234)  # for replicability
-
-d50 <- sample(d, 50) # a random sample of 50 datasets
-
-get_eurostat <- eurostat::get_eurostat  # package 'eurostat' needs to be installed
-
-FUNS <- c('importData', 'get_eurostat')
-
-timeit <- function(funname, code)
-    tryCatch(system.time(get(funname)(code))['elapsed'],
-             error = function(e) as.numeric(NA)) # due to errors in some 'eurostat' package imports
-
-compileInfo <-
-    function(code) {
-        FUNS2 <- if (sample(c(TRUE,FALSE), 1))
-            FUNS else rev(FUNS) # so that the execution order is random
-        res <- data.frame(code,
-                          timeit(FUNS2[1], code),
-                          timeit(FUNS2[2], code))
-        colnames(res) <- c('Data code name',FUNS2)
-        res
-    }
+describe('nama_10_gdp')
 ```
+
+    ## Downloading Eurostat Metabase
+
+    ## Uncompressing (extracting)
+
+    ## Importing (reading into memory)
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for geo
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for na_item
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for time
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for unit
+
+    ##      Dim_name                  Dim_name_label        Dim_val
+    ##   1:      geo Geopolitical entity (reporting)             AL
+    ##   2:      geo Geopolitical entity (reporting)             AT
+    ##   3:      geo Geopolitical entity (reporting)             BA
+    ##   4:      geo Geopolitical entity (reporting)             BE
+    ##   5:      geo Geopolitical entity (reporting)             BG
+    ##  ---                                                        
+    ## 154:     unit                 Unit of measure       PD15_NAC
+    ## 155:     unit                 Unit of measure PD_PCH_PRE_EUR
+    ## 156:     unit                 Unit of measure PD_PCH_PRE_NAC
+    ## 157:     unit                 Unit of measure       PYP_MEUR
+    ## 158:     unit                 Unit of measure       PYP_MNAC
+    ##                                                                                 Dim_val_label nama_10_gdp
+    ##   1:                                                                                  Albania        TRUE
+    ##   2:                                                                                  Austria        TRUE
+    ##   3:                                                                   Bosnia and Herzegovina        TRUE
+    ##   4:                                                                                  Belgium        TRUE
+    ##   5:                                                                                 Bulgaria        TRUE
+    ##  ---                                                                                                     
+    ## 154:                             Price index (implicit deflator), 2015=100, national currency        TRUE
+    ## 155:              Price index (implicit deflator), percentage change on previous period, euro        TRUE
+    ## 156: Price index (implicit deflator), percentage change on previous period, national currency        TRUE
+    ## 157:                                                       Previous year prices, million euro        TRUE
+    ## 158:                                 Previous year prices, million units of national currency        TRUE
 
 ``` r
-L <- lapply(d50, compileInfo)
+describe('nama_10_gdp', wide=TRUE)
 ```
+
+    ##    Dim_name                         Dim_name_label nama_10_gdp
+    ## 1:      geo        Geopolitical entity (reporting)        TRUE
+    ## 2:  na_item National accounts indicator (ESA 2010)        TRUE
+    ## 3:     time                         Period of time        TRUE
+    ## 4:     unit                        Unit of measure        TRUE
+    ##                                                                                                                                                                                                                                                                                                                               Dim_values
+    ## 1:                                                                                                                                     EU27_2020, EU28, EU15, EA, EA19, EA12, BE, BG, CZ, DK, DE, EE, IE, EL, ES, FR, HR, IT, CY, LV, LT, LU, HU, MT, NL, AT, PL, PT, RO, SI, SK, FI, SE, IS, LI, NO, CH, UK, ME, MK, AL, RS, TR, BA, XK
+    ## 2:                                                                                              B1GQ, B1G, P3, P3_S13, P31_S13, P32_S13, P31_S14_S15, P31_S14, P31_S15, P41, P5G, P51G, P52_P53, P52, P53, P6, P61, P62, P7, P71, P72, B11, B111, B112, D1, D11, D12, B2A3G, D2X3, D2, D3, D21X31, D21, D31, YA1, YA0, YA2, P3_P5, P3_P6
+    ## 3:                                              2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 1999, 1998, 1997, 1996, 1995, 1994, 1993, 1992, 1991, 1990, 1989, 1988, 1987, 1986, 1985, 1984, 1983, 1982, 1981, 1980, 1979, 1978, 1977, 1976, 1975
+    ## 4: CLV_I15, CLV_I10, CLV_I05, PC_GDP, PC_EU27_2020_MEUR_CP, PC_EU27_2020_MPPS_CP, CP_MEUR, CP_MNAC, CP_MPPS_EU27_2020, CLV15_MEUR, CLV10_MEUR, CLV05_MEUR, CLV15_MNAC, CLV10_MNAC, CLV05_MNAC, CLV_PCH_PRE, PYP_MEUR, PYP_MNAC, CON_PPCH_PRE, PD15_EUR, PD10_EUR, PD05_EUR, PD15_NAC, PD10_NAC, PD05_NAC, PD_PCH_PRE_EUR, PD_PCH_PRE_NAC
 
 ``` r
-Res <- do.call(rbind, L)
-
-Res2 <- within(Res,
-               ratio <- get_eurostat/importData)
-
-row.names(Res2) <- NULL # to eliminate the visual noise
-
-Res2 # lower = faster (in seconds)
+compare('nama_10_gdp', 'nama_10_a64')
 ```
 
-    ##      Data code name importData get_eurostat      ratio
-    ## 1           vit_bs1       1.08         6.74  6.2407407
-    ## 2      yth_incl_060       0.13           NA         NA
-    ## 3      spr_exp_pens       0.54         3.37  6.2407407
-    ## 4      yth_incl_100       0.12         0.43  3.5833333
-    ## 5     mar_sg_am_ewx       0.08         0.06  0.7500000
-    ## 6      sts_inppnd_q      10.51       127.64 12.1446242
-    ## 7         ei_isrt_q       0.11         0.25  2.2727273
-    ## 8         migr_acqs       0.04         0.10  2.5000000
-    ## 9        sbs_ins_5b       0.19         1.31  6.8947368
-    ## 10    earn_ses06_15       0.35           NA         NA
-    ## 11         iss_ctry       0.23           NA         NA
-    ## 12     lmp_expme_lv       0.13         0.57  4.3846154
-    ## 13    hlth_ehis_hc6       0.10         0.12  1.2000000
-    ## 14         nrg_122m       0.49         6.55 13.3673469
-    ## 15     hlth_dpeh200       0.06           NA         NA
-    ## 16    road_eqr_carm       0.10         0.28  2.8000000
-    ## 17     hlth_silc_15       2.92        24.95  8.5445205
-    ## 18      cens_91typb       0.04           NA         NA
-    ## 19    naio_18_agg_6       0.08         0.20  2.5000000
-    ## 20     migr_emi1ctz      31.26       354.30 11.3339731
-    ## 21     hsw_aw_nnasz       0.08         0.11  1.3750000
-    ## 22      hlth_dhc010       0.10         0.38  3.8000000
-    ## 23       nasa_10_ki       0.12         0.25  2.0833333
-    ## 24 htec_emp_risced2       1.05         8.94  8.5142857
-    ## 25        bop_eu6_m       0.31         2.41  7.7741935
-    ## 26  ext_lt_intertrd       0.26         2.16  8.3076923
-    ## 27   earn_ses_agt12       0.33           NA         NA
-    ## 28      env_wat_pop       0.06         0.03  0.5000000
-    ## 29  rail_go_intunld       0.33           NA         NA
-    ## 30    hlth_cd_ysdr1      10.60        10.90  1.0283019
-    ## 31     lfsa_enewasn       0.23         1.81  7.8695652
-    ## 32      cens_91actz       0.26         2.26  8.6923077
-    ## 33      hlth_dhc070       0.22         0.52  2.3636364
-    ## 34    earn_ses10_20       0.90           NA         NA
-    ## 35        nasa_f_of      10.33        72.29  6.9980639
-    ## 36     ef_mpmachine       0.08         0.20  2.5000000
-    ## 37     ert_eff_ex_m       0.25         1.14  4.5600000
-    ## 38     cens_01nsctz       0.90           NA         NA
-    ## 39      ipr_trn_tot       0.17         0.06  0.3529412
-    ## 40       fish_ld_es       9.96       118.86 11.9337349
-    ## 41    lmp_partme_es       0.14         0.50  3.5714286
-    ## 42       sts_inlb_a       0.89         7.38  8.2921348
-    ## 43    hlth_cd_ainfr       0.31         2.25  7.2580645
-    ## 44     yth_empl_040       0.34         2.71  7.9705882
-    ## 45          hsw_pb7       0.09         0.17  1.8888889
-    ## 46  earn_nt_unemtrp       0.07         0.04  0.5714286
-    ## 47        bs_bs7_04       0.08         0.04  0.5000000
-    ## 48  lfso_06opskisco       0.08           NA         NA
-    ## 49       migr_eipre       2.82        28.61 10.1453901
-    ## 50     ef_ov_luob99       0.25         1.61  6.4400000
+    ##      Dim_name        Dim_val nama_10_gdp
+    ##   1:      geo      EU27_2020        TRUE
+    ##   2:      geo           EU28        TRUE
+    ##   3:      geo           EU15        TRUE
+    ##   4:      geo             EA        TRUE
+    ##   5:      geo           EA19        TRUE
+    ##  ---                                    
+    ## 154:     unit       PD15_NAC        TRUE
+    ## 155:     unit       PD10_NAC        TRUE
+    ## 156:     unit       PD05_NAC        TRUE
+    ## 157:     unit PD_PCH_PRE_EUR        TRUE
+    ## 158:     unit PD_PCH_PRE_NAC        TRUE
+    ##      Dim_name        Dim_val nama_10_a64
+    ##   1:      geo      EU27_2020        TRUE
+    ##   2:      geo           EU28        TRUE
+    ##   3:      geo           EU15        TRUE
+    ##   4:      geo             EA        TRUE
+    ##   5:      geo           EA19        TRUE
+    ##  ---                                    
+    ## 206:     unit       PD10_EUR        TRUE
+    ## 207:     unit       PD15_NAC        TRUE
+    ## 208:     unit       PD10_NAC        TRUE
+    ## 209:     unit PD_PCH_PRE_EUR        TRUE
+    ## 210:     unit PD_PCH_PRE_NAC        TRUE
 
-``` r
-# How many times eurodata::importData is faster on average?
+    ## Verifying the code
 
-mean(Res2$ratio, na.rm=TRUE)
-```
+    ## Downloading Eurostat labels for nace_r2
 
-    ## [1] 5.251208
-
-``` r
-median(Res2$ratio, na.rm=TRUE)
-```
-
-    ## [1] 4.472308
+    ##      Dim_name                  Dim_name_label        Dim_val
+    ##   1:      geo Geopolitical entity (reporting)             AL
+    ##   2:      geo Geopolitical entity (reporting)             AT
+    ##   3:      geo Geopolitical entity (reporting)             BA
+    ##   4:      geo Geopolitical entity (reporting)             BE
+    ##   5:      geo Geopolitical entity (reporting)             BG
+    ##  ---                                                        
+    ## 251:     unit                 Unit of measure       PD15_NAC
+    ## 252:     unit                 Unit of measure PD_PCH_PRE_EUR
+    ## 253:     unit                 Unit of measure PD_PCH_PRE_NAC
+    ## 254:     unit                 Unit of measure       PYP_MEUR
+    ## 255:     unit                 Unit of measure       PYP_MNAC
+    ##                                                                                 Dim_val_label nama_10_gdp nama_10_a64
+    ##   1:                                                                                  Albania        TRUE        TRUE
+    ##   2:                                                                                  Austria        TRUE        TRUE
+    ##   3:                                                                   Bosnia and Herzegovina        TRUE        TRUE
+    ##   4:                                                                                  Belgium        TRUE        TRUE
+    ##   5:                                                                                 Bulgaria        TRUE        TRUE
+    ##  ---                                                                                                                 
+    ## 251:                             Price index (implicit deflator), 2015=100, national currency        TRUE        TRUE
+    ## 252:              Price index (implicit deflator), percentage change on previous period, euro        TRUE        TRUE
+    ## 253: Price index (implicit deflator), percentage change on previous period, national currency        TRUE        TRUE
+    ## 254:                                                       Previous year prices, million euro        TRUE        TRUE
+    ## 255:                                 Previous year prices, million units of national currency        TRUE        TRUE
