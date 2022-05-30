@@ -39,6 +39,14 @@
 #' browseDataList(grepl('bop',Code) & !grepl('its',Code))
 #' }
 #' @useDynLib eurodata
+#' @examples
+#' \dontrun{
+#' browseDataList(grepl('GDP',`Dataset name`) &
+#' grepl('main',`Dataset name`) &
+#'    grepl('international',`Dataset name`) &
+#'    !grepl('quarterly',`Dataset name`))
+#' browseDataList(grepl('bop',Code) & grepl('its',Code))
+#' }
 #' @export
 browseDataList <- function(subs) {
     SearchCriteria <-

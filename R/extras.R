@@ -1,6 +1,7 @@
 #' @import data.table
 #' @importFrom rvest read_html html_elements html_text
 #' @importFrom memoise memoise
+#' @importFrom stats as.formula
 NULL
 
 memImportMetabase <-
@@ -15,13 +16,17 @@ memImportLabels <-
 #' for the selected Eurostat dimension, e.g. for \code{"geo"} it is \code{"Geopolitical entity (reporting)"},
 #' for \code{"nace_r2"} it is \code{"Classification of economic activities - NACE Rev.2"},
 #' for \code{"indic_sb"} it is \code{"Economical indicator for structural business statistics"} etc.
-#' See \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&dir=dic\%2Fen}
+#' See \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&dir=dic\%2Fen/}
 #' for the list of all codes (the .dic file extension to be ignored).
 #' Each description is web-scraped from a table (row "Label") at the specific url, e.g. for \code{"geo"} it is
-#' \url{https://dd.eionet.europa.eu/vocabulary/eurostat/geo}.
+#' \url{https://dd.eionet.europa.eu/vocabulary/eurostat/geo/}.
 #' @param EurostatDimCode A string -- the code name of the Eurostat dimension, e.g. \code{"geo"} or \code{"nace_r2"}
 #' or \code{"indic_sb"}, etc.
 #' @return A character vector of length 1: the label/description of \code{EurostatDimCode}.
+#' @examples
+#' \dontrun{
+#' importDimLabel('nace_r2')
+#' }
 #' @export
 importDimLabel <- function(EurostatDimCode) {
     stopifnot(EurostatDimCode %>% is.character,
@@ -67,7 +72,7 @@ attachLabels <- function(dt)
 #'
 #' @param EurostatDatasetCode A string with Eurostat dataset code name, e.g. \code{"nama_10_gdp"} or \code{"bop_its6_det"}.
 #' See e.g.:
-#' \url{http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}
+#' \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}
 #' @param import_labels Boolean: should labels for the codes inside dimensions be imported. Default: if \code{wide} is
 #' \code{FALSE} then \code{import_labels} is TRUE and vice versa.
 #' @param wide Boolean: should each dimension be compressed to one row and all values within each dimension to a single,
@@ -78,6 +83,10 @@ attachLabels <- function(dt)
 #' either \code{Dim_val} (if \code{wide=FALSE}) or \code{Dim_values} (if \code{wide=TRUE}),
 #' \code{Dim_val_label} (if \code{import_labels}=\code{TRUE}), and a column with a name = \code{EurostatDatasetCode} with all
 #' its values = \code{TRUE}.
+#' @examples
+#' \dontrun{
+#' describe('nama_10_gdp')
+#' }
 #' @export
 describe <- function(EurostatDatasetCode, import_labels=!wide, wide=FALSE, import_dim_labels=TRUE) {
     stopifnot(EurostatDatasetCode %>% is.character,
@@ -132,6 +141,10 @@ describe <- function(EurostatDatasetCode, import_labels=!wide, wide=FALSE, impor
 #' @return A \link[data.table]{data.table} with columns \code{Dim_name}, \code{Dim_name_label} (if \code{import_dim_labels}=\code{TRUE}),
 #' \code{Dim_val}, \code{Dim_val_label} (if \code{import_labels}=\code{TRUE}), and logical columns corresponding to the dataset names
 #' in \code{...} indicating in which dataset a given dimension and dimension value appears and in which it does not.
+#' @examples
+#' \dontrun{
+#' compare('nama_10_gdp', 'nama_10_pe')
+#' }
 #' @export
 compare <- function(..., import_labels=TRUE, import_dim_labels=TRUE) {
     EDC <- # Eurostat Dataset Codes

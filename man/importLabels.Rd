@@ -16,7 +16,12 @@ and corresponding labels (named with suffix \code{_labels}).
 }
 \description{
 Import the appropriate \code{.dic} file from
- \url{http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?dir=dic/en}
+ \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?dir=dic/en/}
 for the selected Eurostat dimension, e.g. \code{geo} (countries or other geographic entities),
 \code{nace_r2} (sectors), \code{indic_sb} (indicators), etc.
+}
+\examples{
+\dontrun{
+importLabels('nace_r2')
+}
 }

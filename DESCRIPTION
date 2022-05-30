@@ -1,13 +1,15 @@
 Package: eurodata
 Type: Package
-Title: Fast and easy Eurostat data import and search
-Description: Fast and easy Eurostat data import and search.
-Version: 1.4.1
-Date: 2022-05-19
-Author: Aleksander Rutkowski
-Maintainer: Aleksander Rutkowski <alek.rutkowski@gmail.com>
+Title: Fast and Easy Eurostat Data Import and Search
+Description: Interface to Eurostat’s Bulk Download Facility with fast data.table-based import of
+    data, labels, and metadata. On top of the core functionality, data search and data
+    description/comparison functions are also provided.
+Version: 1.4.2
+Date: 2022-05-20
+Authors@R: c(person("Aleksander","Rutkowski", role=c("aut","cre"), email="alek.rutkowski@gmail.com"))
 License: GPL-2
-URL: https://github.com/alekrutkowski/autoshiny
+URL: https://github.com/alekrutkowski/eurodata/
+Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports:
     utils,

@@ -6,11 +6,15 @@ NULL
 #'
 #' @param EurostatDatasetCode A string with Eurostat dataset code name, e.g. \code{nama_10_gdp} or \code{bop_its6_det}.
 #' See e.g.:
-#' \url{http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}
+#' \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}
 #' @return A Eurostat dataset as a `flat' data.frame.
 #' A `flat' dataset has all numeric values in one column, with each row representing one of the available combinations
 #' of all dimensions (e.g. if dimensions are: countries, years, sectors, and indicators, there can be a row for value
 #' added in retail in Germany in 2013).
+#' @examples
+#' \dontrun{
+#' importData('nama_10_gdp')
+#' }
 #' @export
 importData <- function(EurostatDatasetCode) {
     stopifnot(EurostatDatasetCode %>% is.character,
@@ -66,13 +70,17 @@ importData <- function(EurostatDatasetCode) {
 #' Import Eurostat labels (descriptions) for a given dimension code
 #'
 #' Import the appropriate \code{.dic} file from
-#'  \url{http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?dir=dic/en}
+#'  \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?dir=dic/en/}
 #' for the selected Eurostat dimension, e.g. \code{geo} (countries or other geographic entities),
 #' \code{nace_r2} (sectors), \code{indic_sb} (indicators), etc.
 #' @param EurostatDimCode A string -- the code name of the Eurostat dimension, e.g. \code{geo} or \code{nace_r2}
 #' or \code{indic_sb}.
 #' @return A data.frame with 2 columns: codes (with a name determined by \code{EurostatDimCode})
 #' and corresponding labels (named with suffix \code{_labels}).
+#' @examples
+#' \dontrun{
+#' importLabels('nace_r2')
+#' }
 #' @export
 importLabels <- function(EurostatDimCode) {
     stopifnot(EurostatDimCode %>% is.character,
@@ -104,6 +112,10 @@ importLabels <- function(EurostatDimCode) {
 #' structure of datasets (see the columns \code{Data subgroup, level 0},
 #' \code{Data subgroup, level 1}, \code{Data subgroup, level 2}, etc.).
 #' It is tagged with S3 class \code{EurostatDataList}.
+#' @examples
+#' \dontrun{
+#' importDataList()
+#' }
 #' @export
 importDataList <- function() {
     RawTable <-
@@ -179,6 +191,10 @@ importDataList <- function() {
 #'   e.g. \code{"EU28"} if \code{Dim_name} is \code{"geo"};
 #'   not to be confused with the actual numeric values
 #'   in the actual datasets
+#' }
+#' @examples
+#' \dontrun{
+#' importMetabase()
 #' }
 #' @export
 importMetabase <- function() {

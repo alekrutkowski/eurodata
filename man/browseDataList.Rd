@@ -50,4 +50,11 @@ Search Eurostat datasets and see the result as a table in a browser
 browseDataList(grepl('servic',`Dataset name`))
 browseDataList(grepl('bop',Code) & !grepl('its',Code))
 }
+\dontrun{
+browseDataList(grepl('GDP',`Dataset name`) &
+grepl('main',`Dataset name`) &
+   grepl('international',`Dataset name`) &
+   !grepl('quarterly',`Dataset name`))
+browseDataList(grepl('bop',Code) & grepl('its',Code))
+}
 }

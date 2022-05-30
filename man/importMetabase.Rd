@@ -27,3 +27,8 @@ dimensions (where a dimension is e.g. \code{geo} or \code{nace_r2}
 or \code{indic_sb}) and, within each dataset and dimension,
 which codes (e.g. which countries for the \code{geo} dimension).
 }
+\examples{
+\dontrun{
+importMetabase()
+}
+}

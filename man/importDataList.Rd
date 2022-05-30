@@ -15,3 +15,8 @@ It is tagged with S3 class \code{EurostatDataList}.
 \description{
 Import and reshape Eurostat inventory of datasets
 }
+\examples{
+\dontrun{
+importDataList()
+}
+}

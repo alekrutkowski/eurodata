@@ -9,7 +9,7 @@ importData(EurostatDatasetCode)
 \arguments{
 \item{EurostatDatasetCode}{A string with Eurostat dataset code name, e.g. \code{nama_10_gdp} or \code{bop_its6_det}.
 See e.g.:
-\url{http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}}
+\url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}}
 }
 \value{
 A Eurostat dataset as a `flat' data.frame.
@@ -19,4 +19,9 @@ added in retail in Germany in 2013).
 }
 \description{
 Download and import a Eurostat dataset
+}
+\examples{
+\dontrun{
+importData('nama_10_gdp')
+}
 }

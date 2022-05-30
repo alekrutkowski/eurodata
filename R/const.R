@@ -31,3 +31,12 @@ CssStyle <- '
             </style>
         </head>
     <body>'
+
+# To avoid CRAN NOTE:
+. <- NULL
+Code <- NULL
+Dim_val_label <- NULL
+code <- NULL
+flags_ <- NULL
+type <- NULL
+value_ <- NULL

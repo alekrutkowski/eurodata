@@ -22,3 +22,8 @@ in \code{...} indicating in which dataset a given dimension and dimension value 
 \description{
 Compare specific Eurostat datasets on the basis of information from Metabase
 }
+\examples{
+\dontrun{
+compare('nama_10_gdp', 'nama_10_pe')
+}
+}

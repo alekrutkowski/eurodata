@@ -3,7 +3,7 @@ eurodata – R package for fast and easy Eurostata data import and search
 Aleksander Rutkowski
 
 The package relies on [Eurostat’s Bulk Download
-Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
+Facility](https://ec.europa.eu/eurostat/data/bulkdownload/).
 
 The core API contains just 6 functions – 4 for data or metadata imports
 and 2 for search:
@@ -11,21 +11,21 @@ and 2 for search:
 Import functionality:
 
 -   **importData** – fast thanks to
-    [data.table](https://cran.r-project.org/web/packages/data.table/index.html)::[fread](http://www.rdocumentation.org/packages/data.table/functions/fread)
+    [data.table](https://CRAN.R-project.org/package=data.table)::[fread](https://www.rdocumentation.org/packages/data.table/functions/fread/)
 -   **importDataLabels** – as above
 -   **importMetabase** – as above
 -   **importDataList** – reflects the hierarchical structure of the
     Eurostat tree of datasets – fast transformation of the raw [Table of
     Contents
-    file](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt)
+    file](https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt)
     is based on a C++ code snippet compiled via
-    [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
+    [Rcpp](https://CRAN.R-project.org/package=Rcpp)
 
 Search functionality:
 
 -   **browseDataList** – based on importDataList, shows an HTML table
     (generated with
-    [xtable](https://cran.r-project.org/web/packages/xtable/index.html)::[xtable](http://www.rdocumentation.org/packages/xtable/functions/xtable))
+    [xtable](https://CRAN.R-project.org/package=xtable)::[xtable](https://www.rdocumentation.org/packages/xtable/functions/xtable/))
     in a browser with a list of the found datasets
 -   **find** – based on importDataList, shows a textual report on the
     found datasets – a \`\`quick-n-dirty’’ way to find a Eurostat
@@ -41,7 +41,9 @@ NEW! Extra functionality:
 ## Installation
 
 ``` r
-devtools::install_github('alekrutkowski/eurodata') # package 'devtools' needs to be installed
+install.packages('eurodata') # from CRAN
+# or
+remotes::install_github('alekrutkowski/eurodata') # package 'remotes' needs to be installed
 ```
 
 ## Functionality demo
@@ -66,7 +68,7 @@ str(x)
     ##  $ value_ : num  4063 865 2577 1590 2634 ...
     ##  $ flags_ : chr  "" "" " p" " p" ...
     ##  - attr(*, "EurostatDatasetCode")= chr "nama_10_a10"
-    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-05-19 12:54:02"
+    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-05-23 11:44:02"
 
 ``` r
 head(x,10)
@@ -116,7 +118,7 @@ str(y[y$Code=='nama_10_a10',])  # metadata on x
     ##  $ Last table structure change: chr "2022-03-22"
     ##  $ Data start                 : chr "1975"
     ##  $ Data end                   : chr "2021"
-    ##  $ Link                       : chr "http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=nama_10_a10&lang=en"
+    ##  $ Link                       : chr "https://ec.europa.eu/eurostat/databrowser/view/nama_10_a10/default/table?lang=en"
 
 ``` r
 z <- importLabels('geo')
@@ -153,7 +155,7 @@ head(z,10)
 find(gdp,main,international,-quarterly)
 ```
 
-    ## 2022-05-19 12:54:18
+    ## 2022-05-23 11:44:18
     ## 2 dataset(s)/table(s) found.
     ## Keywords: gdp, main, international, -quarterly
     ## 
@@ -171,7 +173,7 @@ find(gdp,main,international,-quarterly)
     ## Last table structure change : 2022-01-14
     ## Data start : 1975
     ## Data end : 2021
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=naida_10_gdp&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/naida_10_gdp/default/table?lang=en
     ## 
     ##  Database by themes >>
     ##  Economy and finance >>
@@ -186,9 +188,9 @@ find(gdp,main,international,-quarterly)
     ## Last table structure change : 2022-04-11
     ## Data start : 1991
     ## Data end : 2021Q4
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_gdp6_q&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_gdp6_q/default/table?lang=en
     ## 
-    ## 2022-05-19 12:54:18
+    ## 2022-05-23 11:44:18
     ## 2 dataset(s)/table(s) found.
     ## Keywords: gdp, main, international, -quarterly
     ## 
@@ -199,7 +201,7 @@ find(gdp,main,international,-quarterly)
 find(bop, its)
 ```
 
-    ## 2022-05-19 12:54:20
+    ## 2022-05-23 11:44:20
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -216,7 +218,7 @@ find(bop, its)
     ## Last table structure change : 2021-02-08
     ## Data start : 2004
     ## Data end : 2013
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its_det/default/table?lang=en
     ## 
     ## No : 2
     ## Dataset name : International trade in services (1985-2003)
@@ -226,7 +228,7 @@ find(bop, its)
     ## Last table structure change : 2021-02-08
     ## Data start : 1985
     ## Data end : 2003
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its_deth/default/table?lang=en
     ## 
     ## No : 3
     ## Dataset name : International trade in services - market integration indicators (1992-2013)
@@ -236,7 +238,7 @@ find(bop, its)
     ## Last table structure change : 2021-02-08
     ## Data start : 1992
     ## Data end : 2013
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its_str/default/table?lang=en
     ## 
     ## No : 4
     ## Dataset name : Total services, detailed geographical breakdown by EU Member States (2002-2012)
@@ -246,7 +248,7 @@ find(bop, its)
     ## Last table structure change : 2021-02-08
     ## Data start : 2002
     ## Data end : 2012
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its_tot/default/table?lang=en
     ## 
     ##  Database by themes >>
     ##  Economy and finance >>
@@ -261,7 +263,7 @@ find(bop, its)
     ## Last table structure change : 2022-05-10
     ## Data start : 2010
     ## Data end : 2021
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en
     ## 
     ## No : 6
     ## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)
@@ -271,7 +273,7 @@ find(bop, its)
     ## Last table structure change : 2022-01-28
     ## Data start : 2010
     ## Data end : 2020
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_tot/default/table?lang=en
     ## 
     ##  Database by themes >>
     ##  Population and social conditions >>
@@ -286,9 +288,9 @@ find(bop, its)
     ## Last table structure change : 2022-05-10
     ## Data start : 2010
     ## Data end : 2021
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en
     ## 
-    ## 2022-05-19 12:54:20
+    ## 2022-05-23 11:44:20
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -298,7 +300,7 @@ find(bop, its)
 find(bop,-ybk,its)
 ```
 
-    ## 2022-05-19 12:54:21
+    ## 2022-05-23 11:44:22
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
@@ -315,7 +317,7 @@ find(bop,-ybk,its)
     ## Last table structure change : 2021-02-08
     ## Data start : 2004
     ## Data end : 2013
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its_det/default/table?lang=en
     ## 
     ## No : 2
     ## Dataset name : International trade in services (1985-2003)
@@ -325,7 +327,7 @@ find(bop,-ybk,its)
     ## Last table structure change : 2021-02-08
     ## Data start : 1985
     ## Data end : 2003
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its_deth/default/table?lang=en
     ## 
     ## No : 3
     ## Dataset name : International trade in services - market integration indicators (1992-2013)
@@ -335,7 +337,7 @@ find(bop,-ybk,its)
     ## Last table structure change : 2021-02-08
     ## Data start : 1992
     ## Data end : 2013
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its_str/default/table?lang=en
     ## 
     ## No : 4
     ## Dataset name : Total services, detailed geographical breakdown by EU Member States (2002-2012)
@@ -345,7 +347,7 @@ find(bop,-ybk,its)
     ## Last table structure change : 2021-02-08
     ## Data start : 2002
     ## Data end : 2012
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its_tot/default/table?lang=en
     ## 
     ##  Database by themes >>
     ##  Economy and finance >>
@@ -360,7 +362,7 @@ find(bop,-ybk,its)
     ## Last table structure change : 2022-05-10
     ## Data start : 2010
     ## Data end : 2021
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en
     ## 
     ## No : 6
     ## Dataset name : Total services, detailed geographical breakdown by EU Member States (since 2010) (BPM6)
@@ -370,7 +372,7 @@ find(bop,-ybk,its)
     ## Last table structure change : 2022-01-28
     ## Data start : 2010
     ## Data end : 2020
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_tot/default/table?lang=en
     ## 
     ##  Database by themes >>
     ##  Population and social conditions >>
@@ -385,9 +387,9 @@ find(bop,-ybk,its)
     ## Last table structure change : 2022-05-10
     ## Data start : 2010
     ## Data end : 2021
-    ## Link : http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en
+    ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en
     ## 
-    ## 2022-05-19 12:54:21
+    ## 2022-05-23 11:44:22
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
@@ -396,24 +398,109 @@ find(bop,-ybk,its)
 ``` r
 browseDataList(grepl('GDP',`Dataset name`) &
                    grepl('main',`Dataset name`) &
-                   grepl('selected',`Dataset name`) &
+                   grepl('international',`Dataset name`) &
                    !grepl('quarterly',`Dataset name`))
 ```
 
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-19 12:54:23 ■ Number of datasets/tables
-found: 0 ■ Search criteria: grepl(“GDP”, `Dataset name`) & grepl(“main”,
-`Dataset name`) &grepl(“selected”, `Dataset name`) & !grepl(“quarterly”,
-`Dataset name`)</tt>
+<tt>■ Generated on: 2022-05-23 11:44:24 ■ Number of datasets/tables
+found: 1 ■ Search criteria: grepl(“GDP”, `Dataset name`) & grepl(“main”,
+`Dataset name`) &grepl(“international”, `Dataset name`) &
+!grepl(“quarterly”,`Dataset name`)</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 12:54:24 2022 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Mon May 23 11:44:25 2022 -->
 <table class="gridtable">
 <tr>
 <th>
-Nothing found
+Row
 </th>
+<th>
+Data subgroup, level 0
+</th>
+<th>
+Data subgroup, level 1
+</th>
+<th>
+Data subgroup, level 2
+</th>
+<th>
+Data subgroup, level 3
+</th>
+<th>
+Data subgroup, level 4
+</th>
+<th>
+Dataset name
+</th>
+<th>
+Code
+</th>
+<th>
+Type
+</th>
+<th>
+Last update of data
+</th>
+<th>
+Last table structure change
+</th>
+<th>
+Data start
+</th>
+<th>
+Data end
+</th>
+<th>
+Link
+</th>
+</tr>
+<tr>
+<td>
+1
+</td>
+<td>
+Database by themes
+</td>
+<td>
+Economy and finance
+</td>
+<td>
+National accounts (ESA 2010)
+</td>
+<td>
+National accounts - international data cooperation
+</td>
+<td>
+Annual national accounts- international data cooperation
+</td>
+<td>
+<b>GDP and main aggregates- international data cooperation annual
+data</b>
+</td>
+<td>
+<tt><b>naida_10_gdp</b></tt>
+</td>
+<td>
+dataset
+</td>
+<td>
+2022-05-17
+</td>
+<td>
+2022-01-14
+</td>
+<td>
+1975
+</td>
+<td>
+2021
+</td>
+<td>
+<a href="https://ec.europa.eu/eurostat/databrowser/view/naida_10_gdp/default/table?lang=en" target="_blank">click
+here</a>
+</td>
 </tr>
 </table>
 </body>
@@ -426,10 +513,10 @@ browseDataList(grepl('bop',Code) & grepl('its',Code))
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-19 12:54:24 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-05-23 11:44:25 ■ Number of datasets/tables
 found: 7 ■ Search criteria: grepl(“bop”, Code) & grepl(“its”, Code)</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 12:54:25 2022 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Mon May 23 11:44:30 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -511,7 +598,7 @@ dataset
 2013
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_det&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/bop_its_det/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -554,7 +641,7 @@ dataset
 2003
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_deth&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/bop_its_deth/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -598,7 +685,7 @@ dataset
 2013
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_str&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/bop_its_str/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -642,7 +729,7 @@ dataset
 2012
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its_tot&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/bop_its_tot/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -684,7 +771,7 @@ dataset
 2021
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -727,7 +814,7 @@ dataset
 2020
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_tot&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/bop_its6_tot/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -769,7 +856,7 @@ dataset
 2021
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=bop_its6_det&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -816,11 +903,11 @@ importDataList() %>%
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-19 12:54:38 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-05-23 11:44:41 ■ Number of datasets/tables
 found: 6 ■ Search criteria: those including data on firms with fewer
 than 10 employees and NACE Rev.2 disaggregation</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Thu May 19 12:54:38 2022 -->
+<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Mon May 23 11:44:41 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -915,7 +1002,7 @@ dataset
 2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_ncost_r2&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/lc_ncost_r2/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -964,7 +1051,7 @@ dataset
 2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nstruc_r2&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/lc_nstruc_r2/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -1013,7 +1100,7 @@ dataset
 2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nnum1_r2&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/lc_nnum1_r2/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -1062,7 +1149,7 @@ dataset
 2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nnum2_r2&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/lc_nnum2_r2/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -1111,7 +1198,7 @@ dataset
 2016
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lc_nstu_r2&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/lc_nstu_r2/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -1156,7 +1243,7 @@ dataset
 2020
 </td>
 <td>
-<a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ext_tec01&lang=en" target="_blank">click
+<a href="https://ec.europa.eu/eurostat/databrowser/view/ext_tec01/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -1169,6 +1256,28 @@ here</a>
 ``` r
 describe('nama_10_gdp')
 ```
+
+    ## Downloading Eurostat Metabase
+
+    ## Uncompressing (extracting)
+
+    ## Importing (reading into memory)
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for geo
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for na_item
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for time
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for unit
 
     ##      Dim_name                  Dim_name_label        Dim_val
     ##   1:      geo Geopolitical entity (reporting)             AL
@@ -1238,6 +1347,11 @@ compare('nama_10_gdp', 'nama_10_a64')
     ## 208:     unit       PD10_NAC        TRUE
     ## 209:     unit PD_PCH_PRE_EUR        TRUE
     ## 210:     unit PD_PCH_PRE_NAC        TRUE
+
+    ## Verifying the code
+
+    ## Downloading Eurostat labels for nace_r2
+
     ##      Dim_name                  Dim_name_label        Dim_val
     ##   1:      geo Geopolitical entity (reporting)             AL
     ##   2:      geo Geopolitical entity (reporting)             AT

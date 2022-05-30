@@ -9,21 +9,20 @@ always_allow_html: yes
 options(width = 120)
 eurostat::clean_eurostat_cache() # in case repeated evaluation
 cran <- function(package)
-    paste0('https://cran.r-project.org/web/packages/',
-           package,'/index.html')
+    paste0('https://CRAN.R-project.org/package=',package)
 rdoc <- function(package,funct)
-    paste0('http://www.rdocumentation.org/packages/',
-           package,'/functions/',funct)
+    paste0('https://www.rdocumentation.org/packages/',
+           package,'/functions/',funct,'/')
 lnk_ <- function(name,url)
     paste0('[',name,']','(',url,')')
 lnk <- function(package,funct)
     paste0(lnk_(package,cran(package)),'::',
            lnk_(funct,rdoc(package,funct)))
 estat_toc_link <-
-    'http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt'
+    'https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file=table_of_contents_en.txt'
 ```
 
-The package relies on [Eurostat's Bulk Download Facility](http://ec.europa.eu/eurostat/data/bulkdownload).
+The package relies on [Eurostat's Bulk Download Facility](https://ec.europa.eu/eurostat/data/bulkdownload/).
 
 The core API contains just 6 functions -- 4 for data or metadata imports and 2 for search:
 
@@ -51,7 +50,9 @@ NEW! Extra functionality:
 ## Installation
 
 ```{r installation, eval=FALSE, include=TRUE}
-devtools::install_github('alekrutkowski/eurodata') # package 'devtools' needs to be installed
+install.packages('eurodata') # from CRAN
+# or
+remotes::install_github('alekrutkowski/eurodata') # package 'remotes' needs to be installed
 ```
 
 ## Functionality demo
@@ -104,7 +105,7 @@ find(bop,-ybk,its)
 ```{r browse_demo, results='asis'}
 browseDataList(grepl('GDP',`Dataset name`) &
                    grepl('main',`Dataset name`) &
-                   grepl('selected',`Dataset name`) &
+                   grepl('international',`Dataset name`) &
                    !grepl('quarterly',`Dataset name`))
 browseDataList(grepl('bop',Code) & grepl('its',Code))
 ```

@@ -18,8 +18,13 @@ Import the appropriate description file from \url{https://dd.eionet.europa.eu/}
 for the selected Eurostat dimension, e.g. for \code{"geo"} it is \code{"Geopolitical entity (reporting)"},
 for \code{"nace_r2"} it is \code{"Classification of economic activities - NACE Rev.2"},
 for \code{"indic_sb"} it is \code{"Economical indicator for structural business statistics"} etc.
-See \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&dir=dic\%2Fen}
+See \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&dir=dic\%2Fen/}
 for the list of all codes (the .dic file extension to be ignored).
 Each description is web-scraped from a table (row "Label") at the specific url, e.g. for \code{"geo"} it is
-\url{https://dd.eionet.europa.eu/vocabulary/eurostat/geo}.
+\url{https://dd.eionet.europa.eu/vocabulary/eurostat/geo/}.
+}
+\examples{
+\dontrun{
+importDimLabel('nace_r2')
+}
 }
