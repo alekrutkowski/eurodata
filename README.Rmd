@@ -1,5 +1,5 @@
 ---
-title: "eurodata -- R package for fast and easy Eurostata data import and search"
+title: "eurodata -- R package for fast and easy Eurostat data import and search"
 author: "Aleksander Rutkowski"
 output: github_document
 always_allow_html: yes
