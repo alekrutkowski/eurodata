@@ -2,11 +2,13 @@ eurodata – R package for fast and easy Eurostat data import and search
 ================
 Aleksander Rutkowski
 
-The package relies on [Eurostat’s Bulk Download
+The package relies, for the moment, on both the new [Eurostat’s API SDMX
+2.1](https://wikis.ec.europa.eu/display/EUROSTATHELP/Transition+-+from+Eurostat+Bulk+Download+to+API)
+and on the old [Eurostat’s Bulk Download
 Facility](https://ec.europa.eu/eurostat/data/bulkdownload/).
 
-The core API contains just 6 functions – 4 for data or metadata imports
-and 2 for search:
+The core API of the `eurodata` package contains just 6 functions – 4 for
+data or metadata imports and 2 for search:
 
 Import functionality:
 
@@ -52,6 +54,13 @@ remotes::install_github('alekrutkowski/eurodata') # package 'remotes' needs to b
 library(eurodata)
 ```
 
+    ## 
+    ## Attaching package: 'eurodata'
+
+    ## The following object is masked from 'package:utils':
+    ## 
+    ##     find
+
 ### Imports
 
 ``` r
@@ -59,32 +68,33 @@ x <- importData('nama_10_a10')  # actual dataset
 str(x)
 ```
 
-    ## Classes 'EurostatDataset' and 'data.frame':  1164237 obs. of  7 variables:
-    ##  $ unit   : Factor w/ 28 levels "CLV_I05","CLV_I10",..: 5 5 5 5 5 5 5 5 5 5 ...
-    ##  $ nace_r2: Factor w/ 12 levels "A","B-E","C",..: 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ na_item: Factor w/ 4 levels "B1G","D1","D11",..: 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ geo    : Factor w/ 45 levels "AL","AT","BA",..: 2 3 4 5 6 7 8 9 10 11 ...
-    ##  $ time   : Factor w/ 47 levels "2021","2020",..: 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ value_ : num  4063 865 2577 1590 2634 ...
-    ##  $ flags_ : chr  "" "" " p" " p" ...
+    ## Classes 'EurostatDataset' and 'data.frame':  1164237 obs. of  8 variables:
+    ##  $ freq       : Factor w/ 1 level "A": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ unit       : Factor w/ 28 levels "CLV_I05","CLV_I10",..: 5 5 5 5 5 5 5 5 5 5 ...
+    ##  $ nace_r2    : Factor w/ 12 levels "A","B-E","C",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ na_item    : Factor w/ 4 levels "B1G","D1","D11",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ geo        : Factor w/ 45 levels "AL","AT","BA",..: 2 3 4 5 6 7 8 9 10 11 ...
+    ##  $ TIME_PERIOD: Factor w/ 47 levels "1975","1976",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ value_     : num  NA NA NA NA NA ...
+    ##  $ flags_     : chr  ":" ":" ":" ":" ...
     ##  - attr(*, "EurostatDatasetCode")= chr "nama_10_a10"
-    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-05-23 11:44:02"
+    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-08-30 17:07:16"
 
 ``` r
 head(x,10)
 ```
 
-    ##          unit nace_r2 na_item geo time   value_ flags_
-    ## 1  CLV05_MEUR       A     B1G  AT 2021   4063.0       
-    ## 2  CLV05_MEUR       A     B1G  BA 2021    865.1       
-    ## 3  CLV05_MEUR       A     B1G  BE 2021   2576.6      p
-    ## 4  CLV05_MEUR       A     B1G  BG 2021   1590.4      p
-    ## 5  CLV05_MEUR       A     B1G  CH 2021   2634.5       
-    ## 6  CLV05_MEUR       A     B1G  CY 2021    289.4      p
-    ## 7  CLV05_MEUR       A     B1G  CZ 2021   2561.0       
-    ## 8  CLV05_MEUR       A     B1G  DE 2021  18520.3      p
-    ## 9  CLV05_MEUR       A     B1G  DK 2021   2977.6       
-    ## 10 CLV05_MEUR       A     B1G  EA 2021 158523.1
+    ##    freq       unit nace_r2 na_item geo TIME_PERIOD value_ flags_
+    ## 1     A CLV05_MEUR       A     B1G  AT        1975     NA      :
+    ## 2     A CLV05_MEUR       A     B1G  BA        1975     NA      :
+    ## 3     A CLV05_MEUR       A     B1G  BE        1975     NA      :
+    ## 4     A CLV05_MEUR       A     B1G  BG        1975     NA      :
+    ## 5     A CLV05_MEUR       A     B1G  CH        1975     NA      :
+    ## 6     A CLV05_MEUR       A     B1G  CY        1975     NA      :
+    ## 7     A CLV05_MEUR       A     B1G  CZ        1975     NA      :
+    ## 8     A CLV05_MEUR       A     B1G  DE        1975     NA      :
+    ## 9     A CLV05_MEUR       A     B1G  DK        1975 1031.4       
+    ## 10    A CLV05_MEUR       A     B1G  EA        1975     NA      :
 
 ``` r
 y <- importDataList()  # metadata
@@ -114,7 +124,7 @@ str(y[y$Code=='nama_10_a10',])  # metadata on x
     ##  $ Dataset name               : chr "Gross value added and income by A*10 industry breakdowns"
     ##  $ Code                       : chr "nama_10_a10"
     ##  $ Type                       : chr "dataset"
-    ##  $ Last update of data        : chr "2022-05-16"
+    ##  $ Last update of data        : chr "2022-08-29"
     ##  $ Last table structure change: chr "2022-03-22"
     ##  $ Data start                 : chr "1975"
     ##  $ Data end                   : chr "2021"
@@ -155,7 +165,7 @@ head(z,10)
 find(gdp,main,international,-quarterly)
 ```
 
-    ## 2022-05-23 11:44:18
+    ## 2022-08-30 17:07:29
     ## 2 dataset(s)/table(s) found.
     ## Keywords: gdp, main, international, -quarterly
     ## 
@@ -169,7 +179,7 @@ find(gdp,main,international,-quarterly)
     ## Dataset name : GDP and main aggregates- international data cooperation annual data
     ## Code : naida_10_gdp
     ## Type : dataset
-    ## Last update of data : 2022-05-17
+    ## Last update of data : 2022-08-25
     ## Last table structure change : 2022-01-14
     ## Data start : 1975
     ## Data end : 2021
@@ -184,13 +194,13 @@ find(gdp,main,international,-quarterly)
     ## Dataset name : Main Balance of Payments and International Investment Position items as share of GDP (BPM6)
     ## Code : bop_gdp6_q
     ## Type : dataset
-    ## Last update of data : 2022-04-11
-    ## Last table structure change : 2022-04-11
+    ## Last update of data : 2022-07-05
+    ## Last table structure change : 2022-07-05
     ## Data start : 1991
-    ## Data end : 2021Q4
+    ## Data end : 2022Q1
     ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_gdp6_q/default/table?lang=en
     ## 
-    ## 2022-05-23 11:44:18
+    ## 2022-08-30 17:07:29
     ## 2 dataset(s)/table(s) found.
     ## Keywords: gdp, main, international, -quarterly
     ## 
@@ -201,7 +211,7 @@ find(gdp,main,international,-quarterly)
 find(bop, its)
 ```
 
-    ## 2022-05-23 11:44:20
+    ## 2022-08-30 17:07:31
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -290,7 +300,7 @@ find(bop, its)
     ## Data end : 2021
     ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en
     ## 
-    ## 2022-05-23 11:44:20
+    ## 2022-08-30 17:07:31
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -300,7 +310,7 @@ find(bop, its)
 find(bop,-ybk,its)
 ```
 
-    ## 2022-05-23 11:44:22
+    ## 2022-08-30 17:07:32
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
@@ -389,7 +399,7 @@ find(bop,-ybk,its)
     ## Data end : 2021
     ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en
     ## 
-    ## 2022-05-23 11:44:22
+    ## 2022-08-30 17:07:32
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
@@ -405,12 +415,12 @@ browseDataList(grepl('GDP',`Dataset name`) &
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-23 11:44:24 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-08-30 17:07:34 ■ Number of datasets/tables
 found: 1 ■ Search criteria: grepl(“GDP”, `Dataset name`) & grepl(“main”,
 `Dataset name`) &grepl(“international”, `Dataset name`) &
 !grepl(“quarterly”,`Dataset name`)</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Mon May 23 11:44:25 2022 -->
+<!-- html table generated in R 4.1.2 by xtable 1.8-4 package --><!-- Tue Aug 30 17:07:35 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -480,13 +490,13 @@ Annual national accounts- international data cooperation
 data</b>
 </td>
 <td>
-<tt><b>naida_10_gdp</b></tt>
+<tt><b>naida\_10\_gdp</b></tt>
 </td>
 <td>
 dataset
 </td>
 <td>
-2022-05-17
+2022-08-25
 </td>
 <td>
 2022-01-14
@@ -513,10 +523,10 @@ browseDataList(grepl('bop',Code) & grepl('its',Code))
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-23 11:44:25 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-08-30 17:07:35 ■ Number of datasets/tables
 found: 7 ■ Search criteria: grepl(“bop”, Code) & grepl(“its”, Code)</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Mon May 23 11:44:30 2022 -->
+<!-- html table generated in R 4.1.2 by xtable 1.8-4 package --><!-- Tue Aug 30 17:07:36 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -580,7 +590,7 @@ data
 <b>International trade in services (2004-2013)</b>
 </td>
 <td>
-<tt><b>bop_its_det</b></tt>
+<tt><b>bop\_its\_det</b></tt>
 </td>
 <td>
 dataset
@@ -623,7 +633,7 @@ data
 <b>International trade in services (1985-2003)</b>
 </td>
 <td>
-<tt><b>bop_its_deth</b></tt>
+<tt><b>bop\_its\_deth</b></tt>
 </td>
 <td>
 dataset
@@ -667,7 +677,7 @@ data
 (1992-2013)</b>
 </td>
 <td>
-<tt><b>bop_its_str</b></tt>
+<tt><b>bop\_its\_str</b></tt>
 </td>
 <td>
 dataset
@@ -711,7 +721,7 @@ data
 (2002-2012)</b>
 </td>
 <td>
-<tt><b>bop_its_tot</b></tt>
+<tt><b>bop\_its\_tot</b></tt>
 </td>
 <td>
 dataset
@@ -753,7 +763,7 @@ International trade in services, geographical breakdown (BPM6)
 <b>International trade in services (since 2010) (BPM6)</b>
 </td>
 <td>
-<tt><b>bop_its6_det</b></tt>
+<tt><b>bop\_its6\_det</b></tt>
 </td>
 <td>
 dataset
@@ -796,7 +806,7 @@ International trade in services, geographical breakdown (BPM6)
 (since 2010) (BPM6)</b>
 </td>
 <td>
-<tt><b>bop_its6_tot</b></tt>
+<tt><b>bop\_its6\_tot</b></tt>
 </td>
 <td>
 dataset
@@ -838,7 +848,7 @@ International trade in cultural services
 <b>International trade in services (since 2010) (BPM6)</b>
 </td>
 <td>
-<tt><b>bop_its6_det</b></tt>
+<tt><b>bop\_its6\_det</b></tt>
 </td>
 <td>
 dataset
@@ -903,11 +913,11 @@ importDataList() %>%
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-05-23 11:44:41 ■ Number of datasets/tables
-found: 6 ■ Search criteria: those including data on firms with fewer
+<tt>■ Generated on: 2022-08-30 17:07:42 ■ Number of datasets/tables
+found: 7 ■ Search criteria: those including data on firms with fewer
 than 10 employees and NACE Rev.2 disaggregation</tt>
 </p>
-<!-- html table generated in R 4.2.0 by xtable 1.8-4 package --><!-- Mon May 23 11:44:41 2022 -->
+<!-- html table generated in R 4.1.2 by xtable 1.8-4 package --><!-- Tue Aug 30 17:07:42 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -980,11 +990,10 @@ Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
 <b>Labour cost, wages and salaries, direct remuneration (excluding
-apprentices) by NACE Rev. 2 activity ) - LCS surveys 2008, 2012 and
-2016</b>
+apprentices) by NACE Rev. 2 activity</b>
 </td>
 <td>
-<tt><b>lc_ncost_r2</b></tt>
+<tt><b>lc\_ncost\_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1029,11 +1038,11 @@ Labour cost surveys
 Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
-<b>Structure of labour cost by NACE Rev. 2 activity - % of total cost,
-LCS surveys 2008, 2012 and 2016</b>
+<b>Structure of labour cost by NACE Rev. 2 activity - % of total
+cost</b>
 </td>
 <td>
-<tt><b>lc_nstruc_r2</b></tt>
+<tt><b>lc\_nstruc\_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1079,10 +1088,10 @@ Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
 <b>Number of employees, hours worked and paid, by working time and NACE
-Rev. 2 activity - LCS surveys 2008, 2012 and 2016</b>
+Rev. 2 activity</b>
 </td>
 <td>
-<tt><b>lc_nnum1_r2</b></tt>
+<tt><b>lc\_nnum1\_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1128,10 +1137,10 @@ Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
 <b>Average hours worked and paid per employee, by working time and NACE
-Rev. 2 activity - LCS surveys 2008, 2012 and 2016</b>
+Rev. 2 activity</b>
 </td>
 <td>
-<tt><b>lc_nnum2_r2</b></tt>
+<tt><b>lc\_nnum2\_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1177,10 +1186,10 @@ Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
 </td>
 <td>
 <b>Number of statistical units selected for the survey, by NACE Rev. 2
-activity - LCS surveys 2008, 2012 and 2016</b>
+activity</b>
 </td>
 <td>
-<tt><b>lc_nstu_r2</b></tt>
+<tt><b>lc\_nstu\_r2</b></tt>
 </td>
 <td>
 dataset
@@ -1210,7 +1219,7 @@ here</a>
 Database by themes
 </td>
 <td>
-International trade in goods
+International trade
 </td>
 <td>
 International trade in goods - trade by enterprise characteristics (TEC)
@@ -1225,13 +1234,13 @@ International trade in goods - trade by enterprise characteristics (TEC)
 <b>Trade by NACE Rev. 2 activity and enterprise size class</b>
 </td>
 <td>
-<tt><b>ext_tec01</b></tt>
+<tt><b>ext\_tec01</b></tt>
 </td>
 <td>
 dataset
 </td>
 <td>
-2022-05-05
+2022-08-24
 </td>
 <td>
 2022-02-15
@@ -1244,6 +1253,51 @@ dataset
 </td>
 <td>
 <a href="https://ec.europa.eu/eurostat/databrowser/view/ext_tec01/default/table?lang=en" target="_blank">click
+here</a>
+</td>
+</tr>
+<tr>
+<td>
+7
+</td>
+<td>
+Database by themes
+</td>
+<td>
+International trade
+</td>
+<td>
+International trade in services
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+<b>Services trade by enterprise characteristics (STEC) by NACE Rev.2
+activities and enterprise size class</b>
+</td>
+<td>
+<tt><b>ext\_stec01</b></tt>
+</td>
+<td>
+dataset
+</td>
+<td>
+2022-08-15
+</td>
+<td>
+</td>
+<td>
+2013
+</td>
+<td>
+2019
+</td>
+<td>
+<a href="https://ec.europa.eu/eurostat/databrowser/view/ext_stec01/default/table?lang=en" target="_blank">click
 here</a>
 </td>
 </tr>
@@ -1263,19 +1317,11 @@ describe('nama_10_gdp')
 
     ## Importing (reading into memory)
 
-    ## Verifying the code
-
     ## Downloading Eurostat labels for geo
-
-    ## Verifying the code
 
     ## Downloading Eurostat labels for na_item
 
-    ## Verifying the code
-
     ## Downloading Eurostat labels for time
-
-    ## Verifying the code
 
     ## Downloading Eurostat labels for unit
 
@@ -1322,33 +1368,6 @@ describe('nama_10_gdp', wide=TRUE)
 ``` r
 compare('nama_10_gdp', 'nama_10_a64')
 ```
-
-    ##      Dim_name        Dim_val nama_10_gdp
-    ##   1:      geo      EU27_2020        TRUE
-    ##   2:      geo           EU28        TRUE
-    ##   3:      geo           EU15        TRUE
-    ##   4:      geo             EA        TRUE
-    ##   5:      geo           EA19        TRUE
-    ##  ---                                    
-    ## 154:     unit       PD15_NAC        TRUE
-    ## 155:     unit       PD10_NAC        TRUE
-    ## 156:     unit       PD05_NAC        TRUE
-    ## 157:     unit PD_PCH_PRE_EUR        TRUE
-    ## 158:     unit PD_PCH_PRE_NAC        TRUE
-    ##      Dim_name        Dim_val nama_10_a64
-    ##   1:      geo      EU27_2020        TRUE
-    ##   2:      geo           EU28        TRUE
-    ##   3:      geo           EU15        TRUE
-    ##   4:      geo             EA        TRUE
-    ##   5:      geo           EA19        TRUE
-    ##  ---                                    
-    ## 206:     unit       PD10_EUR        TRUE
-    ## 207:     unit       PD15_NAC        TRUE
-    ## 208:     unit       PD10_NAC        TRUE
-    ## 209:     unit PD_PCH_PRE_EUR        TRUE
-    ## 210:     unit PD_PCH_PRE_NAC        TRUE
-
-    ## Verifying the code
 
     ## Downloading Eurostat labels for nace_r2
 

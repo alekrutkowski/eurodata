@@ -131,6 +131,12 @@ describe <- function(EurostatDatasetCode, import_labels=!wide, wide=FALSE, impor
         print()
 }
 
+# from https://stackoverflow.com/a/54136863/9563034
+quietly <- function(x) {
+    sink(tempfile())
+    on.exit(sink())
+    invisible(force(x))
+}
 
 #' Compare specific Eurostat datasets on the basis of information from Metabase
 #'
@@ -155,9 +161,10 @@ compare <- function(..., import_labels=TRUE, import_dim_labels=TRUE) {
         stop('Function `compare` needs at least 2 arguments (dataset code names as strings)')
     descriptions <-
         EDC %>%
-        lapply(describe,
-               import_labels=FALSE,
-               import_dim_labels=FALSE)
+        lapply(function(x)
+            quietly(describe(x,
+                             import_labels=FALSE,
+                             import_dim_labels=FALSE)))
     mrg <- function(x,y)
         merge(x,y,
               by=c('Dim_name','Dim_val'),
