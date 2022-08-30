@@ -1,5 +1,5 @@
 #' @import data.table
-#' @importFrom rvest read_html html_elements html_text
+#' @importFrom xml2 read_xml xml_find_all xml_attr xml_text
 #' @importFrom memoise memoise
 #' @importFrom stats as.formula
 NULL
@@ -12,7 +12,7 @@ memImportLabels <-
 
 #' Import Eurostat label (description) of a given dimension code
 #'
-#' Import the appropriate description file from \url{https://dd.eionet.europa.eu/}
+#' Import the appropriate description file
 #' for the selected Eurostat dimension, e.g. for \code{"geo"} it is \code{"Geopolitical entity (reporting)"},
 #' for \code{"nace_r2"} it is \code{"Classification of economic activities - NACE Rev.2"},
 #' for \code{"indic_sb"} it is \code{"Economical indicator for structural business statistics"} etc.
@@ -32,12 +32,12 @@ importDimLabel <- function(EurostatDimCode) {
     stopifnot(EurostatDimCode %>% is.character,
               length(EurostatDimCode)==1)
     EurostatDimCode %>%
-        paste0('https://dd.eionet.europa.eu/vocabulary/eurostat/',.) %>%
-        rvest::read_html() %>%
-        rvest::html_elements(xpath='//*[@class="simple_attr_value"]') %>%
-        rvest::html_text() %>%
-        .[3] %>%
-        trimws()
+        toupper() %>%
+        paste0(EurostatBaseUrl,"codelist/ESTAT/",.) %>%
+        xml2::read_xml() %>%
+        xml2::xml_find_all(".//s:Codelist/c:Name") %>%
+        .[xml2::xml_attr(.,"lang")=="en"] %>%
+        xml2::xml_text()
 }
 
 memImportDimLabel <-

@@ -20,22 +20,8 @@ addClass <- function(obj, ClassName)
 
 addAttr <- `attr<-`
 
-verifyFile <- function(FileName, EurostatCode, FileType) {
-    message('Verifying the code')
-    if (FileName %>%
-        readLines(n=1) %>%
-        pmatch('<!DOCTYPE html',.) %>%
-        is.na %>% not)
-        list(error=TRUE,
-             message=paste0('\nProbably a wrong ', ifelse(FileType=='tsv.gz','dataset ',""), 'code:  ', EurostatCode, '\n',
-                            'Check if you can find  ', EurostatCode %++% '.', FileType, '  at\n',
-                            EurostatBaseUrl %>% sub('?file=','?dir=',.,fixed=TRUE),
-                            ifelse(FileType=='tsv.gz','data','dic/en'), '&start=all')) else
-                                list(error=FALSE)
-}
-
 invertDate <- function(x)
-    # inspiered by https://stackoverflow.com/a/46834350/
+    # inspired by https://stackoverflow.com/a/46834350/
     sub('^(\\d{2})\\.(\\d{2})\\.(\\d{4})$','\\3-\\2-\\1',x)
 
 p <- function(str)
@@ -233,7 +219,7 @@ cond <- function(...) {
     # arguments: pairs -- condition1, what-if-true1,
     #                     condition2, what-if-true2,
     #                     etc...
-    #                                 what-if-all-contitions-false
+    #                                 what-if-all-conditions-false
     e <- parent.frame()
     substitute(list(...)) %>%
         as.list %T>%

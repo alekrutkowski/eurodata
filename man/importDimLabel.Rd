@@ -14,7 +14,7 @@ or \code{"indic_sb"}, etc.}
 A character vector of length 1: the label/description of \code{EurostatDimCode}.
 }
 \description{
-Import the appropriate description file from \url{https://dd.eionet.europa.eu/}
+Import the appropriate description file
 for the selected Eurostat dimension, e.g. for \code{"geo"} it is \code{"Geopolitical entity (reporting)"},
 for \code{"nace_r2"} it is \code{"Classification of economic activities - NACE Rev.2"},
 for \code{"indic_sb"} it is \code{"Economical indicator for structural business statistics"} etc.

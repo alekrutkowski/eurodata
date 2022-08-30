@@ -4,9 +4,9 @@ NULL
 
 #' Download and import a Eurostat dataset
 #'
-#' @param EurostatDatasetCode A string with Eurostat dataset code name, e.g. \code{nama_10_gdp} or \code{bop_its6_det}.
-#' See e.g.:
-#' \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}
+#' @param EurostatDatasetCode A string (upper/lower-case difference is not relevant) with Eurostat dataset code name,
+#' e.g. \code{nama_10_gdp} or \code{bop_its6_det}. See \url{https://ec.europa.eu/eurostat/databrowser/explore/all/all_themes}
+#' to find a dataset code -- the dataset codes are in tiny font in square brackets.
 #' @return A Eurostat dataset as a `flat' data.frame.
 #' A `flat' dataset has all numeric values in one column, with each row representing one of the available combinations
 #' of all dimensions (e.g. if dimensions are: countries, years, sectors, and indicators, there can be a row for value
@@ -24,14 +24,13 @@ importData <- function(EurostatDatasetCode) {
     TempGZfileName <- tempfile(fileext='.gz')
     t <- Sys.time()
     utils::download.file(EurostatBaseUrl %++% 'data/' %++%
-                             EurostatDatasetCode %++%
-                             '.tsv.gz',
-                         TempGZfileName)
-    # Uncompress and verify
+                             toupper(EurostatDatasetCode) %++%
+                             '?format=TSV&compressed=true',
+                         TempGZfileName,
+                         method='curl')
+    # Uncompress
     message('Uncompressing (extracting)')
     TempTSVfileName <- R.utils::gunzip(TempGZfileName)
-    v <- verifyFile(TempTSVfileName, EurostatDatasetCode, 'tsv.gz')
-    if (v$error) stop(v$message)
     # Read into RAM
     RawData <- TempTSVfileName %>%
         message_('Importing (reading into memory)') %>%
@@ -67,10 +66,9 @@ importData <- function(EurostatDatasetCode) {
         addClass('EurostatDataset')
 }
 
-#' Import Eurostat labels (descriptions) for a given dimension code
+#' Import Eurostat code list: labels (descriptions) for a given dimension code
 #'
-#' Import the appropriate \code{.dic} file from
-#'  \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?dir=dic/en/}
+#' Import the appropriate `code list' from
 #' for the selected Eurostat dimension, e.g. \code{geo} (countries or other geographic entities),
 #' \code{nace_r2} (sectors), \code{indic_sb} (indicators), etc.
 #' @param EurostatDimCode A string -- the code name of the Eurostat dimension, e.g. \code{geo} or \code{nace_r2}
@@ -85,19 +83,19 @@ importData <- function(EurostatDatasetCode) {
 importLabels <- function(EurostatDimCode) {
     stopifnot(EurostatDimCode %>% is.character,
               length(EurostatDimCode)==1)
-    Url <- EurostatBaseUrl %++% 'dic/en/' %++%
-        EurostatDimCode %++%
-        '.dic'
-    v <- verifyFile(Url,
-                    EurostatDimCode,
-                    'dic')
-    if (v$error) stop(v$message)
+    Url <- EurostatBaseUrl %++% 'codelist/ESTAT/' %++%
+        toupper(EurostatDimCode) %++%
+        '?format=TSV&lang=en'
     t <- Sys.time()
     message('Downloading Eurostat labels for ', EurostatDimCode)
-    data.table::fread(Url,
+    try(data.table::fread(Url,
                       sep='\t',
                       stringsAsFactors=TRUE,
-                      header=FALSE) %>%
+                      header=FALSE)) %>%
+        `if`(inherits(.,'try-error'),
+             stop('Cannot download ',Url,'\n',
+                  attr(.,'condition')$message, call.=FALSE),
+             .) %>%
         as.data.frame %>%
         set_colnames(c(EurostatDimCode,
                        EurostatDimCode %++% '_labels')) %>%
@@ -119,7 +117,7 @@ importLabels <- function(EurostatDimCode) {
 #' @export
 importDataList <- function() {
     RawTable <-
-        data.table::fread(EurostatBaseUrl %++%
+        data.table::fread(EurostatBaseUrl_old %++%
                               'table_of_contents_en.txt',
                           colClasses = 'character',
                           head=TRUE, encoding="UTF-8") %>%
@@ -202,7 +200,7 @@ importMetabase <- function() {
     message('Downloading Eurostat Metabase')
     TempGZfileName <- tempfile(fileext='.gz')
     t <- Sys.time()
-    utils::download.file(EurostatBaseUrl %++% 'metabase.txt.gz',
+    utils::download.file(EurostatBaseUrl_old %++% 'metabase.txt.gz',
                          TempGZfileName)
     # Uncompress and verify
     message('Uncompressing (extracting)')

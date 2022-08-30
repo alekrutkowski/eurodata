@@ -2,7 +2,7 @@
 % Please edit documentation in R/core_import.R
 \name{importLabels}
 \alias{importLabels}
-\title{Import Eurostat labels (descriptions) for a given dimension code}
+\title{Import Eurostat code list: labels (descriptions) for a given dimension code}
 \usage{
 importLabels(EurostatDimCode)
 }
@@ -15,8 +15,7 @@ A data.frame with 2 columns: codes (with a name determined by \code{EurostatDimC
 and corresponding labels (named with suffix \code{_labels}).
 }
 \description{
-Import the appropriate \code{.dic} file from
- \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?dir=dic/en/}
+Import the appropriate `code list' from
 for the selected Eurostat dimension, e.g. \code{geo} (countries or other geographic entities),
 \code{nace_r2} (sectors), \code{indic_sb} (indicators), etc.
 }

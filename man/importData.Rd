@@ -7,9 +7,9 @@
 importData(EurostatDatasetCode)
 }
 \arguments{
-\item{EurostatDatasetCode}{A string with Eurostat dataset code name, e.g. \code{nama_10_gdp} or \code{bop_its6_det}.
-See e.g.:
-\url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}}
+\item{EurostatDatasetCode}{A string (upper/lower-case difference is not relevant) with Eurostat dataset code name,
+e.g. \code{nama_10_gdp} or \code{bop_its6_det}. See \url{https://ec.europa.eu/eurostat/databrowser/explore/all/all_themes}
+to find a dataset code -- the dataset codes are in tiny font in square brackets.}
 }
 \value{
 A Eurostat dataset as a `flat' data.frame.
