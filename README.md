@@ -33,12 +33,20 @@ Search functionality:
     found datasets – a \`\`quick-n-dirty’’ way to find a Eurostat
     dataset without much typing (with a keyword or a few keywords)
 
-NEW! Extra functionality:
+#### NEW (December 2022):
+
+Parameter `filters` in `importData()` allows to download only the
+selected values of dimensions, instead of downloading the full dataset.
+See the example close to the end below.
+
+#### NEW (August 2022) Extra functionality:
 
 -   **describe** – describe a given Eurostat dataset on the basis of
     information from Metabase
 -   **compare** – compare specific Eurostat datasets on the basis of
     information from Metabase
+
+See the usage example at the very end below.
 
 ## Installation
 
@@ -78,7 +86,7 @@ str(x)
     ##  $ value_     : num  NA NA NA NA NA ...
     ##  $ flags_     : chr  ":" ":" ":" ":" ...
     ##  - attr(*, "EurostatDatasetCode")= chr "nama_10_a10"
-    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-08-30 17:07:16"
+    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-12-14 14:52:11"
 
 ``` r
 head(x,10)
@@ -124,7 +132,7 @@ str(y[y$Code=='nama_10_a10',])  # metadata on x
     ##  $ Dataset name               : chr "Gross value added and income by A*10 industry breakdowns"
     ##  $ Code                       : chr "nama_10_a10"
     ##  $ Type                       : chr "dataset"
-    ##  $ Last update of data        : chr "2022-08-29"
+    ##  $ Last update of data        : chr "2022-12-08"
     ##  $ Last table structure change: chr "2022-03-22"
     ##  $ Data start                 : chr "1975"
     ##  $ Data end                   : chr "2021"
@@ -165,7 +173,7 @@ head(z,10)
 find(gdp,main,international,-quarterly)
 ```
 
-    ## 2022-08-30 17:07:29
+    ## 2022-12-14 14:52:22
     ## 2 dataset(s)/table(s) found.
     ## Keywords: gdp, main, international, -quarterly
     ## 
@@ -179,7 +187,7 @@ find(gdp,main,international,-quarterly)
     ## Dataset name : GDP and main aggregates- international data cooperation annual data
     ## Code : naida_10_gdp
     ## Type : dataset
-    ## Last update of data : 2022-08-25
+    ## Last update of data : 2022-12-07
     ## Last table structure change : 2022-01-14
     ## Data start : 1975
     ## Data end : 2021
@@ -194,13 +202,13 @@ find(gdp,main,international,-quarterly)
     ## Dataset name : Main Balance of Payments and International Investment Position items as share of GDP (BPM6)
     ## Code : bop_gdp6_q
     ## Type : dataset
-    ## Last update of data : 2022-07-05
-    ## Last table structure change : 2022-07-05
+    ## Last update of data : 2022-10-20
+    ## Last table structure change : 2022-10-05
     ## Data start : 1991
-    ## Data end : 2022Q1
+    ## Data end : 2022Q2
     ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_gdp6_q/default/table?lang=en
     ## 
-    ## 2022-08-30 17:07:29
+    ## 2022-12-14 14:52:22
     ## 2 dataset(s)/table(s) found.
     ## Keywords: gdp, main, international, -quarterly
     ## 
@@ -211,7 +219,7 @@ find(gdp,main,international,-quarterly)
 find(bop, its)
 ```
 
-    ## 2022-08-30 17:07:31
+    ## 2022-12-14 14:52:23
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -300,7 +308,7 @@ find(bop, its)
     ## Data end : 2021
     ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en
     ## 
-    ## 2022-08-30 17:07:31
+    ## 2022-12-14 14:52:23
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, its
     ## 
@@ -310,7 +318,7 @@ find(bop, its)
 find(bop,-ybk,its)
 ```
 
-    ## 2022-08-30 17:07:32
+    ## 2022-12-14 14:52:24
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
@@ -399,7 +407,7 @@ find(bop,-ybk,its)
     ## Data end : 2021
     ## Link : https://ec.europa.eu/eurostat/databrowser/view/bop_its6_det/default/table?lang=en
     ## 
-    ## 2022-08-30 17:07:32
+    ## 2022-12-14 14:52:24
     ## 7 dataset(s)/table(s) found.
     ## Keywords: bop, -ybk, its
     ## 
@@ -415,12 +423,12 @@ browseDataList(grepl('GDP',`Dataset name`) &
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-08-30 17:07:34 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-12-14 14:52:25 ■ Number of datasets/tables
 found: 1 ■ Search criteria: grepl(“GDP”, `Dataset name`) & grepl(“main”,
 `Dataset name`) &grepl(“international”, `Dataset name`) &
 !grepl(“quarterly”,`Dataset name`)</tt>
 </p>
-<!-- html table generated in R 4.1.2 by xtable 1.8-4 package --><!-- Tue Aug 30 17:07:35 2022 -->
+<!-- html table generated in R 4.1.3 by xtable 1.8-4 package --><!-- Wed Dec 14 14:52:26 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -496,7 +504,7 @@ data</b>
 dataset
 </td>
 <td>
-2022-08-25
+2022-12-07
 </td>
 <td>
 2022-01-14
@@ -523,10 +531,10 @@ browseDataList(grepl('bop',Code) & grepl('its',Code))
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-08-30 17:07:35 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-12-14 14:52:26 ■ Number of datasets/tables
 found: 7 ■ Search criteria: grepl(“bop”, Code) & grepl(“its”, Code)</tt>
 </p>
-<!-- html table generated in R 4.1.2 by xtable 1.8-4 package --><!-- Tue Aug 30 17:07:36 2022 -->
+<!-- html table generated in R 4.1.3 by xtable 1.8-4 package --><!-- Wed Dec 14 14:52:26 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -913,11 +921,11 @@ importDataList() %>%
 <html>
 <body>
 <p>
-<tt>■ Generated on: 2022-08-30 17:07:42 ■ Number of datasets/tables
+<tt>■ Generated on: 2022-12-14 14:52:31 ■ Number of datasets/tables
 found: 7 ■ Search criteria: those including data on firms with fewer
 than 10 employees and NACE Rev.2 disaggregation</tt>
 </p>
-<!-- html table generated in R 4.1.2 by xtable 1.8-4 package --><!-- Tue Aug 30 17:07:42 2022 -->
+<!-- html table generated in R 4.1.3 by xtable 1.8-4 package --><!-- Wed Dec 14 14:52:31 2022 -->
 <table class="gridtable">
 <tr>
 <th>
@@ -986,7 +994,7 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
+Labour costs survey - NACE Rev. 2 activity
 </td>
 <td>
 <b>Labour cost, wages and salaries, direct remuneration (excluding
@@ -999,16 +1007,16 @@ apprentices) by NACE Rev. 2 activity</b>
 dataset
 </td>
 <td>
-2020-03-24
+2022-12-08
 </td>
 <td>
-2021-02-08
+2022-09-15
 </td>
 <td>
 2008
 </td>
 <td>
-2016
+2020
 </td>
 <td>
 <a href="https://ec.europa.eu/eurostat/databrowser/view/lc_ncost_r2/default/table?lang=en" target="_blank">click
@@ -1035,7 +1043,7 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
+Labour costs survey - NACE Rev. 2 activity
 </td>
 <td>
 <b>Structure of labour cost by NACE Rev. 2 activity - % of total
@@ -1048,16 +1056,16 @@ cost</b>
 dataset
 </td>
 <td>
-2020-03-24
+2022-12-08
 </td>
 <td>
-2021-02-08
+2022-09-15
 </td>
 <td>
 2008
 </td>
 <td>
-2016
+2020
 </td>
 <td>
 <a href="https://ec.europa.eu/eurostat/databrowser/view/lc_nstruc_r2/default/table?lang=en" target="_blank">click
@@ -1084,7 +1092,7 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
+Labour costs survey - NACE Rev. 2 activity
 </td>
 <td>
 <b>Number of employees, hours worked and paid, by working time and NACE
@@ -1097,16 +1105,16 @@ Rev. 2 activity</b>
 dataset
 </td>
 <td>
-2020-03-24
+2022-12-08
 </td>
 <td>
-2021-02-08
+2022-09-15
 </td>
 <td>
 2008
 </td>
 <td>
-2016
+2020
 </td>
 <td>
 <a href="https://ec.europa.eu/eurostat/databrowser/view/lc_nnum1_r2/default/table?lang=en" target="_blank">click
@@ -1133,7 +1141,7 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
+Labour costs survey - NACE Rev. 2 activity
 </td>
 <td>
 <b>Average hours worked and paid per employee, by working time and NACE
@@ -1146,16 +1154,16 @@ Rev. 2 activity</b>
 dataset
 </td>
 <td>
-2020-03-24
+2022-12-08
 </td>
 <td>
-2021-02-08
+2022-09-15
 </td>
 <td>
 2008
 </td>
 <td>
-2016
+2020
 </td>
 <td>
 <a href="https://ec.europa.eu/eurostat/databrowser/view/lc_nnum2_r2/default/table?lang=en" target="_blank">click
@@ -1182,7 +1190,7 @@ Labour costs
 Labour cost surveys
 </td>
 <td>
-Labour costs survey 2008, 2012 and 2016 - NACE Rev. 2 activity
+Labour costs survey - NACE Rev. 2 activity
 </td>
 <td>
 <b>Number of statistical units selected for the survey, by NACE Rev. 2
@@ -1195,16 +1203,16 @@ activity</b>
 dataset
 </td>
 <td>
-2020-03-24
+2022-12-08
 </td>
 <td>
-2021-02-08
+2022-09-15
 </td>
 <td>
 2008
 </td>
 <td>
-2016
+2020
 </td>
 <td>
 <a href="https://ec.europa.eu/eurostat/databrowser/view/lc_nstu_r2/default/table?lang=en" target="_blank">click
@@ -1240,10 +1248,10 @@ International trade in goods - trade by enterprise characteristics (TEC)
 dataset
 </td>
 <td>
-2022-08-24
+2022-11-11
 </td>
 <td>
-2022-02-15
+2022-11-07
 </td>
 <td>
 2012
@@ -1304,6 +1312,40 @@ here</a>
 </table>
 </body>
 </html>
+
+## New parameter `filters`
+
+To reduce the download size and time if full dataset not needed, e.g.:
+
+``` r
+subset_of__bop_its6_det <-
+    importData('bop_its6_det',
+               # New -- download only subset of available data
+               filters = list(geo=c('AT','BG'), # these two countries
+                              TIME_PERIOD=2014:2020, # only that period
+                              bop_item='SC')) # only "Services: Transport"
+```
+
+    ## Downloading Eurostat dataset bop_its6_det
+
+    ## Importing (reading into memory)
+
+``` r
+str(subset_of__bop_its6_det)
+```
+
+    ## Classes 'EurostatDataset' and 'data.frame':  4368 obs. of  9 variables:
+    ##  $ freq       : Factor w/ 1 level "A": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ currency   : Factor w/ 1 level "MIO_EUR": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ bop_item   : Factor w/ 1 level "SC": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ stk_flow   : Factor w/ 3 levels "BAL","CRE","DEB": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ partner    : Factor w/ 117 levels "ACP","ACP_AFR",..: 1 2 3 4 5 5 6 6 7 7 ...
+    ##  $ geo        : Factor w/ 2 levels "AT","BG": 2 2 2 2 1 2 1 2 1 2 ...
+    ##  $ TIME_PERIOD: Factor w/ 7 levels "2014","2015",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ value_     : num  -220.7 -110.7 -62.7 -47.3 -241 ...
+    ##  $ flags_     : chr  "" "" "" "" ...
+    ##  - attr(*, "EurostatDatasetCode")= chr "bop_its6_det"
+    ##  - attr(*, "DownloadTime")= POSIXct[1:1], format: "2022-12-14 14:52:33"
 
 ## Extras
 

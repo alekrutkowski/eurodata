@@ -44,10 +44,17 @@ Search functionality:
 - **find** -- based on importDataList, shows a textual report on the found datasets --
 a ``quick-n-dirty'' way to find a Eurostat dataset without much typing (with a keyword or a few keywords)
 
-NEW! Extra functionality:
+#### NEW (December 2022):
+
+Parameter `filters` in `importData()` allows to download only the selected values of dimensions,
+instead of downloading the full dataset. See the example close to the end below.
+
+#### NEW (August 2022) Extra functionality:
 
 - **describe** -- describe a given Eurostat dataset on the basis of information from Metabase
 - **compare** -- compare specific Eurostat datasets on the basis of information from Metabase
+
+See the usage example at the very end below.
 
 ## Installation
 
@@ -137,6 +144,20 @@ importDataList() %>%
     # the `SearchCriteria` argument below is optional
     print(SearchCriteria =
               'those including data on firms with fewer than 10 employees and NACE Rev.2 disaggregation') 
+```
+
+## New parameter `filters`
+
+To reduce the download size and time if full dataset not needed, e.g.:
+
+```{r}
+subset_of__bop_its6_det <-
+    importData('bop_its6_det',
+               # New -- download only subset of available data
+               filters = list(geo=c('AT','BG'), # these two countries
+                              TIME_PERIOD=2014:2020, # only that period
+                              bop_item='SC')) # only "Services: Transport"
+str(subset_of__bop_its6_det)
 ```
 
 ## Extras

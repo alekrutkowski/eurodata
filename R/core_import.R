@@ -7,6 +7,13 @@ NULL
 #' @param EurostatDatasetCode A string (upper/lower-case difference is not relevant) with Eurostat dataset code name,
 #' e.g. \code{nama_10_gdp} or \code{bop_its6_det}. See \url{https://ec.europa.eu/eurostat/databrowser/explore/all/all_themes}
 #' to find a dataset code -- the dataset codes are in tiny font in square brackets.
+#' @param filters Optional: a list of atomic vectors. The names of the elements of the list should correspond to the
+#' names of the dimensions of the dataset (defined in \code{EurostatDatasetCode}), e.g. \code{geo}, \code{nace_r2},
+#' \code{indic_esb} etc. The elements of each vector in that list should correspond to each respective dimension's values
+#' available in the dataset. Only these dimension values will be downloaded. For \code{TIME_PERIOD} it's enough to provide
+#' 1 or 2 values -- the lowest one will be used as a start of the data period and the highest as the end of the data
+#' period downloaded. Use \code{filters} if you need only a few dimension values as it will be faster than downloading the
+#' full dataset.
 #' @return A Eurostat dataset as a `flat' data.frame.
 #' A `flat' dataset has all numeric values in one column, with each row representing one of the available combinations
 #' of all dimensions (e.g. if dimensions are: countries, years, sectors, and indicators, there can be a row for value
@@ -14,28 +21,55 @@ NULL
 #' @examples
 #' \dontrun{
 #' importData('nama_10_gdp')
+#  importData('bop_its6_det',
+#'            filters = list(geo=c('AT','BG'),
+#'                           TIME_PERIOD=2014:2020,
+#'                           bop_item='SC'))
 #' }
 #' @export
-importData <- function(EurostatDatasetCode) {
-    stopifnot(EurostatDatasetCode %>% is.character,
-              length(EurostatDatasetCode)==1)
+importData <- function(EurostatDatasetCode, filters=NULL) {
+    stopifnot(is.character(EurostatDatasetCode),
+              length(EurostatDatasetCode)==1,
+              is.null(filters) || is.list(filters) && length(filters)>0)
+    if (is.list(filters) && any(names(filters)==""))
+        stop('All elements of `filters` must be named.')
+    url_prefix <-
+        EurostatBaseUrl %++% 'data/' %++%
+        toupper(EurostatDatasetCode)
+    url_suffix <-
+        if (is.list(filters))
+            urlStructure(EurostatDatasetCode) %>%
+        .[.!='freq' & .!='TIME_PERIOD'] %T>%
+        {not_present_dims <- setdiff(names(filters),c(.,'TIME_PERIOD'))
+        if (length(not_present_dims)>0)
+            warning('`filters` contains dimension(s) not present in the dataset, ignored:\n',
+                    paste(not_present_dims, collapse=', '),
+                    call.=FALSE, immediate.=TRUE)} %>%
+        filters[.] %>%
+        lapply(paste,collapse='+') %>%
+        {do.call(paste,c(.,sep='.'))} %>%
+        paste0("/.",.,"?format=TSV",
+               if ('TIME_PERIOD' %in% names(filters))
+                   paste0("&startPeriod=",min(filters$TIME_PERIOD),
+                          "&endPeriod=",max(filters$TIME_PERIOD)) else "")
     # Download
     message('Downloading Eurostat dataset ', EurostatDatasetCode)
-    TempGZfileName <- tempfile(fileext='.gz')
     t <- Sys.time()
-    utils::download.file(EurostatBaseUrl %++% 'data/' %++%
-                             toupper(EurostatDatasetCode) %++%
-                             '?format=TSV&compressed=true',
-                         TempGZfileName,
-                         method='curl')
-    # Uncompress
-    message('Uncompressing (extracting)')
-    TempTSVfileName <- R.utils::gunzip(TempGZfileName)
+    if (is.null(filters)) {
+        TempGZfileName <- tempfile(fileext='.gz')
+        utils::download.file(url_prefix %++% '?format=TSV&compressed=true',
+                             TempGZfileName,
+                             method='curl')
+        # Uncompress
+        message('Uncompressing (extracting)')
+        TempTSVfileName <- R.utils::gunzip(TempGZfileName)
+    }
     # Read into RAM
-    RawData <- TempTSVfileName %>%
+    RawData <-
+        `if`(is.null(filters), TempTSVfileName,
+             paste0(url_prefix,url_suffix)) %>%
         message_('Importing (reading into memory)') %>%
         data.table::fread(sep='\t',
-                          sep2=',',
                           colClasses='character',
                           header=TRUE)
     # Extract column names
@@ -66,6 +100,20 @@ importData <- function(EurostatDatasetCode) {
         addClass('EurostatDataset')
 }
 
+urlStructure <- function(ds_code)
+    ds_code %>%
+    toupper(.) %>%
+    paste0('https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/datastructure/estat/',.) %>%
+    xml2::read_xml() %>%
+    xml2::as_list() %>%
+    {.$Structure$
+            Structures$
+            DataStructures$
+            DataStructure$
+            DataStructureComponents$
+            DimensionList} %>%
+    sapply(function(x) attr(x$ConceptIdentity$Ref,'id'))
+
 #' Import Eurostat code list: labels (descriptions) for a given dimension code
 #'
 #' Import the appropriate `code list' from
@@ -89,9 +137,9 @@ importLabels <- function(EurostatDimCode) {
     t <- Sys.time()
     message('Downloading Eurostat labels for ', EurostatDimCode)
     try(data.table::fread(Url,
-                      sep='\t',
-                      stringsAsFactors=TRUE,
-                      header=FALSE)) %>%
+                          sep='\t',
+                          stringsAsFactors=TRUE,
+                          header=FALSE)) %>%
         `if`(inherits(.,'try-error'),
              stop('Cannot download ',Url,'\n',
                   attr(.,'condition')$message, call.=FALSE),

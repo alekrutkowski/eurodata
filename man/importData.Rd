@@ -4,12 +4,20 @@
 \alias{importData}
 \title{Download and import a Eurostat dataset}
 \usage{
-importData(EurostatDatasetCode)
+importData(EurostatDatasetCode, filters = NULL)
 }
 \arguments{
 \item{EurostatDatasetCode}{A string (upper/lower-case difference is not relevant) with Eurostat dataset code name,
 e.g. \code{nama_10_gdp} or \code{bop_its6_det}. See \url{https://ec.europa.eu/eurostat/databrowser/explore/all/all_themes}
 to find a dataset code -- the dataset codes are in tiny font in square brackets.}
+
+\item{filters}{Optional: a list of atomic vectors. The names of the elements of the list should correspond to the
+names of the dimensions of the dataset (defined in \code{EurostatDatasetCode}), e.g. \code{geo}, \code{nace_r2},
+\code{indic_esb} etc. The elements of each vector in that list should correspond to each respective dimension's values
+available in the dataset. Only these dimension values will be downloaded. For \code{TIME_PERIOD} it's enough to provide
+1 or 2 values -- the lowest one will be used as a start of the data period and the highest as the end of the data
+period downloaded. Use \code{filters} if you need only a few dimension values as it will be faster than downloading the
+full dataset.}
 }
 \value{
 A Eurostat dataset as a `flat' data.frame.
@@ -23,5 +31,8 @@ Download and import a Eurostat dataset
 \examples{
 \dontrun{
 importData('nama_10_gdp')
+           filters = list(geo=c('AT','BG'),
+                          TIME_PERIOD=2014:2020,
+                          bop_item='SC'))
 }
 }
