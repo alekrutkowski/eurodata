@@ -4,7 +4,10 @@ Title: Fast and Easy Eurostat Data Import and Search
 Description: Interface to Eurostat’s Bulk Download Facility with fast data.table-based import of
     data, labels, and metadata. On top of the core functionality, data search and data
     description/comparison functions are also provided.
-Version: 1.6.0
+    Use https://github.com/alekrutkowski/eurodata_codegen -- a point-and-click app for rapid and
+    easy generation of richly-commented R code -- to import a Eurostat dataset or it's subset
+    (based on the eurodata::importData() function).
+Version: 1.6.1
 Date: 2022-12-14
 Authors@R: c(person("Aleksander","Rutkowski", role=c("aut","cre"), email="alek.rutkowski@gmail.com"))
 License: GPL-2
