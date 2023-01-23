@@ -2,6 +2,12 @@ eurodata – R package for fast and easy Eurostat data import and search
 ================
 Aleksander Rutkowski
 
+#### *NEW (January 2023):*
+
+**_Use [eurodata_codegen](https://github.com/alekrutkowski/eurodata_codegen), a point-and-click app
+for rapid and easy generation of richly-commented R code, to import a Eurostat dataset or it's subset
+(based on the `eurodata::importData()` function)._**
+
 The package relies, for the moment, on both the new [Eurostat’s API SDMX
 2.1](https://wikis.ec.europa.eu/display/EUROSTATHELP/Transition+-+from+Eurostat+Bulk+Download+to+API)
 and on the old [Eurostat’s Bulk Download
