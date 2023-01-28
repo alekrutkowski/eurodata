@@ -30,7 +30,10 @@ Download and import a Eurostat dataset
 }
 \examples{
 \dontrun{
+           
 importData('nama_10_gdp')
+           
+importData('bop_its6_det',
            filters = list(geo=c('AT','BG'),
                           TIME_PERIOD=2014:2020,
                           bop_item='SC'))
