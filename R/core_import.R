@@ -165,8 +165,9 @@ importLabels <- function(EurostatDimCode) {
 #' @export
 importDataList <- function() {
     RawTable <-
-        data.table::fread(EurostatBaseUrl_old %++%
-                              'table_of_contents_en.txt',
+        data.table::fread(EurostatBaseUrl %>%
+                              sub('sdmx/2.1/',"",.,fixed=TRUE) %++%
+                              'catalogue/toc/txt?lang=EN',
                           colClasses = 'character',
                           head=TRUE, encoding="UTF-8") %>%
         as.data.frame %>%
@@ -176,7 +177,7 @@ importDataList <- function() {
             invertDate(`last update of data`)
         `last table structure change` <-
             invertDate(`last table structure change`)
-        txtpos <- stringr::str_locate(title, "[a-zA-Z0-9\'%]") %>%
+        txtpos <- stringr::str_locate(title, "[a-zA-Z0-9'%\\.\\-]") %>%
             extract(, 'start')
         level <- floor((txtpos - 1)/4) %>% as.integer()
         id <- seq_along(level)
@@ -248,8 +249,11 @@ importMetabase <- function() {
     message('Downloading Eurostat Metabase')
     TempGZfileName <- tempfile(fileext='.gz')
     t <- Sys.time()
-    utils::download.file(EurostatBaseUrl_old %++% 'metabase.txt.gz',
-                         TempGZfileName)
+    utils::download.file(EurostatBaseUrl %>%
+                             sub('sdmx/2.1/',"",.,fixed=TRUE) %++%
+                             'catalogue/metabase.txt.gz?labels=no',
+                         TempGZfileName,
+                         method='curl') # method='curl' needed otherwise error in readBin inside gunzip below
     # Uncompress and verify
     message('Uncompressing (extracting)')
     TempTSVfileName <- R.utils::gunzip(TempGZfileName)

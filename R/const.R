@@ -1,9 +1,6 @@
 EurostatBaseUrl <-
     'https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/'
 
-EurostatBaseUrl_old <-
-    'https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?file='
-
 CssStyle <- '
     <!DOCTYPE html>
     <html>

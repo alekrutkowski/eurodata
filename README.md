@@ -8,10 +8,9 @@ Aleksander Rutkowski
 for rapid and easy generation of richly-commented R code, to import a Eurostat dataset or it's subset
 (based on the `eurodata::importData()` function)._**
 
-The package relies, for the moment, on both the new [Eurostat’s API SDMX
+The package is fully compatible with the new [Eurostat’s API SDMX
 2.1](https://wikis.ec.europa.eu/display/EUROSTATHELP/Transition+-+from+Eurostat+Bulk+Download+to+API)
-and on the old [Eurostat’s Bulk Download
-Facility](https://ec.europa.eu/eurostat/data/bulkdownload/).
+and no longer relies on the old Eurostat’s Bulk Download Facility.
 
 The core API of the `eurodata` package contains just 6 functions – 4 for
 data or metadata imports and 2 for search:
