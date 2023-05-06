@@ -13,8 +13,9 @@ describe(
 }
 \arguments{
 \item{EurostatDatasetCode}{A string with Eurostat dataset code name, e.g. \code{"nama_10_gdp"} or \code{"bop_its6_det"}.
-See e.g.:
-\url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}}
+See e.g.: \url{https://ec.europa.eu/eurostat/databrowser/explore/all/all_themes} where, once you follow one of the "branches"
+of the "tree" of datasets, the dataset codes are in tiny grey font in square brackets just under the full names of the datasets
+(the names are in navy blue and preceded by a cube icon).}
 
 \item{import_labels}{Boolean: should labels for the codes inside dimensions be imported. Default: if \code{wide} is
 \code{FALSE} then \code{import_labels} is TRUE and vice versa.}

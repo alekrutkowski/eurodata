@@ -16,10 +16,12 @@ memImportLabels <-
 #' for the selected Eurostat dimension, e.g. for \code{"geo"} it is \code{"Geopolitical entity (reporting)"},
 #' for \code{"nace_r2"} it is \code{"Classification of economic activities - NACE Rev.2"},
 #' for \code{"indic_sb"} it is \code{"Economical indicator for structural business statistics"} etc.
-#' See \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&dir=dic\%2Fen/}
-#' for the list of all codes (the .dic file extension to be ignored).
-#' Each description is web-scraped from a table (row "Label") at the specific url, e.g. for \code{"geo"} it is
-#' \url{https://dd.eionet.europa.eu/vocabulary/eurostat/geo/}.
+#' Click on "Code lists" just under "Apply download operations on" at \url{https://ec.europa.eu/eurostat/databrowser/bulk?lang=en}
+#' for the list of all codes.
+#' Each description is imported from inside the XML file
+#' (via the path: \emph{m:Structure / m:Structures / s:Codelists / s:Codelist / c:Name xml:lang="en"})
+#' from the respective URL, e.g. for \code{"geo"} it is
+#' \url{https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/codelist/ESTAT/GEO}.
 #' @param EurostatDimCode A string -- the code name of the Eurostat dimension, e.g. \code{"geo"} or \code{"nace_r2"}
 #' or \code{"indic_sb"}, etc.
 #' @return A character vector of length 1: the label/description of \code{EurostatDimCode}.
@@ -71,8 +73,9 @@ attachLabels <- function(dt)
 #' Describe a given Eurostat dataset on the basis of information from Metabase
 #'
 #' @param EurostatDatasetCode A string with Eurostat dataset code name, e.g. \code{"nama_10_gdp"} or \code{"bop_its6_det"}.
-#' See e.g.:
-#' \url{https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf}
+#' See e.g.: \url{https://ec.europa.eu/eurostat/databrowser/explore/all/all_themes} where, once you follow one of the "branches"
+#' of the "tree" of datasets, the dataset codes are in tiny grey font in square brackets just under the full names of the datasets
+#' (the names are in navy blue and preceded by a cube icon).
 #' @param import_labels Boolean: should labels for the codes inside dimensions be imported. Default: if \code{wide} is
 #' \code{FALSE} then \code{import_labels} is TRUE and vice versa.
 #' @param wide Boolean: should each dimension be compressed to one row and all values within each dimension to a single,

@@ -20,8 +20,10 @@ NULL
 #' added in retail in Germany in 2013).
 #' @examples
 #' \dontrun{
+#' # Full dataset import:
 #' importData('nama_10_gdp')
-#  importData('bop_its6_det',
+#' # Import only a subset of a dataset:
+#' importData('bop_its6_det',
 #'            filters = list(geo=c('AT','BG'),
 #'                           TIME_PERIOD=2014:2020,
 #'                           bop_item='SC'))
