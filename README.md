@@ -2,6 +2,10 @@ eurodata – R package for fast and easy Eurostat data import and search
 ================
 Aleksander Rutkowski
 
+#### NEW (June 2026):
+
+Improved error handling / error messages.
+
 #### NEW (May 2023):
 
 The package is fully compatible with the [Eurostat’s SDMX
