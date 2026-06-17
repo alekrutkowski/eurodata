@@ -32,9 +32,16 @@ NULL
 importData <- function(EurostatDatasetCode, filters=NULL) {
     stopifnot(is.character(EurostatDatasetCode),
               length(EurostatDatasetCode)==1,
-              is.null(filters) || is.list(filters) && length(filters)>0)
-    if (is.list(filters) && any(names(filters)==""))
+              "`filters` argument cannot be an empty list" =
+                  is.null(filters) || is.list(filters) && length(filters)>0)
+    if (!is.null(filters) && (is.null(names(filters)) || any(names(filters)=="")))
         stop('All elements of `filters` must be named.')
+    filters %>% names %>%
+        sapply(function(x) if (filters[[x]] %>% identical(""))
+            warning('In `filters`, you specified `',x,' = ""` ==> all combinations of dimension `',x,'` will be imported.',
+                    call.=FALSE, immediate.=TRUE))
+    filters <-
+        filters %>% lapply(. %>% as.character %>% utils::URLencode())
     url_prefix <-
         EurostatBaseUrl %++% 'data/' %++%
         toupper(EurostatDatasetCode)
@@ -44,9 +51,9 @@ importData <- function(EurostatDatasetCode, filters=NULL) {
         .[.!='freq' & .!='TIME_PERIOD'] %T>%
         {not_present_dims <- setdiff(names(filters),c(.,'TIME_PERIOD'))
         if (length(not_present_dims)>0)
-            warning('`filters` contains dimension(s) not present in the dataset, ignored:\n',
-                    paste(not_present_dims, collapse=', '),
-                    call.=FALSE, immediate.=TRUE)} %>%
+            stop('`filters` contains dimension(s) not present in the dataset:\n',
+                 paste(not_present_dims, collapse=', '),
+                 call.=FALSE)} %>%
         filters[.] %>%
         lapply(paste,collapse='+') %>%
         {do.call(paste,c(.,sep='.'))} %>%
@@ -55,13 +62,14 @@ importData <- function(EurostatDatasetCode, filters=NULL) {
                    paste0("&startPeriod=",min(filters$TIME_PERIOD),
                           "&endPeriod=",max(filters$TIME_PERIOD)) else "")
     # Download
-    message('Downloading Eurostat dataset ', EurostatDatasetCode)
+    message('Downloading Eurostat dataset `', EurostatDatasetCode,'`')
     t <- Sys.time()
     if (is.null(filters)) {
         TempGZfileName <- tempfile(fileext='.gz')
         utils::download.file(url_prefix %++% '?format=TSV&compressed=true',
                              TempGZfileName,
-                             method='curl')
+                             method='curl',
+                             quiet=TRUE)
         # Uncompress
         message('Uncompressing (extracting)')
         TempTSVfileName <- R.utils::gunzip(TempGZfileName)
@@ -71,9 +79,14 @@ importData <- function(EurostatDatasetCode, filters=NULL) {
         `if`(is.null(filters), TempTSVfileName,
              paste0(url_prefix,url_suffix)) %>%
         message_('Importing (reading into memory)') %>%
-        data.table::fread(sep='\t',
-                          colClasses='character',
-                          header=TRUE)
+        read_or_error(data.table::fread,
+                      .,
+                      sep='\t',
+                      colClasses='character',
+                      header=TRUE) %>%
+        `if`(nrow(.)==0 && ncol(.)==1 && grepl('is not available for dissemination',colnames(.)),
+             stop('Possibly wrong dataset code `',EurostatDatasetCode,'`.',call.=FALSE),
+             .)
     # Extract column names
     FirstColName <- RawData %>%
         colnames %>%
@@ -102,19 +115,85 @@ importData <- function(EurostatDatasetCode, filters=NULL) {
         addClass('EurostatDataset')
 }
 
+read_or_error <- function(f, url, ...) {
+    tryCatch(
+        {
+            f(url, ...)
+        },
+        error = function(e_fread) {
+            res <- tryCatch(
+                curl::curl_fetch_memory(url),
+                error = function(e_curl) {
+                    return(stop(
+                        "import failed: ", conditionMessage(e_fread),
+                        "\nCould not retrieve HTTP error body: ", conditionMessage(e_curl)
+                    ))
+                }
+            )
+
+            body <- rawToChar(res$content)
+
+            msg <- tryCatch({
+                x <- xml2::read_xml(body)
+
+                fault_code <- x %>%
+                    xml2::xml_find_first(".//*[local-name()='faultcode']") %>%
+                    xml2::xml_text()
+
+                fault_string <- x %>%
+                    xml2::xml_find_first(".//*[local-name()='faultstring']") %>%
+                    xml2::xml_text()
+
+                if (!is.na(fault_string) && nzchar(fault_string)) {
+                    stop(
+                        "HTTP error ", res$status_code,
+                        if (!is.na(fault_code) && nzchar(fault_code)) paste0(" / faultcode ", fault_code) else "",
+                        ": ", fault_string
+                    )
+                } else {
+                    stop("HTTP error ", res$status_code, ":\n", body)
+                }
+            }, error = function(e_xml) {
+                if (res$status_code >= 400L && nzchar(body)) {
+                    stop("HTTP error ", res$status_code, ":\n", body %>%
+                             `if`(grepl('is not available for dissemination',.),
+                                  paste0('Possibly wrong code `',
+                                         sub("(?s).*<faultstring>ERR_NOT_FOUND_4:\\s*([^[:space:]]+)\\s*\\(.*", "\\1", ., perl = TRUE),
+                                         '`.'),
+                                  .) %>%
+                             `if`(grepl('The following values for dimension are not allowed',.),
+                                  sub("(?s).*?definition\\.\\s*(.*?)</faultstring>.*", "\\1", ., perl = TRUE),
+                                  .),
+                         call.=FALSE)
+                } else {
+                    stop(
+                        "import failed, but re-fetch returned HTTP ", res$status_code,
+                        ". This is probably a parsing/import error rather than an HTTP error.\n",
+                        conditionMessage(e_fread)
+                    )
+                }
+            })
+
+            msg
+        }
+    )
+}
+
 urlStructure <- function(ds_code)
     ds_code %>%
     toupper(.) %>%
     paste0('https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/datastructure/estat/',.) %>%
-    xml2::read_xml() %>%
-    xml2::as_list() %>%
-    {.$Structure$
-            Structures$
-            DataStructures$
-            DataStructure$
-            DataStructureComponents$
-            DimensionList} %>%
-    sapply(function(x) attr(x$ConceptIdentity$Ref,'id'))
+    read_or_error(. %>%
+                      xml2::read_xml() %>%
+                      xml2::as_list() %>%
+                      {.$Structure$
+                              Structures$
+                              DataStructures$
+                              DataStructure$
+                              DataStructureComponents$
+                              DimensionList} %>%
+                      sapply(function(x) attr(x$ConceptIdentity$Ref,'id')),
+                  .)
 
 #' Import Eurostat code list: labels (descriptions) for a given dimension code
 #'
@@ -137,15 +216,12 @@ importLabels <- function(EurostatDimCode) {
         toupper(EurostatDimCode) %++%
         '?format=TSV&lang=en'
     t <- Sys.time()
-    message('Downloading Eurostat labels for ', EurostatDimCode)
-    try(data.table::fread(Url,
-                          sep='\t',
-                          stringsAsFactors=TRUE,
-                          header=FALSE)) %>%
-        `if`(inherits(.,'try-error'),
-             stop('Cannot download ',Url,'\n',
-                  attr(.,'condition')$message, call.=FALSE),
-             .) %>%
+    message('Downloading Eurostat labels for `',EurostatDimCode,'`')
+    read_or_error(data.table::fread,
+                  Url,
+                  sep='\t',
+                  stringsAsFactors=TRUE,
+                  header=FALSE) %>%
         as.data.frame %>%
         set_colnames(c(EurostatDimCode,
                        EurostatDimCode %++% '_labels')) %>%
